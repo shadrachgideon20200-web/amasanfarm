@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Amasan Yam Farm</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #87ceeb;
+      font-family: Arial;
+      text-align: center;
+      padding: 50px 20px;
+      margin: 0;
+      transition: 0.3s;
+    }
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #4CAF50;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOut 1s 2s forwards;
+    }
+  .yam-spin {
+      font-size: 80px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+  .card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 420px;
+      margin: auto;
+      transition: 0.3s;
+    }
+  .alert {
+      background: #ffeb3b;
+      color: #333;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+  .stock-counter {
+      background: #ff5722;
+      color: white;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  .stock-counter.low-stock {
+      animation: pulse 1s infinite;
+    }
+  .greeting-box {
+      background:#4CAF50;
+      color:white;
+      padding:10px;
+      border-radius:8px;
+      margin-bottom:15px;
+      font-weight:bold;
+      font-size:15px;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.03); }
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 6px;
+      width: 100%;
+      max-width: 250px;
+      transition: 0.2s;
+    }
+    button:hover { opacity: 0.85; transform: scale(1.02); }
+  .btn-whatsapp { background: #25D366; }
+  .btn-call { background: #2196F3; }
+  .btn-map { background: #4285F4; }
+  .btn-secondary { background: #9e9e9e; font-size: 14px; }
+  .btn-upload { background: #FF5722; font-size: 13px; padding: 8px 10px; width: 48%; }
+  .btn-delete { background: #f44336; font-size: 13px; padding: 8px 10px; width: 48%; }
+  .btn-admin { background: #607D8B; font-size: 14px; }
+  .btn-ai { background: #673AB7; font-size: 15px; }
+  .btn-pay { background: #0A74DA; }
+
+  .admin-controls {
+      display: flex;
+      gap: 4%;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+  .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 15px 0;
+    }
+  .gallery-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+    }
+  .upload-box {
+      border: 2px dashed #4CAF50;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      background: #f9f9f9;
+      display: none;
+    }
+
+  .slider-container {
+      position: relative;
+      max-width: 100%;
+      margin: 15px 0;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+  .slider {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+  .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+    }
+
+  .review {
+      background: #f1f8f4;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 14px;
+    }
+  .review b { color: #2e7d32; }
+  .stars { color: #ffc107; }
+
+    #settingsMenu { display: none; margin-top: 15px; background: #f9f9f9; border-radius: 10px; padding: 15px; text-align: left; }
+    #settingsMenu button { background: white; color: #333; border: 1px solid #ddd; text-align: left; margin: 5px 0; font-size: 15px; }
+
+    #shareOptions, #orderForm, #deliveryInfo, #priceCalc, #reviewForm, #photoManager, #aiChat, #orderStats, #customerMap {
+      display: none;
+      padding: 10px;
+      background: #e0e0e0;
+      border-radius: 8px;
+      margin-top: 5px;
+      text-align: left;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-family: Arial;
+      font-size: 14px;
+    }
+    label {
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+    }
+  .price-result {
+      background: #4CAF50;
+      color: white;
+      padding: 12px;
+      border-radius: 5px;
+      margin-top: 8px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 16px;
+    }
+
+  .stat-box {
+      background: white;
+      padding: 10px;
+      border-radius: 6px;
+      margin: 5px 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+  .stat-number {
+      font-weight: bold;
+      color: #4CAF50;
+      font-size: 18px;
+    }
+
+  .ai-bubble {
+      background: #673AB7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 12px;
+      display: inline-block;
+      margin: 4px 0;
+      max-width: 85%;
+    }
+
+    body.dark { background: #121212; color: #eee; }
+    body.dark.card { background: #1e1e1e; color: white; }
+    body.dark #settingsMenu { background: #2a2a2a; }
+    body.dark #settingsMenu button { background: #333; color: white; border: 1px solid #555; }
+    body.dark #shareOptions, body.dark #orderForm, body.dark #deliveryInfo, body.dark #priceCalc, body.dark #reviewForm, body.dark #photoManager, body.dark #aiChat, body.dark #orderStats, body.dark #customerMap { background: #333; }
+    body.dark.review { background: #2a2a2a; }
+    body.dark.upload-box { background: #2a2a2a; border-color: #666; }
+    body.dark label { color: #ddd; }
+    body.dark input, body.dark select, body.dark textarea { background: #444; color: white; border: 1px solid #666; }
+    body.dark.stat-box { background: #2a2a2a; }
+  </style>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+  <div id="loader">
+    <div class="yam-spin">🍠</div>
+  </div>
+
+  <div class="card">
+    <div class="alert">🔥 NEW STOCK ALERT: Fresh Potatoes Just Landed!</div>
+    <div id="stockBanner" class="stock-counter">⚡ Only <span id="stockCount">23</span> tubers left today!</div>
+
+    <div id="greetingBox" class="greeting-box"></div>
+
+    <h1>Amasan Yam Farm 🌱</h1>
+    <p>📍 Wukari, Taraba State, Nigeria</p>
+
+    <h3>📸 Our Fresh Produce</h3>
+
+    <button id="loginBtn" class="btn-admin" onclick="loginAdmin()">🔐 Admin Login</button>
+
+    <div class="upload-box" id="adminBox">
+      <p style="font-size:13px; margin:0 0 8px 0;"><b>Admin Controls - Welcome Boss!</b></p>
+      <input type="file" id="fileInput" accept="image/*" multiple>
+      <div class="admin-controls">
+        <button class="btn-upload" onclick="uploadPhotos()">📤 Upload</button>
+        <button class="btn-delete" onclick="deleteLastPhoto()">🗑️ Delete Last</button>
+      </div>
+    </div>
+
+    <div class="gallery" id="gallery">
+      <div class="gallery-item"><img src="https://placehold.co/200x150/4CAF50/ffffff?text=Potatoes"></div>
+      <div class="gallery-item"><img src="https://placehold.co/200x150/FF9800/ffffff?text=Water+Yam"></div>
+      <div class="gallery-item"><img src="https://placehold.co/200x150/795548/ffffff?text=White+Yam"></div>
+      <div class="gallery-item"><img src="https://placehold.co/200x150/8BC34A/ffffff?text=Farm+View"></div>
+    </div>
+
+    <h2>Fresh Produce</h2>
+    <p>Potatoes 🥔 ₦8,000/bag</p>
+    <p>Water Yam 🍠 ₦6,500/Tuber</p>
+    <p>White Yam 🍠 ₦7,000/Tuber</p>
+
+    <h3>⭐ What Customers Dey Say</h3>
+    <div class="slider-container">
+      <div class="slider" id="slider">
+        <div class="slide">
+          <div class="review">
+            <b>Mama Joy - Wukari</b> <span class="stars">★★★</span><br>
+            "Best Potatoes I don buy! Sweet like honey. Delivery fast too 🌱"
+          </div>
+        </div>
+        <div class="slide">
+          <div class="review">
+            <b>Alhaji Musa - Takum</b> <span class="stars">★★★</span><br>
+            "Quality no be here. My customers dey ask for Amasan produce every market day"
+          </div>
+        </div>
+        <div class="slide">
+          <div class="review">
+            <b>Aunty Blessing - Lagos</b> <span class="stars">★★★</span><br>
+            "I order online, e reach me fresh. The AI bot answer all my questions!"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-pay" onclick="payNow()">💳 Pay Online with Paystack</button>
+
+    <a id="whatsappLink" href="https://wa.me/2348104817797?text=Hello%20Amasan%20Farm!%20I%20saw%20your%20site%20and%20I%20want%20to%20order%20fresh%20produce%20🌱" target="_blank" onclick="addOrder()">
+      <button class="btn-whatsapp">Order on WhatsApp 💬</button>
+    </a>
+
+    <a href="tel:+2348104817797">
+      <button class="btn-call">Call Us Now 📞</button>
+    </a>
+    <a href="https://maps.google.com/?q=Wukari+Taraba+State+Nigeria" target="_blank">
+      <button class="btn-map">📍 Find Our Farm</button>
+    </a>
+
+    <div style="margin-top: 20px; border-top: 2px solid #eee; padding-top: 15px;">
+      <button class="btn-ai" onclick="toggleAI()">🤖 Ask Amasan AI</button>
+      <div id="aiChat" style="display:none;">
+        <input type="text" id="aiQuestion" placeholder="e.g. Delivery to Lagos how much?">
+        <button onclick="askAI()" style="background:#673AB7; color:white;">Ask AI</button>
+        <div id="aiAnswer">👋 Hello! I am Amasan AI. Ask me about prices + delivery!</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+      <button class="btn-secondary" onclick="showSettings()">Settings ⚙️</button>
+      <button class="btn-secondary" onclick="showAbout()">About Us ℹ️</button>
+    </div>
+
+    <div id="settingsMenu">
+      <button onclick="toggleDark()">🌙 Dark Mode <span id="darkTxt" style="float:right">OFF</span></button>
+      <button onclick="toggleAdminBox()">👁️ Hide/Show Admin Box <span id="adminTxt" style="float:right">SHOW</span></button>
+      <button onclick="showSection('orderStats')">📊 Order Statistics</button>
+      <div id="orderStats"><div class="stat-box">Total Orders <span class="stat-number" id="totalOrders">0</span></div></div>
+
+      <button onclick="showSection('photoManager')">📸 Manage Photos & Stock</button>
+      <div id="photoManager">
+        <label>Update Stock Count:</label>
+        <input type="number" id="newStock" value="23" min="0">
+        <button onclick="updateStock()" style="background:#FF5722; color:white;">Update Stock</button>
+      </div>
+
+      <button onclick="showSection('orderForm')">📝 Quick Order Form</button>
+      <div id="orderForm">
+        <label>Your Name:</label>
+        <input type="text" id="custName" placeholder="Enter full name">
+        <label>Phone:</label>
+        <input type="tel" id="custPhone" placeholder="080xxxxxxxx">
+
+        <label>State:</label>
+        <select id="custState" onchange="loadLGAs()">
+          <option value="">Select State</option>
+        </select>
+
+        <label>LGA:</label>
+        <select id="custLGA">
+          <option value="">Select LGA first</option>
+        </select>
+
+        <label>Product:</label>
+        <select id="orderYam">
+          <option value="Potatoes - ₦8,000">Potatoes - ₦8,000/bag</option>
+          <option value="Water Yam - ₦6,500">Water Yam - ₦6,500/Tuber</option>
+          <option value="White Yam - ₦7,000">White Yam - ₦7,000/Tuber</option>
+        </select>
+        <label>Quantity:</label>
+        <input type="number" id="orderQty" value="1" min="1">
+        <button onclick="sendOrder()" style="background:#25D366; color:white;">Send Order via WhatsApp</button>
+      </div>
+
+      <button onclick="showSection('priceCalc')">🧮 Smart Price Calculator</button>
+      <div id="priceCalc">
+        <label>Select Product:</label>
+        <select id="calcYam" onchange="calcPrice()">
+          <option value="8000">Potatoes - ₦8,000</option>
+          <option value="6500">Water Yam - ₦6,500</option>
+          <option value="7000">White Yam - ₦7,000</option>
+        </select>
+        <label>Quantity:</label>
+        <input type="number" id="calcBags" value="1" min="1" oninput="calcPrice()">
+        <label>Delivery State:</label>
+        <select id="calcState" onchange="calcPrice()">
+          <option value="500">Taraba - ₦500</option>
+          <option value="1500">Benue/Nasarawa - ₦1,500</option>
+          <option value="3000">Abuja/Kaduna - ₦3,000</option>
+          <option value="5000">Lagos/Abeokuta - ₦5,000</option>
+          <option value="8000">Far North/East - ₦8,000</option>
+        </select>
+        <div id="totalPrice" class="price-result">Total: ₦8,500</div>
+      </div>
+
+      <button onclick="changePassword()">🔑 Change Password</button>
+      <button onclick="logoutAdmin()" style="color: red;">🔒 Logout Admin</button>
+      <button onclick="hideSettings()" style="color: red;">✕ Close Settings</button>
+    </div>
+  </div>
+
+  <div id="aboutPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999">
+    <div style="background:white; max-width:500px; margin:30px auto; padding:30px; border-radius:10px; max-height:80vh; overflow-y:auto; text-align:left">
+      <h2 style="text-align:center">About Amasan Produce</h2>
+
+      <h3>🌱 Our Story</h3>
+      <p>We start Amasan Farm in 2018 with just 1 acre of land in Wukari, Taraba State. Wetin start as small family farm today don grow to over 50 acres of premium potatoes, yam and fresh produce. From selling by roadside to serving customers across Nigeria - na God and hard work!</p>
+
+      <h3>🎯 Our Mission & Vision</h3>
+      <p><b>Mission:</b> To feed Nigeria with fresh, chemical-free farm produce straight from our land to your table.</p>
+      <p><b>Vision:</b> To become West Africa's most trusted farm brand, where every customer get farm-fresh quality at fair price.</p>
+
+      <h3>⭐ Experience You Can Trust</h3>
+      <p>Over 8 years of farming excellence! We don learn the land, master the seasons, and build trust with thousands of customers. When you buy from Amasan, you dey buy from experience.</p>
+
+      <button onclick="closeAbout()" style="margin-top:15px; padding:10px 20px; background:#4CAF50; color:white; border:none; border-radius:5px; width:100%">Close</button>
+    </div>
+  </div>
+
+  <script>
+    var adminPassword = 'Amasan001';
+    var isAdmin = false;
+    var slideIndex = 0;
+    var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbw5JAH2qBTAFUzTdIKCQqHJ6AfFtw8bKq6eJ73Qizw9V7DAByU8-mrrZTDuKwN_XxF8/exec';
+
+    var nigeriaStates = {
+      "Abia": ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala Ngwa North", "Isiala Ngwa South", "Isuikwuato", "Obi Ngwa", "Ohafia", "Osisioma", "Ugwunagbo", "Ukwa East", "Ukwa West", "Umuahia North", "Umuahia South", "Umu Nneochi"],
+      "Adamawa": ["Demsa", "Fufore", "Ganye", "Gayuk", "Gombi", "Grie", "Hong", "Jada", "Lamurde", "Madagali", "Maiha", "Mayo Belwa", "Michika", "Mubi North", "Mubi South", "Numan", "Shelleng", "Song", "Toungo", "Yola North", "Yola South"],
+      "Akwa Ibom": ["Abak", "Eastern Obolo", "Eket", "Esit Eket", "Essien Udim", "Etim Ekpo", "Etinan", "Ibeno", "Ibesikpo Asutan", "Ibiono Ibom", "Ika", "Ikono", "Ikot Abasi", "Ikot Ekpene", "Ini", "Itu", "Mbo", "Mkpat Enin", "Nsit Atai", "Nsit Ibom", "Nsit Ubium", "Obot Akara", "Okobo", "Onna", "Oron", "Oruk Anam", "Udung Uko", "Ukanafun", "Uruan", "Urue Offong Oruko", "Uyo"],
+      "Anambra": ["Aguata", "Anambra East", "Anambra West", "Anaocha", "Awka North", "Awka South", "Ayamelum", "Dunukofia", "Ekwusigo", "Idemili North", "Idemili South", "Ihiala", "Njikoka", "Nnewi North", "Nnewi South", "Ogbaru", "Onitsha North", "Onitsha South", "Orumba North", "Orumba South", "Oyi"],
+      "Bauchi": ["Alkaleri", "Bauchi", "Bogoro", "Damban", "Darazo", "Dass", "Ganjuwa", "Giade", "Itas Gadau", "Jamaare", "Katagum", "Kirfi", "Misau", "Ningi", "Shira", "Tafawa Balewa", "Toro", "Warji", "Zaki"],
+      "Bayelsa": ["Brass", "Ekeremor", "Kolokuma Opokuma", "Nembe", "Ogbia", "Sagbama", "Southern Ijaw", "Yenagoa"],
+      "Benue": ["Ado", "Agatu", "Apa", "Buruku", "Gboko", "Guma", "Gwer East", "Gwer West", "Katsina Ala", "Konshisha", "Kwande", "Logo", "Makurdi", "Obi", "Ogbadibo", "Ohimini", "Oju", "Okpokwu", "Oturkpo", "Tarka", "Ukum", "Ushongo", "Vandeikya"],
+      "Borno": ["Abadam", "Askira Uba", "Bama", "Bayo", "Biu", "Chibok", "Damboa", "Dikwa", "Gubio", "Guzamala", "Gwoza", "Hawul", "Jere", "Kaga", "Kala Balge", "Konduga", "Kukawa", "Kwaya Kusar", "Mafa", "Magumeri", "Maiduguri", "Marte", "Mobbar", "Monguno", "Ngala", "Nganzai", "Shani"],
+      "Cross River": ["Abi", "Akamkpa", "Akpabuyo", "Bakassi", "Bekwarra", "Biase", "Boki", "Calabar Municipal", "Calabar South", "Etung", "Ikom", "Obanliku", "Obubra", "Obudu", "Odukpani", "Ogoja", "Yakuur", "Yala"],
+      "Delta": ["Aniocha North", "Aniocha South", "Bomadi", "Burutu", "Ethiope East", "Ethiope West", "Ika North East", "Ika South", "Isoko North", "Isoko South", "Ndokwa East", "Ndokwa West", "Okpe", "Oshimili North", "Oshimili South", "Patani", "Sapele", "Udu", "Ughelli North", "Ughelli South", "Ukwuani", "Uvwie", "Warri North", "Warri South", "Warri South West"],
+      "Ebonyi": ["Abakaliki", "Afikpo North", "Afikpo South", "Ebonyi", "Ezza North", "Ezza South", "Ikwo", "Ishielu", "Ivo", "Izzi", "Ohaozara", "Ohaukwu", "Onicha"],
+      "Edo": ["Akoko Edo", "Egor", "Esan Central", "Esan North East", "Esan South East", "Esan West", "Etsako Central", "Etsako East", "Etsako West", "Igueben", "Ikpoba Okha", "Orhionmwon", "Oredo", "Ovia North East", "Ovia South West", "Owan East", "Owan West", "Uhunmwonde"],
+      "Ekiti": ["Ado Ekiti", "Efon", "Ekiti East", "Ekiti South West", "Ekiti West", "Emure", "Gbonyin", "Ido Osi", "Ijero", "Ikere", "Ikole", "Ilejemeje", "Irepodun Ifelodun", "Ise Orun", "Moba", "Oye"],
+      "Enugu": ["Aninri", "Awgu", "Enugu East", "Enugu North", "Enugu South", "Ezeagu", "Igbo Etiti", "Igbo Eze North", "Igbo Eze South", "Isi Uzo", "Nkanu East", "Nkanu West", "Nsukka", "Oji River", "Udenu", "Udi", "Uzo Uwani"],
+      "FCT": ["Abaji", "Bwari", "Gwagwalada", "Kuje", "Kwali", "Municipal Area Council"],
+      "Gombe": ["Akko", "Balanga", "Billiri", "Dukku", "Funakaye", "Gombe", "Kaltungo", "Kwami", "Nafada", "Shongom", "Yamaltu Deba"],
+      "Imo": ["Aboh Mbaise", "Ahiazu Mbaise", "Ehime Mbano", "Ezinihitte", "Ideato North", "Ideato South", "Ihitte Uboma", "Ikeduru", "Isiala Mbano", "Isu", "Mbaitoli", "Ngor Okpala", "Njaba", "Nkwerre", "Nwangele", "Obowo", "Oguta", "Ohaji Egbema", "Okigwe", "Orlu", "Orsu", "Oru East", "Oru West", "Owerri Municipal", "Owerri North", "Owerri West", "Unuimo"],
+      "Jigawa": ["Auyo", "Babura", "Biriniwa", "Birnin Kudu", "Buji", "Dutse", "Gagarawa", "Garki", "Gumel", "Guri", "Gwaram", "Gwiwa", "Hadejia", "Jahun", "Kafin Hausa", "Kazaure", "Kiri Kasama", "Kiyawa", "Kaugama", "Maigatari", "Malam Madori", "Miga", "Ringim", "Roni", "Sule Tankarkar", "Taura", "Yankwashi"],
+      "Kaduna": ["Birnin Gwari", "Chikun", "Giwa", "Igabi", "Ikara", "Jaba", "Jema a", "Kachia", "Kaduna North", "Kaduna South", "Kagarko", "Kajuru", "Kaura", "Kauru", "Kubau", "Kudan", "Lere", "Makarfi", "Sabon Gari", "Sanga", "Soba", "Zangon Kataf", "Zaria"],
+      "Kano": ["Ajingi", "Albasu", "Bagwai", "Bebeji", "Bichi", "Bunkure", "Dala", "Dambatta", "Dawakin Kudu", "Dawakin Tofa", "Doguwa", "Fagge", "Gabasawa", "Garko", "Garun Mallam", "Gaya", "Gezawa", "Gwale", "Gwarzo", "Kabo", "Kano Municipal", "Karaye", "Kibiya", "Kiru", "Kumbotso", "Kunchi", "Kura", "Madobi", "Makoda", "Minjibir", "Nasarawa", "Rano", "Rimin Gado", "Rogo", "Shanono", "Sumaila", "Takai", "Tarauni", "Tofa", "Tsanyawa", "Tudun Wada", "Ungogo", "Warawa", "Wudil"],
+      "Katsina": ["Bakori", "Batagarawa", "Batsari", "Baure", "Bindawa", "Charanchi", "Dandume", "Danja", "Dan Musa", "Daura", "Dutsi", "Dutsin Ma", "Faskari", "Funtua", "Ingawa", "Jibia", "Kafur", "Kaita", "Kankara", "Kankia", "Katsina", "Kurfi", "Kusada", "Mai Adua", "Malumfashi", "Mani", "Mashi", "Matazu", "Musawa", "Rimi", "Sabuwa", "Safana", "Sandamu", "Zango"],
+      "Kebbi": ["Aleiro", "Arewa Dandi", "Argungu", "Augie", "Bagudo", "Birnin Kebbi", "Bunza", "Dandi", "Fakai", "Gwandu", "Jega", "Kalgo", "Koko Besse", "Maiyama", "Ngaski", "Sakaba", "Shanga", "Suru", "Wasagu Danko", "Yauri", "Zuru"],
+      "Kogi": ["Adavi", "Ajaokuta", "Ankpa", "Bassa", "Dekina", "Ibaji", "Idah", "Igalamela Odolu", "Ijumu", "Kabba Bunu", "Kogi", "Lokoja", "Mopa Muro", "Ofu", "Ogori Magongo", "Okehi", "Okene", "Olamaboro", "Omala", "Yagba East", "Yagba West"],
+      "Kwara": ["Asa", "Baruten", "Edu", "Ekiti", "Ifelodun", "Ilorin East", "Ilorin South", "Ilorin West", "Irepodun", "Isin", "Kaiama", "Moro", "Offa", "Oke Ero", "Oyun", "Pategi"],
+      "Lagos": ["Agege", "Ajeromi Ifelodun", "Alimosho", "Amuwo Odofin", "Apapa", "Badagry", "Epe", "Eti Osa", "Ibeju Lekki", "Ifako Ijaiye", "Ikeja", "Ikorodu", "Kosofe", "Lagos Island", "Lagos Mainland", "Mushin", "Ojo", "Oshodi Isolo", "Shomolu", "Surulere"],
+      "Nasarawa": ["Akwanga", "Awe", "Doma", "Karu", "Keana", "Keffi", "Kokona", "Lafia", "Nasarawa", "Nasarawa Egon", "Obi", "Toto", "Wamba"],
+      "Niger": ["Agaie", "Agwara", "Bida", "Borgu", "Bosso", "Chanchaga", "Edati", "Gbako", "Gurara", "Katcha", "Kontagora", "Lapai", "Lavun", "Magama", "Mariga", "Mashegu", "Mokwa", "Moya", "Paikoro", "Rafi", "Rijau", "Shiroro", "Suleja", "Tafa", "Wushishi"],
+      "Ogun": ["Abeokuta North", "Abeokuta South", "Ado Odo Ota", "Egbado North", "Egbado South", "Ewekoro", "Ifo", "Ijebu East", "Ijebu North", "Ijebu North East", "Ijebu Ode", "Ikenne", "Imeko Afon", "Ipokia", "Obafemi Owode", "Odeda", "Odogbolu", "Ogun Waterside", "Remo North", "Shagamu"],
+      "Ondo": ["Akoko North East", "Akoko North West", "Akoko South East", "Akoko South West", "Akure North", "Akure South", "Ese Odo", "Idanre", "Ifedore", "Ilaje", "Ile Oluji Okigbo", "Irele", "Odigbo", "Okitipupa", "Ondo East", "Ondo West", "Ose", "Owo"],
+      "Osun": ["Atakunmosa East", "Atakunmosa West", "Aiyedaade", "Aiyedire", "Boluwaduro", "Boripe", "Ede North", "Ede South", "Egbedore", "Ejigbo", "Ife Central", "Ife East", "Ife North", "Ife South", "Ifelodun", "Ila", "Ilesa East", "Ilesa West", "Irepodun", "Irewole", "Isokan", "Iwo", "Obokun", "Odo Otin", "Ola Oluwa", "Olorunda", "Oriade", "Orolu", "Osogbo"],
+      "Oyo": ["Afijio", "Akinyele", "Atiba", "Atisbo", "Egbeda", "Ibadan North", "Ibadan North East", "Ibadan North West", "Ibadan South East", "Ibadan South West", "Ibarapa Central", "Ibarapa East", "Ibarapa North", "Ido", "Irepo", "Iseyin", "Itesiwaju", "Iwajowa", "Kajola", "Lagelu", "Ogbomoso North", "Ogbomoso South", "Ogo Oluwa", "Olorunsogo", "Oluyole", "Ona Ara", "Orelope", "Ori Ire", "Oyo East", "Oyo West", "Saki East", "Saki West", "Surulere"],
+      "Plateau": ["Barkin Ladi", "Bassa", "Bokkos", "Jos East", "Jos North", "Jos South", "Kanam", "Kanke", "Langtang North", "Langtang South", "Mangu", "Mikang", "Pankshin", "Qua an Pan", "Riyom", "Shendam", "Wase"],
+      "Rivers": ["Abua Odual", "Ahoada East", "Ahoada West", "Akuku Toru", "Andoni", "Asari Toru", "Bonny", "Degema", "Eleme", "Emuoha", "Etche", "Gokana", "Ikwerre", "Khana", "Obio Akpor", "Ogba Egbema Ndoni", "Ogu Bolo", "Okrika", "Omuma", "Opobo Nkoro", "Oyigbo", "Port Harcourt", "Tai"],
+      "Sokoto": ["Binji", "Bodinga", "Dange Shuni", "Gada", "Goronyo", "Gudu", "Gwadabawa", "Illela", "Isa", "Kebbe", "Kware", "Rabah", "Sabon Birni", "Shagari", "Silame", "Sokoto North", "Sokoto South", "Tambuwal", "Tangaza", "Tureta", "Wamako", "Wurno", "Yabo"],
+      "Taraba": ["Ardo Kola", "Bali", "Donga", "Gashaka", "Gassol", "Ibi", "Jalingo", "Karim Lamido", "Kumi", "Lau", "Sardauna", "Takum", "Ussa", "Wukari", "Yorro", "Zing"],
+      "Yobe": ["Bade", "Bursari", "Damaturu", "Fika", "Fune", "Geidam", "Gujba", "Gulani", "Jakusko", "Karasuwa", "Machina", "Nangere", "Nguru", "Potiskum", "Tarmuwa", "Yunusari", "Yusufari"],
+      "Zamfara": ["Anka", "Bakura", "Birnin Magaji Kiyaw", "Bukkuyum", "Bungudu", "Gummi", "Gusau", "Kaura Namoda", "Maradun", "Maru", "Shinkafi", "Talata Mafara", "Tsafe", "Zurmi"]
+    };
+
+    function loadStates() {
+      var stateSelect = document.getElementById('custState');
+      stateSelect.innerHTML = '<option value="">Select State</option>';
+      for (var state in nigeriaStates) {
+        var option = document.createElement('option');
+        option.value = state;
+        option.textContent = state;
+        stateSelect.appendChild(option);
+      }
+    }
+
+    function loadLGAs() {
+      var stateSelect = document.getElementById('custState');
+      var lgaSelect = document.getElementById('custLGA');
+      var selectedState = stateSelect.value;
+      lgaSelect.innerHTML = '<option value="">Select LGA</option>';
+      if (selectedState && nigeriaStates[selectedState]) {
+        nigeriaStates[selectedState].forEach(function(lga) {
+          var option = document.createElement('option');
+          option.value = lga;
+          option.textContent = lga;
+          lgaSelect.appendChild(option);
+        });
+      }
+    }
+
+    function loginAdmin() {
+      var pass = prompt('Enter Admin Password:');
+      if (pass === adminPassword) {
+        isAdmin = true;
+        document.getElementById('adminBox').style.display = 'block';
+        document.getElementById('loginBtn').style.display = 'none';
+        loadOrderList();
+        alert('Welcome Boss! Admin mode activated 🔓');
+      } else {
+        alert('Wrong password!');
+      }
+    }
+
+    function logoutAdmin() {
+      isAdmin = false;
+      document.getElementById('adminBox').style.display = 'none';
+      document.getElementById('loginBtn').style.display = 'block';
+      alert('Logged out');
+    }
+
+    function toggleAdminBox() {
+      var box = document.getElementById('adminBox');
+      var txt = document.getElementById('adminTxt');
+      if (box.style.display === 'none') {
+        box.style.display = 'block';
+        txt.textContent = 'HIDE';
+      } else {
+        box.style.display = 'none';
+        txt.textContent = 'SHOW';
+      }
+    }
+
+    function uploadPhotos() {
+      var files = document.getElementById('fileInput').files;
+      var gallery = document.getElementById('gallery');
+      if (files.length === 0) return alert('Select photos first!');
+      for (var i = 0; i < files.length; i++) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var div = document.createElement('div');
+          div.className = 'gallery-item';
+          div.innerHTML = '<img src="' + e.target.result + '">';
+          gallery.appendChild(div);
+        };
+        reader.readAsDataURL(files[i]);
+      }
+      alert(files.length + ' photo(s) uploaded!');
+    }
+
+    function deleteLastPhoto() {
+      var gallery = document.getElementById('gallery');
+      if (gallery.children.length > 0) {
+        gallery.removeChild(gallery.lastChild);
+        alert('Last photo deleted');
+      }
+    }
+
+    function updateStock() {
+      var newStock = parseInt(document.getElementById('newStock').value);
+      var stockBanner = document.getElementById('stockBanner');
+      document.getElementById('stockCount').textContent = newStock;
+      localStorage.setItem('stock', newStock);
+      if (newStock < 10) {
+        stockBanner.classList.add('low-stock');
+      } else {
+        stockBanner.classList.remove('low-stock');
+      }
+      alert('Stock updated to ' + newStock);
+    }
+
+    function moveSlide(dir) {
+      var slider = document.getElementById('slider');
+      var slides = slider.children.length;
+      slideIndex += dir;
+      if (slideIndex < 0) slideIndex = slides - 1;
+      if (slideIndex >= slides) slideIndex = 0;
+      slider.style.transform = 'translateX(-' + (slideIndex * 100) + '%)';
+    }
+
+    setInterval(function() {
+      moveSlide(1);
+    }, 4000);
+
+    function showSettings() {
+      document.getElementById('settingsMenu').style.display = 'block';
+      loadStates();
+      calcPrice();
+      loadOrderList();
+    }
+
+    function hideSettings() {
+      document.getElementById('settingsMenu').style.display = 'none';
+      document.querySelectorAll('#settingsMenu > div').forEach(function(div) {
+        div.style.display = 'none';
+      });
+    }
+
+    function showSection(id) {
+      var el = document.getElementById(id);
+      el.style.display = el.style.display === 'none'? 'block' : 'none';
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      var txt = document.getElementById('darkTxt');
+      txt.textContent = document.body.classList.contains('dark')? 'ON' : 'OFF';
+    }
+
+    function calcPrice() {
+      var price = parseInt(document.getElementById('calcYam').value);
+      var qty = parseInt(document.getElementById('calcBags').value);
+      var delivery = parseInt(document.getElementById('calcState').value);
+      var total = (price * qty) + delivery;
+      document.getElementById('totalPrice').textContent = 'Total: ₦' + total.toLocaleString();
+    }
+
+    function sendOrder() {
+      var name = document.getElementById('custName').value;
+      var phone = document.getElementById('custPhone').value;
+      var state = document.getElementById('custState').value;
+      var lga = document.getElementById('custLGA').value;
+      var product = document.getElementById('orderYam').value;
+      var qty = document.getElementById('orderQty').value;
+
+      if (!name ||!phone ||!state ||!lga) return alert('Fill all fields!');
+
+      var order = {
+        name: name,
+        phone: phone,
+        location: lga + ', ' + state,
+        product: product,
+        qty: qty,
+        date: new Date().toLocaleString()
+      };
+      var orders = JSON.parse(localStorage.getItem('orderList') || '[]');
+      orders.unshift(order);
+      localStorage.setItem('orderList', JSON.stringify(orders));
+
+      var count = parseInt(localStorage.getItem('orders') || '0') + 1;
+      localStorage.setItem('orders', count);
+      document.getElementById('totalOrders').textContent = count;
+
+      var orderData = {name, phone, state, lga, product, qty};
+      fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(orderData)
+      }).catch(function(err){
+        console.log('Google Sheet error:', err);
+      });
+
+      var msg = 'New Order from Website:\n\nName: ' + name + '\nPhone: ' + phone + '\nLocation: ' + lga + ', ' + state + '\nProduct: ' + product + '\nQuantity: ' + qty;
+      var whatsappUrl = 'https://wa.me/2348104817797?text=' + encodeURIComponent(msg);
+      window.location.href = whatsappUrl;
+
+      alert('Order sent! ✅ WhatsApp + Admin panel + Google Sheet all get am');
+
+      document.getElementById('custName').value = '';
+      document.getElementById('custPhone').value = '';
+      document.getElementById('orderQty').value = '1';
+    }
+
+    function loadOrderList() {
+      var orders = JSON.parse(localStorage.getItem('orderList') || '[]');
+      var statsDiv = document.getElementById('orderStats');
+
+      if (orders.length === 0) {
+        statsDiv.innerHTML = '<div class="stat-box">No orders yet <span class="stat-number">0</span></div>';
+        return;
+      }
+
+      var html = '<div class="stat-box">Total Orders <span class="stat-number">' + orders.length + '</span></div>';
+      html += '<div style="max-height:200px; overflow-y:auto; margin-top:10px;">';
+
+      orders.forEach(function(order, i) {
+        html += '<div style="background:white; padding:8px; border-radius:5px; margin:5px 0; font-size:12px; text-align:left;">';
+        html += '<b>' + (i+1) + '. ' + order.name + '</b> - ' + order.phone + '<br>';
+        html += order.product + ' x' + order.qty + '<br>';
+        html += '<small>' + order.location + ' | ' + order.date + '</small>';
+        html += '</div>';
+      });
+
+      html += '</div>';
+      html += '<button onclick="clearOrders()" style="background:#f44336; color:white; margin-top:8px; width:100%;">🗑️ Clear All Orders</button>';
+
+      statsDiv.innerHTML = html;
+    }
+
+    function clearOrders() {
+      if (confirm('Delete all orders? This cannot be undone!')) {
+        localStorage.removeItem('orderList');
+        localStorage.removeItem('orders');
+        document.getElementById('totalOrders').textContent = '0';
+        loadOrderList();
+        alert('All orders cleared');
+      }
+    }
+
+    function toggleAI() {
+      var chat = document.getElementById('aiChat');
+      chat.style.display = chat.style.display === 'none'? 'block' : 'none';
+    }
+
+    function askAI() {
+      var q = document.getElementById('aiQuestion').value.toLowerCase();
+      var ans = document.getElementById('aiAnswer');
+
+      if (q.includes('price') || q.includes('how much')) {
+        ans.innerHTML = '<div class="ai-bubble">Potatoes: ₦8,000/bag\nWater Yam: ₦6,500/tuber\nWhite Yam: ₦7,000/tuber</div>';
+      } else if (q.includes('delivery') || q.includes('lagos')) {
+        ans.innerHTML = '<div class="ai-bubble">Delivery to Lagos: ₦5,000\nTaraba: ₦500\nAbuja: ₦3,000</div>';
+      } else if (q.includes('location') || q.includes('where')) {
+        ans.innerHTML = '<div class="ai-bubble">We dey Wukari, Taraba State. Click "Find Our Farm" for Google Map 📍</div>';
+      } else {
+        ans.innerHTML = '<div class="ai-bubble">Hello! Ask me about prices, delivery, or location. Or click WhatsApp to chat with boss directly 💬</div>';
+      }
+    }
+
+    function changePassword() {
+      var newPass = prompt('Enter new admin password:');
+      if (newPass) {
+        adminPassword = newPass;
+        alert('Password changed!');
+      }
+    }
+
+    function payNow() {
+      var handler = PaystackPop.setup({
+        key: 'pk_test_YOUR_KEY_HERE',
+        email: 'customer@email.com',
+        amount: 850000,
+        currency: 'NGN',
+        ref: 'AMASAN_' + Math.floor(Math.random() * 1000000),
+        callback: function(response){
+          alert('Payment successful! Ref: ' + response.reference);
+        },
+        onClose: function(){
+          alert('Payment cancelled');
+        }
+      });
+      handler.openIframe();
+    }
+
+    function showAbout() {
+      document.getElementById('aboutPopup').style.display = 'block';
+    }
+
+    function closeAbout() {
+      document.getElementById('aboutPopup').style.display = 'none';
+    }
+
+    var hour = new Date().getHours();
+    var greet = hour < 12? 'Good Morning' : hour < 18? 'Good Afternoon' : 'Good Evening';
+    document.getElementById('greetingBox').textContent = greet + '! Welcome to Amasan Farm 🌱';
+
+    var savedStock = parseInt(localStorage.getItem('stock')) || 23;
+    document.getElementById('stockCount').textContent = savedStock;
+    document.getElementById('newStock').value = savedStock;
+
+    if (savedStock < 10) {
+      document.getElementById('stockBanner').classList.add('low-stock');
+    }
+
+    document.getElementById('totalOrders').textContent = localStorage.getItem('orders') || '0';
+  </script>
+</body>
+</html>
