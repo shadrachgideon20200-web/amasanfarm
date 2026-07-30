@@ -70,7 +70,7 @@
     <button class="nav-btn" onclick="openAboutModal()"><i class="fas fa-seedling"></i> About Us</button>
     <button class="nav-btn" onclick="openTrackModal()"><i class="fas fa-truck"></i> Track Order</button>
     <button class="nav-btn" onclick="openFeedbackModal()"><i class="fas fa-comment-dots"></i> Feedback</button>
-    <a class="nav-btn" href="https://wa.me/2348037558809" target="_blank"><i class="fab fa-whatsapp" style="color:var(--whatsapp)"></i> WhatsApp</a>
+    <a class="nav-btn" href="https://wa.me/2348088375509" target="_blank"><i class="fab fa-whatsapp" style="color:var(--whatsapp)"></i> WhatsApp</a>
     <button class="nav-btn" id="install-app-btn" style="display:none;" onclick="installApp()"><i class="fas fa-download"></i> Install App</button>
     <button class="nav-btn" onclick="toggleDarkMode()"><i class="fas fa-moon" id="theme-icon"></i></button>
     <button class="nav-btn" onclick="openCartModal()"><i class="fas fa-shopping-basket"></i> Cart <span class="cart-badge" id="cart-count">0</span></button>
@@ -436,7 +436,7 @@ function submitOrder(){
     `;
     document.getElementById('receipt-total-display').innerText=`Total Due: ₦ ${total.toLocaleString()}`;
     const waText = encodeURIComponent(`Hello Amasan Farm! I just placed an order.\n\nOrder Ref: #${ref}\nName: ${name}\nTotal: ₦${total.toLocaleString()}\nItems: ${items}`);
-    document.getElementById('whatsapp-receipt-btn').href = `https://wa.me/2348037558809?text=${waText}`;
+    document.getElementById('whatsapp-receipt-btn').href = `https://wa.me/2348088375509?text=${waText}`;
     cart=[];
     updateCartUI();
     closeModal('cart-modal');
