@@ -5,1641 +5,285 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Amasan Farm Admin Hub</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- LEAFLET CSS FOR GPS MAPS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  
   <style>
-    :root {
-      --bg-dark: #121212;
-      --bg-card: #1e1e1e;
-      --bg-hover: #282828;
-      --primary: #2e7d32;
-      --primary-light: #4caf50;
-      --accent: #ff9800;
-      --text: #f0f0f0;
-      --text-muted: #8e8e8e;
-      --border: #2a2a2a;
-      --danger: #f44336;
-      --warning: #ff9800;
-    }
-    /* LIGHT MODE OVERRIDES */
-    body.light-mode {
-      --bg-dark: #f4f6f8;
-      --bg-card: #ffffff;
-      --bg-hover: #eef2f5;
-      --text: #1a1a1a;
-      --text-muted: #6c757d;
-      --border: #e0e0e0;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    /* BRAND LOGO STYLING */
-    .brand-logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    }
-    .brand-logo-large {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 12px;
-    }
-    /* AUTHENTICATION OVERLAY */
-    .login-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(18, 18, 18, 0.95);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .login-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      padding: 32px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-    }
-    .login-card .brand {
-      justify-content: center;
-      flex-direction: column;
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-    }
-    .login-card p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 20px;
-    }
-    .password-wrapper {
-      position: relative;
-      width: 100%;
-      margin-bottom: 12px;
-    }
-    .password-wrapper input {
-      width: 100%;
-      padding: 12px 42px 12px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-dark);
-      color: var(--text);
-      font-size: 1rem;
-      outline: none;
-    }
-    .password-wrapper input:focus {
-      border-color: var(--primary-light);
-    }
-    .toggle-password {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1rem;
-      transition: color 0.2s;
-    }
-    .toggle-password:hover {
-      color: var(--text);
-    }
-    .forgot-link {
-      display: block;
-      text-align: right;
-      font-size: 0.8rem;
-      color: var(--primary-light);
-      text-decoration: none;
-      margin-bottom: 16px;
-      cursor: pointer;
-    }
-    .forgot-link:hover {
-      text-decoration: underline;
-    }
-    .login-card button {
-      width: 100%;
-      padding: 12px;
-      justify-content: center;
-    }
-    .error-msg {
-      color: var(--danger);
-      font-size: 0.85rem;
-      margin-top: 12px;
-      display: none;
-    }
-    .success-msg {
-      color: var(--primary-light);
-      font-size: 0.85rem;
-      margin-top: 12px;
-      display: none;
-    }
-    /* SIDEBAR */
-    .sidebar {
-      width: 240px;
-      background-color: var(--bg-card);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 20px 12px;
-    }
-    .sidebar-menu {
-      flex: 1;
-    }
-    .sidebar-footer {
-      border-top: 1px solid var(--border);
-      padding-top: 12px;
-      margin-top: 12px;
-    }
-    .brand {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--primary-light);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      margin-bottom: 24px;
-    }
-    .nav-btn {
-      width: 100%;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 0.95rem;
-      font-weight: 500;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      transition: all 0.2s ease;
-    }
-    .nav-btn div {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .nav-btn:hover {
-      background-color: var(--bg-hover);
-      color: var(--text);
-    }
-    .nav-btn.active {
-      background-color: var(--primary);
-      color: #fff;
-    }
-    .nav-btn.logout-btn:hover {
-      background-color: rgba(244, 67, 54, 0.15);
-      color: var(--danger);
-    }
-    .badge {
-      background: var(--accent);
-      color: #000;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 12px;
-    }
-    .badge-danger {
-      background: var(--danger);
-      color: #fff;
-    }
-    /* MAIN CONTAINER */
-    .main-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-    header {
-      background-color: var(--bg-card);
-      padding: 16px 28px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .theme-toggle-btn {
-      background: var(--bg-hover);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 8px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-    .theme-toggle-btn:hover {
-      border-color: var(--primary-light);
-    }
-    .view-section {
-      display: none;
-      height: calc(100vh - 65px);
-      overflow-y: auto;
-    }
-    .view-section.active {
-      display: block;
-    }
-    /* DASHBOARD */
-    .dashboard-padding {
-      padding: 28px;
-    }
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: var(--bg-card);
-      padding: 20px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-    .card h4 {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-    .card .value {
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
-    /* CUSTOMER SUPPORT CHAT */
-    .chat-layout {
-      display: flex;
-      height: 100%;
-    }
-    .chat-sidebar {
-      width: 320px;
-      background: var(--bg-card);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-    }
-    .chat-search-box {
-      padding: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .chat-search-box input {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-dark);
-      color: var(--text);
-      font-size: 0.9rem;
-    }
-    .customer-list {
-      flex: 1;
-      overflow-y: auto;
-    }
-    .customer-item {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .customer-item:hover, .customer-item.active {
-      background-color: var(--bg-hover);
-    }
-    .customer-item.active {
-      border-left: 3px solid var(--primary-light);
-    }
-    .customer-item .name {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .customer-item .preview {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .chat-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-dark);
-    }
-    .chat-header {
-      padding: 16px 24px;
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .messages-container {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .message {
-      max-width: 55%;
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      white-space: pre-wrap;
-    }
-    .message.incoming {
-      background: var(--bg-card);
-      align-self: flex-start;
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-    .message.outgoing {
-      background: var(--primary);
-      color: #fff;
-      align-self: flex-end;
-    }
-    .quick-replies {
-      display: flex;
-      gap: 8px;
-      padding: 10px 24px 0 24px;
-      background: var(--bg-card);
-      overflow-x: auto;
-    }
-    .chip-btn {
-      background: var(--bg-hover);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 16px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-    .chip-btn:hover {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary-light);
-    }
-    .chat-input-area {
-      padding: 16px 24px;
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 12px;
-    }
-    .chat-input-area input {
-      flex: 1;
-      padding: 12px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-dark);
-      color: var(--text);
-      font-size: 0.95rem;
-    }
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: var(--primary-light);
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-secondary {
-      background: var(--bg-hover);
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-    .btn-danger {
-      background: var(--danger);
-      color: #fff;
-    }
-    /* GPS MAP & ORDERS CONTAINER */
-    .gps-map-container {
-      width: 100%;
-      height: 320px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      margin-bottom: 24px;
-      overflow: hidden;
-      z-index: 1;
-    }
-    .table-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .filter-group {
-      display: flex;
-      gap: 8px;
-    }
-    .filter-btn {
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-    .filter-btn.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary-light);
-    }
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--bg-card);
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    .data-table th, .data-table td {
-      padding: 14px 18px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
-    }
-    .data-table th {
-      background: var(--bg-hover);
-      color: var(--text-muted);
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-    }
-    
-    /* STATUS BADGES AND ACTION BUTTONS */
-    .status-tag {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      display: inline-block;
-      text-transform: uppercase;
-    }
-    .status-pending { background: rgba(255, 152, 0, 0.2); color: var(--accent); }
-    .status-confirmed { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
-    .status-dispatched { background: rgba(255, 152, 0, 0.25); color: #ff9800; }
-    .status-delivered { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
-    .status-cancelled { background: rgba(244, 67, 54, 0.2); color: var(--danger); }
-    .btn-status {
-      padding: 4px 8px;
-      border-radius: 4px;
-      border: none;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: opacity 0.2s;
-      color: #fff;
-    }
-    .btn-status:hover {
-      opacity: 0.85;
-    }
-    .btn-confirm { background-color: #2e7d32; }
-    .btn-dispatch { background-color: #ff9800; color: #000; }
-    .btn-deliver { background-color: #2196f3; }
-    .btn-cancel { background-color: #f44336; }
-    .stock-critical {
-      color: var(--danger);
-      font-weight: 700;
-    }
-    .stock-badge-low {
-      background: rgba(244, 67, 54, 0.2);
-      color: var(--danger);
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-    }
-    /* DISPATCH DRAWER */
-    .dispatch-drawer {
-      position: absolute;
-      top: 0;
-      right: -340px;
-      width: 320px;
-      height: 100%;
-      background: var(--bg-card);
-      border-left: 1px solid var(--border);
-      box-shadow: -4px 0 20px rgba(0,0,0,0.5);
-      transition: right 0.3s ease;
-      z-index: 10;
-      padding: 24px;
-    }
-    .dispatch-drawer.open {
-      right: 0;
-    }
-    .drawer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .close-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-    .dispatch-form label {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 14px;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-    .dispatch-form select, .dispatch-form input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--bg-dark);
-      color: var(--text);
-    }
-    /* INVENTORY MODAL STYLING */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1050;
-    }
-    .modal-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      padding: 28px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 440px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-    }
-    .modal-card h3 {
-      margin-bottom: 16px;
-      color: var(--primary-light);
-    }
-    .form-group {
-      margin-bottom: 14px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--bg-dark);
-      color: var(--text);
-    }
+    :root { --bg-dark:#121212; --bg-card:#1e1e1e; --bg-hover:#282828; --primary:#2e7d32; --primary-light:#4caf50; --accent:#ff9800; --text:#f0f0f0; --text-muted:#8e8e8e; --border:#2a2a2a; --danger:#f44336; --warning:#ff9800; }
+    body.light-mode { --bg-dark:#f4f6f8; --bg-card:#ffffff; --bg-hover:#eef2f5; --text:#1a1a1a; --text-muted:#6c757d; --border:#e0e0e0; }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+    body{background-color:var(--bg-dark);color:var(--text);display:flex;height:100vh;overflow:hidden;transition:background-color 0.3s,color 0.3s}
+   .brand-logo{width:38px;height:38px;border-radius:50%;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,0.4)}
+   .brand-logo-large{width:64px;height:64px;margin-bottom:12px}
+   .login-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(18,18,18,0.95);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:1000}
+   .login-card{background:var(--bg-card);border:1px solid var(--border);padding:32px;border-radius:12px;width:100%;max-width:380px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.6)}
+   .login-card.brand{justify-content:center;flex-direction:column;font-size:1.4rem;margin-bottom:8px}
+   .login-card p{color:var(--text-muted);font-size:0.9rem;margin-bottom:20px}
+   .password-wrapper{position:relative;width:100%;margin-bottom:12px}
+   .password-wrapper input{width:100%;padding:12px 42px 12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text);font-size:1rem;outline:none}
+   .password-wrapper input:focus{border-color:var(--primary-light)}
+   .toggle-password{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);cursor:pointer;font-size:1rem;transition:color 0.2s}
+   .toggle-password:hover{color:var(--text)}
+   .forgot-link{display:block;text-align:right;font-size:0.8rem;color:var(--primary-light);text-decoration:none;margin-bottom:16px;cursor:pointer}
+   .forgot-link:hover{text-decoration:underline}
+   .login-card button{width:100%;padding:12px;justify-content:center}
+   .error-msg{color:var(--danger);font-size:0.85rem;margin-top:12px;display:none}
+   .success-msg{color:var(--primary-light);font-size:0.85rem;margin-top:12px;display:none}
+   .sidebar{width:240px;background-color:var(--bg-card);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 12px}
+   .sidebar-menu{flex:1}
+   .sidebar-footer{border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
+   .brand{font-size:1.1rem;font-weight:700;color:var(--primary-light);display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:24px}
+   .nav-btn{width:100%;background:none;border:none;color:var(--text-muted);padding:12px 16px;text-align:left;font-size:0.95rem;font-weight:500;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;transition:all 0.2s ease}
+   .nav-btn div{display:flex;align-items:center;gap:12px}
+   .nav-btn:hover{background-color:var(--bg-hover);color:var(--text)}
+   .nav-btn.active{background-color:var(--primary);color:#fff}
+   .nav-btn.logout-btn:hover{background-color:rgba(244,67,54,0.15);color:var(--danger)}
+   .badge{background:var(--accent);color:#000;font-size:0.75rem;font-weight:700;padding:2px 8px;border-radius:12px}
+   .badge-danger{background:var(--danger);color:#fff}
+   .main-container{flex:1;display:flex;flex-direction:column;position:relative}
+    header{background-color:var(--bg-card);padding:16px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+   .theme-toggle-btn{background:var(--bg-hover);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:20px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:8px;transition:all 0.2s ease}
+   .theme-toggle-btn:hover{border-color:var(--primary-light)}
+   .view-section{display:none;height:calc(100vh - 65px);overflow-y:auto}
+   .view-section.active{display:block}
+   .dashboard-padding{padding:28px}
+   .grid-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+   .card{background:var(--bg-card);padding:20px;border-radius:10px;border:1px solid var(--border)}
+   .card h4{color:var(--text-muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+   .card.value{font-size:1.8rem;font-weight:700}
+   .chat-layout{display:flex;height:100%}
+   .chat-sidebar{width:320px;background:var(--bg-card);border-right:1px solid var(--border);display:flex;flex-direction:column}
+   .chat-search-box{padding:16px;border-bottom:1px solid var(--border)}
+   .chat-search-box input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text);font-size:0.9rem}
+   .customer-list{flex:1;overflow-y:auto}
+   .customer-item{padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s}
+   .customer-item:hover,.customer-item.active{background-color:var(--bg-hover)}
+   .customer-item.active{border-left:3px solid var(--primary-light)}
+   .customer-item.name{font-weight:600;margin-bottom:4px}
+   .customer-item.preview{font-size:0.85rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+   .chat-main{flex:1;display:flex;flex-direction:column;background:var(--bg-dark)}
+   .chat-header{padding:16px 24px;background:var(--bg-card);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+   .messages-container{flex:1;padding:24px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+   .message{max-width:55%;padding:12px 16px;border-radius:10px;font-size:0.95rem;line-height:1.4;white-space:pre-wrap}
+   .message.incoming{background:var(--bg-card);align-self:flex-start;border:1px solid var(--border);color:var(--text)}
+   .message.outgoing{background:var(--primary);color:#fff;align-self:flex-end}
+   .quick-replies{display:flex;gap:8px;padding:10px 24px 0 24px;background:var(--bg-card);overflow-x:auto}
+   .chip-btn{background:var(--bg-hover);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:16px;font-size:0.8rem;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+   .chip-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary-light)}
+   .chat-input-area{padding:16px 24px;background:var(--bg-card);border-top:1px solid var(--border);display:flex;gap:12px}
+   .chat-input-area input{flex:1;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text);font-size:0.95rem}
+   .btn{padding:10px 20px;border:none;border-radius:8px;background:var(--primary-light);color:#fff;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+   .btn-secondary{background:var(--bg-hover);border:1px solid var(--border);color:var(--text)}
+   .btn-danger{background:var(--danger);color:#fff}
+   .gps-map-container{width:100%;height:320px;border-radius:10px;border:1px solid var(--border);margin-bottom:24px;overflow:hidden;z-index:1}
+   .table-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+   .filter-group{display:flex;gap:8px}
+   .filter-btn{padding:8px 16px;border-radius:6px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-muted);cursor:pointer;font-size:0.85rem}
+   .filter-btn.active{background:var(--primary);color:#fff;border-color:var(--primary-light)}
+   .data-table{width:100%;border-collapse:collapse;background:var(--bg-card);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+   .data-table th,.data-table td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--border);font-size:0.9rem}
+   .data-table th{background:var(--bg-hover);color:var(--text-muted);text-transform:uppercase;font-size:0.75rem;letter-spacing:0.5px}
+   .status-tag{padding:4px 10px;border-radius:12px;font-size:0.75rem;font-weight:600;display:inline-block;text-transform:uppercase}
+   .status-pending{background:rgba(255,152,0,0.2);color:var(--accent)}
+   .status-confirmed{background:rgba(76,175,80,0.2);color:#4caf50}
+   .status-dispatched{background:rgba(255,152,0,0.25);color:#ff9800}
+   .status-delivered{background:rgba(33,150,243,0.2);color:#2196f3}
+   .status-cancelled{background:rgba(244,67,54,0.2);color:var(--danger)}
+   .btn-status{padding:4px 8px;border-radius:4px;border:none;font-size:0.75rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:opacity 0.2s;color:#fff}
+   .btn-status:hover{opacity:0.85}
+   .btn-confirm{background-color:#2e7d32}
+   .btn-dispatch{background-color:#ff9800;color:#000}
+   .btn-deliver{background-color:#2196f3}
+   .btn-cancel{background-color:#f44336}
+   .stock-critical{color:var(--danger);font-weight:700}
+   .stock-badge-low{background:rgba(244,67,54,0.2);color:var(--danger);padding:4px 8px;border-radius:4px;font-size:0.8rem}
+   .dispatch-drawer{position:absolute;top:0;right:-340px;width:320px;height:100%;background:var(--bg-card);border-left:1px solid var(--border);box-shadow:-4px 0 20px rgba(0,0,0,0.5);transition:right 0.3s ease;z-index:10;padding:24px}
+   .dispatch-drawer.open{right:0}
+   .drawer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+   .close-btn{background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer}
+   .dispatch-form label{display:block;font-size:0.8rem;color:var(--text-muted);margin-top:14px;margin-bottom:6px;text-transform:uppercase}
+   .dispatch-form select,.dispatch-form input{width:100%;padding:10px;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)}
+   .modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1050}
+   .modal-card{background:var(--bg-card);border:1px solid var(--border);padding:28px;border-radius:12px;width:100%;max-width:440px;box-shadow:0 8px 24px rgba(0,0,0,0.6)}
+   .modal-card h3{margin-bottom:16px;color:var(--primary-light)}
+   .form-group{margin-bottom:14px}
+   .form-group label{display:block;font-size:0.8rem;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase}
+   .form-group input{width:100%;padding:10px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)}
   </style>
 </head>
 <body>
-  <!-- AUTHENTICATION OVERLAY -->
   <div class="login-overlay" id="login-overlay">
     <div class="login-card" id="login-view-card">
-      <div class="brand">
-        <img src="IMG-20260726-WA8808.jpg" alt="Amasan Farm Logo" class="brand-logo brand-logo-large">
-        <span>Amasan Admin</span>
-      </div>
+      <div class="brand"><img src="IMG-20260726-WA8808.jpg" alt="Amasan Farm Logo" class="brand-logo brand-logo-large"><span>Amasan Admin</span></div>
       <p>Enter password to access the portal</p>
-      
-      <div class="password-wrapper">
-        <input type="password" id="admin-pass-input" placeholder="Enter password..." onkeypress="if(event.key==='Enter') checkPassword()">
-        <i class="fas fa-eye toggle-password" id="toggle-pass-icon" onclick="togglePasswordVisibility('admin-pass-input', 'toggle-pass-icon')"></i>
-      </div>
+      <div class="password-wrapper"><input type="password" id="admin-pass-input" placeholder="Enter password..." onkeypress="if(event.key==='Enter') checkPassword()"><i class="fas fa-eye toggle-password" id="toggle-pass-icon" onclick="togglePasswordVisibility('admin-pass-input', 'toggle-pass-icon')"></i></div>
       <span class="forgot-link" onclick="switchAuthView('forgot')">Forgot Password?</span>
       <button class="btn" id="login-btn" onclick="checkPassword()"><i class="fas fa-lock"></i> Login</button>
       <div class="error-msg" id="login-error">Incorrect password. 3 attempts remaining.</div>
     </div>
     <div class="login-card" id="forgot-view-card" style="display: none;">
-      <div class="brand">
-        <i class="fas fa-key"></i> Reset Password
-      </div>
+      <div class="brand"><i class="fas fa-key"></i> Reset Password</div>
       <p>Enter your administrator email to receive a password reset link.</p>
-      <div class="password-wrapper" style="margin-bottom: 16px;">
-        <input type="email" id="reset-email-input" placeholder="Amasanfarm@gmail.com" onkeypress="if(event.key==='Enter') handlePasswordReset()">
-      </div>
+      <div class="password-wrapper" style="margin-bottom: 16px;"><input type="email" id="reset-email-input" placeholder="Amasanfarm@gmail.com" onkeypress="if(event.key==='Enter') handlePasswordReset()"></div>
       <button class="btn" id="reset-btn" onclick="handlePasswordReset()"><i class="fas fa-paper-plane"></i> Send Reset Link</button>
-      
-      <span class="forgot-link" style="text-align: center; margin-top: 16px; margin-bottom: 0;" onclick="switchAuthView('login')">
-        <i class="fas fa-arrow-left"></i> Back to Login
-      </span>
+      <span class="forgot-link" style="text-align: center; margin-top: 16px; margin-bottom: 0;" onclick="switchAuthView('login')"><i class="fas fa-arrow-left"></i> Back to Login</span>
       <div class="success-msg" id="reset-success">Reset link sent! Check your inbox.</div>
       <div class="error-msg" id="reset-error">Please enter a valid email address.</div>
     </div>
   </div>
-  <!-- ADD ITEM MODAL -->
   <div class="modal-overlay" id="add-item-modal">
-    <div class="modal-card">
-      <h3><i class="fas fa-plus-circle"></i> Add New Product</h3>
+    <div class="modal-card"><h3><i class="fas fa-plus-circle"></i> Add New Product</h3>
       <form onsubmit="event.preventDefault(); saveNewProduct();">
-        <div class="form-group">
-          <label>Product Name</label>
-          <input type="text" id="new-item-name" placeholder="e.g. Broiler Starter (25kg)" required>
-        </div>
-        <div class="form-group">
-          <label>Unit Price (₦)</label>
-          <input type="number" id="new-item-price" placeholder="e.g. 15000" required>
-        </div>
-        <div class="form-group">
-          <label>Initial Stock Quantity</label>
-          <input type="number" id="new-item-qty" placeholder="e.g. 50" required>
-        </div>
-        <div class="form-group">
-          <label>Alert Threshold Level</label>
-          <input type="number" id="new-item-threshold" value="5" required>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-          <button type="submit" class="btn" style="flex:1; justify-content:center;">Save Product</button>
-          <button type="button" class="btn btn-secondary" onclick="closeAddItemModal()">Cancel</button>
-        </div>
+        <div class="form-group"><label>Product Name</label><input type="text" id="new-item-name" placeholder="e.g. Broiler Starter (25kg)" required></div>
+        <div class="form-group"><label>Unit Price (₦)</label><input type="number" id="new-item-price" placeholder="e.g. 15000" required></div>
+        <div class="form-group"><label>Initial Stock Quantity</label><input type="number" id="new-item-qty" placeholder="e.g. 50" required></div>
+        <div class="form-group"><label>Alert Threshold Level</label><input type="number" id="new-item-threshold" value="5" required></div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;"><button type="submit" class="btn" style="flex:1; justify-content:center;">Save Product</button><button type="button" class="btn btn-secondary" onclick="closeAddItemModal()">Cancel</button></div>
       </form>
     </div>
   </div>
   <audio id="chat-chime" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-  <!-- SIDEBAR NAVIGATION -->
   <aside class="sidebar">
-    <div class="brand">
-      <img src="IMG-20260726-WA8808.jpg" alt="Amasan Farm Logo" class="brand-logo">
-      <span>Amasan Admin</span>
-    </div>
+    <div class="brand"><img src="IMG-20260726-WA8808.jpg" alt="Amasan Farm Logo" class="brand-logo"><span>Amasan Admin</span></div>
     <div class="sidebar-menu">
-      <button class="nav-btn active" onclick="switchView('dashboard-view', this)">
-        <div><i class="fas fa-chart-pie"></i> Dashboard</div>
-      </button>
-      <button class="nav-btn" onclick="switchView('chat-view', this)">
-        <div><i class="fas fa-comments"></i> Customer Support</div>
-        <span class="badge" id="unread-count">0</span>
-      </button>
-      <button class="nav-btn" onclick="switchView('inventory-view', this)">
-        <div><i class="fas fa-boxes"></i> Inventory & Pricing</div>
-        <span class="badge badge-danger" id="low-stock-count" style="display: none;">0</span>
-      </button>
-      <button class="nav-btn" onclick="switchView('orders-view', this)">
-        <div><i class="fas fa-truck"></i> Orders & GPS Track</div>
-      </button>
-      <button class="nav-btn" onclick="switchView('info-view', this)">
-        <div><i class="fas fa-info-circle"></i> Farm Contact & Bank</div>
-      </button>
+      <button class="nav-btn active" onclick="switchView('dashboard-view', this)"><div><i class="fas fa-chart-pie"></i> Dashboard</div></button>
+      <button class="nav-btn" onclick="switchView('chat-view', this)"><div><i class="fas fa-comments"></i> Customer Support</div><span class="badge" id="unread-count">0</span></button>
+      <button class="nav-btn" onclick="switchView('inventory-view', this)"><div><i class="fas fa-boxes"></i> Inventory & Pricing</div><span class="badge badge-danger" id="low-stock-count" style="display: none;">0</span></button>
+      <button class="nav-btn" onclick="switchView('orders-view', this)"><div><i class="fas fa-truck"></i> Orders & GPS Track</div></button>
+      <button class="nav-btn" onclick="switchView('info-view', this)"><div><i class="fas fa-info-circle"></i> Farm Contact & Bank</div></button>
     </div>
-    <div class="sidebar-footer">
-      <button class="nav-btn logout-btn" onclick="logoutAdmin()">
-        <div><i class="fas fa-sign-out-alt"></i> Logout</div>
-      </button>
-    </div>
+    <div class="sidebar-footer"><button class="nav-btn logout-btn" onclick="logoutAdmin()"><div><i class="fas fa-sign-out-alt"></i> Logout</div></button></div>
   </aside>
-  <!-- MAIN AREA -->
   <div class="main-container">
-    <header>
-      <h3 id="page-title">Dashboard Overview</h3>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        <button class="theme-toggle-btn" onclick="toggleDarkMode()">
-          <i class="fas fa-moon" id="theme-icon"></i>
-          <span id="theme-text">Dark Mode</span>
-        </button>
-        <div>
-          <span style="font-size: 0.85rem; color: var(--text-muted);">Status: </span>
-          <span id="connection-status" style="color: var(--primary-light); font-weight: bold;">● Connecting...</span>
-        </div>
-      </div>
-    </header>
-    <!-- SECTION 1: DASHBOARD OVERVIEW -->
-    <section id="dashboard-view" class="view-section active">
-      <div class="dashboard-padding">
-        <div class="grid-container">
-          <div class="card">
-            <h4>Total Revenue</h4>
-            <div class="value" id="dash-revenue">₦ 0</div>
-          </div>
-          <div class="card">
-            <h4>Active Orders</h4>
-            <div class="value" id="dash-orders">0</div>
-          </div>
-          <div class="card">
-            <h4>Low Stock Alerts</h4>
-            <div class="value" id="dash-alerts" style="color: var(--danger);">0</div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- SECTION 2: CUSTOMER SUPPORT CHAT -->
-    <section id="chat-view" class="view-section">
-      <div class="chat-layout">
-        <div class="chat-sidebar">
-          <div class="chat-search-box">
-            <input type="text" id="customer-search" placeholder="Search customer..." onkeyup="filterCustomers()">
-          </div>
-          <div class="customer-list" id="customer-list"></div>
-        </div>
-        <div class="chat-main">
-          <div class="chat-header">
-            <div>
-              <strong id="active-customer-name">Select a Conversation</strong>
-              <div style="font-size: 0.8rem; color: var(--text-muted);" id="active-order-id">Order Ref: None</div>
-            </div>
-            <button class="btn btn-secondary" onclick="toggleDispatchDrawer()">
-              <i class="fas fa-truck"></i> Assign Dispatch
-            </button>
-          </div>
-          
-          <div class="messages-container" id="messages-container">
-            <div class="message incoming">Select a customer on the left to start chatting in real time.</div>
-          </div>
-          <div class="quick-replies">
-            <button class="chip-btn" onclick="insertCannedReply('Hello! How can I assist you with your order today? You can email us at Amasanfarm@gmail.com or call 08088375509.')">👋 Greeting & Support</button>
-            <button class="chip-btn" onclick="insertCannedReply('Your payment has been received and verified. Thank you!')">💳 Payment Verified</button>
-            <button class="chip-btn" onclick="insertCannedReply('Your driver is currently on the way with your delivery!')">🚚 On the way</button>
-            <button class="chip-btn" onclick="insertCannedReply('Please send your proof of payment or order ID so I can check for you.')">📄 Request Receipt</button>
-            <button class="chip-btn" onclick="insertCannedReply('Our official bank accounts are: OPay (8104817797) or Zenith Bank (2260717656) registered under Gideon Shadrach.')">🏦 Bank Info</button>
-          </div>
-          <div class="chat-input-area">
-            <input type="text" id="message-input" placeholder="Type message or click a quick reply above..." onkeypress="if(event.key==='Enter') sendFirebaseMessage()">
-            <button class="btn" onclick="sendFirebaseMessage()"><i class="fas fa-paper-plane"></i> Send</button>
-          </div>
-        </div>
-      </div>
-      <div class="dispatch-drawer" id="dispatch-drawer">
-        <div class="drawer-header">
-          <h3>Assign Vehicle</h3>
-          <button class="close-btn" onclick="toggleDispatchDrawer()">✕</button>
-        </div>
-        <form class="dispatch-form" onsubmit="event.preventDefault(); assignDispatch();">
-          <label>Order Reference</label>
-          <input type="text" id="dispatch-order-ref" value="None" readonly>
-          <label>Assign Driver</label>
-          <select id="driver-select">
-            <option>Musa Ibrahim</option>
-            <option>Emmanuel Okonkwo</option>
-          </select>
-          <label>Assign Vehicle</label>
-          <input type="text" id="vehicle-input" placeholder="e.g. Toyota Hilux (TRK-01)" required>
-          <label>Delivery ETA</label>
-          <input type="time" id="eta-time">
-          <button class="btn" style="width: 100%; margin-top: 24px; justify-content: center; background: var(--accent); color: #000;">
-            Confirm Dispatch
-          </button>
-        </form>
-      </div>
-    </section>
-    <!-- SECTION 3: INVENTORY -->
-    <section id="inventory-view" class="view-section">
-      <div class="dashboard-padding">
-        <div class="table-controls">
-          <h3>Inventory Management & Pricing</h3>
-          <button class="btn" onclick="openAddItemModal()"><i class="fas fa-plus"></i> Add Product</button>
-        </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Item ID</th>
-              <th>Product Name</th>
-              <th>Unit Price (₦)</th>
-              <th>Stock Quantity</th>
-              <th>Alert Level</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="inventory-table-body"></tbody>
-        </table>
-      </div>
-    </section>
-    <!-- SECTION 4: ORDERS & GPS LIVE TRACKING MAP -->
-    <section id="orders-view" class="view-section">
-      <div class="dashboard-padding">
-        <h4 style="margin-bottom: 12px; color: var(--primary-light);"><i class="fas fa-map-marked-alt"></i> Live Fleet GPS Tracking</h4>
-        <div id="gps-map" class="gps-map-container"></div>
-        <div class="table-controls">
-          <div class="filter-group">
-            <button class="filter-btn active" onclick="filterOrders('All', this)">All Orders</button>
-            <button class="filter-btn" onclick="filterOrders('Pending', this)">Pending</button>
-            <button class="filter-btn" onclick="filterOrders('Confirmed', this)">Confirmed</button>
-            <button class="filter-btn" onclick="filterOrders('Dispatched', this)">Dispatched</button>
-            <button class="filter-btn" onclick="filterOrders('Delivered', this)">Delivered</button>
-            <button class="filter-btn" onclick="filterOrders('Cancelled', this)">Cancelled</button>
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-secondary" onclick="exportOrdersCSV()">
-              <i class="fas fa-file-csv"></i> Export to CSV
-            </button>
-            <button class="btn btn-danger" onclick="clearAllOrders()">
-              <i class="fas fa-trash-alt"></i> Clear All Orders
-            </button>
-          </div>
-        </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Order Ref</th>
-              <th>Customer Name</th>
-              <th>Items Ordered</th>
-              <th>Total Amount (₦)</th>
-              <th>Status</th>
-              <th>GPS Pin</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="orders-table-body"></tbody>
-        </table>
-      </div>
-    </section>
-    <!-- SECTION 5: FARM CONTACT & BANK INFO -->
-    <section id="info-view" class="view-section">
-      <div class="dashboard-padding">
-        <h3 style="margin-bottom: 20px; color: var(--primary-light);"><i class="fas fa-info-circle"></i> Farm Information & Verified Bank Accounts</h3>
-        <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 24px;">
-          <div class="card">
-            <h4 style="color: var(--primary-light); margin-bottom: 12px;"><i class="fas fa-address-book"></i> Official Contact Details</h4>
-            <p style="margin-bottom: 8px;"><strong>Email Support:</strong> <a href="mailto:Amasanfarm@gmail.com" style="color: var(--primary-light); text-decoration: none;">Amasanfarm@gmail.com</a></p>
-            <p style="margin-bottom: 8px;"><strong>Phone / WhatsApp:</strong> <a href="tel:08088375509" style="color: var(--primary-light); text-decoration: none;">08088375509</a></p>
-            <p style="margin-bottom: 8px;"><strong>Physical Location:</strong> Wukari, Taraba State, Nigeria</p>
-          </div>
-          <div class="card">
-            <h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fas fa-university"></i> Approved Bank Accounts</h4>
-            <div style="background: var(--bg-dark); padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border);">
-              <div style="font-weight: 700; color: var(--text);">OPay Digital Services</div>
-              <div style="font-size: 1.2rem; font-family: monospace; color: var(--accent); margin: 4px 0;">8104817797</div>
-              <div style="font-size: 0.8rem; color: var(--text-muted);">Account Name: Gideon Shadrach</div>
-            </div>
-            <div style="background: var(--bg-dark); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
-              <div style="font-weight: 700; color: var(--text);">Zenith Bank</div>
-              <div style="font-size: 1.2rem; font-family: monospace; color: var(--accent); margin: 4px 0;">2260717656</div>
-              <div style="font-size: 0.8rem; color: var(--text-muted);">Account Name: Gideon Shadrach</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <header><h3 id="page-title">Dashboard Overview</h3><div style="display: flex; align-items: center; gap: 18px;"><button class="theme-toggle-btn" onclick="toggleDarkMode()"><i class="fas fa-moon" id="theme-icon"></i><span id="theme-text">Dark Mode</span></button><div><span style="font-size: 0.85rem; color: var(--text-muted);">Status: </span><span id="connection-status" style="color: var(--primary-light); font-weight: bold;">● Connecting...</span></div></div></header>
+    <section id="dashboard-view" class="view-section active"><div class="dashboard-padding"><div class="grid-container"><div class="card"><h4>Total Revenue</h4><div class="value" id="dash-revenue">₦ 0</div></div><div class="card"><h4>Active Orders</h4><div class="value" id="dash-orders">0</div></div><div class="card"><h4>Low Stock Alerts</h4><div class="value" id="dash-alerts" style="color: var(--danger);">0</div></div></div></div></section>
+    <section id="chat-view" class="view-section"><div class="chat-layout"><div class="chat-sidebar"><div class="chat-search-box"><input type="text" id="customer-search" placeholder="Search customer..." onkeyup="filterCustomers()"></div><div class="customer-list" id="customer-list"></div></div><div class="chat-main"><div class="chat-header"><div><strong id="active-customer-name">Select a Conversation</strong><div style="font-size: 0.8rem; color: var(--text-muted);" id="active-order-id">Order Ref: None</div></div><button class="btn btn-secondary" onclick="toggleDispatchDrawer()"><i class="fas fa-truck"></i> Assign Dispatch</button></div><div class="messages-container" id="messages-container"><div class="message incoming">Select a customer on the left to start chatting in real time.</div></div><div class="quick-replies"><button class="chip-btn" onclick="insertCannedReply('Hello! How can I assist you with your order today? You can email us at Amasanfarm@gmail.com or call 08088375509.')">👋 Greeting & Support</button><button class="chip-btn" onclick="insertCannedReply('Your payment has been received and verified. Thank you!')">💳 Payment Verified</button><button class="chip-btn" onclick="insertCannedReply('Your driver is currently on the way with your delivery!')">🚚 On the way</button><button class="chip-btn" onclick="insertCannedReply('Please send your proof of payment or order ID so I can check for you.')">📄 Request Receipt</button><button class="chip-btn" onclick="insertCannedReply('Our official bank accounts are: OPay (8104817797) or Zenith Bank (2260717656) registered under Gideon Shadrach.')">🏦 Bank Info</button></div><div class="chat-input-area"><input type="text" id="message-input" placeholder="Type message or click a quick reply above..." onkeypress="if(event.key==='Enter') sendFirebaseMessage()"><button class="btn" onclick="sendFirebaseMessage()"><i class="fas fa-paper-plane"></i> Send</button></div></div></div><div class="dispatch-drawer" id="dispatch-drawer"><div class="drawer-header"><h3>Assign Vehicle</h3><button class="close-btn" onclick="toggleDispatchDrawer()">✕</button></div><form class="dispatch-form" onsubmit="event.preventDefault(); assignDispatch();"><label>Order Reference</label><input type="text" id="dispatch-order-ref" value="None" readonly><label>Assign Driver</label><select id="driver-select"><option>Musa Ibrahim</option><option>Emmanuel Okonkwo</option></select><label>Assign Vehicle</label><input type="text" id="vehicle-input" placeholder="e.g. Toyota Hilux (TRK-01)" required><label>Delivery ETA</label><input type="time" id="eta-time"><button class="btn" style="width: 100%; margin-top: 24px; justify-content: center; background: var(--accent); color: #000;">Confirm Dispatch</button></form></div></section>
+    <section id="inventory-view" class="view-section"><div class="dashboard-padding"><div class="table-controls"><h3>Inventory Management & Pricing</h3><button class="btn" onclick="openAddItemModal()"><i class="fas fa-plus"></i> Add Product</button></div><table class="data-table"><thead><tr><th>Item ID</th><th>Product Name</th><th>Unit Price (₦)</th><th>Stock Quantity</th><th>Alert Level</th><th>Status</th><th>Actions</th></tr></thead><tbody id="inventory-table-body"></tbody></table></div></section>
+    <section id="orders-view" class="view-section"><div class="dashboard-padding"><h4 style="margin-bottom: 12px; color: var(--primary-light);"><i class="fas fa-map-marked-alt"></i> Live Fleet GPS Tracking</h4><div id="gps-map" class="gps-map-container"></div><div class="table-controls"><div class="filter-group"><button class="filter-btn active" onclick="filterOrders('All', this)">All Orders</button><button class="filter-btn" onclick="filterOrders('Pending', this)">Pending</button><button class="filter-btn" onclick="filterOrders('Confirmed', this)">Confirmed</button><button class="filter-btn" onclick="filterOrders('Dispatched', this)">Dispatched</button><button class="filter-btn" onclick="filterOrders('Delivered', this)">Delivered</button><button class="filter-btn" onclick="filterOrders('Cancelled', this)">Cancelled</button></div><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" onclick="exportOrdersCSV()"><i class="fas fa-file-csv"></i> Export to CSV</button><button class="btn btn-danger" onclick="clearAllOrders()"><i class="fas fa-trash-alt"></i> Clear All Orders</button></div></div><table class="data-table"><thead><tr><th>Order Ref</th><th>Customer Name</th><th>Items Ordered</th><th>Total Amount (₦)</th><th>Status</th><th>GPS Pin</th><th>Action</th></tr></thead><tbody id="orders-table-body"></tbody></table></div></section>
+    <section id="info-view" class="view-section"><div class="dashboard-padding"><h3 style="margin-bottom: 20px; color: var(--primary-light);"><i class="fas fa-info-circle"></i> Farm Information & Verified Bank Accounts</h3><div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 24px;"><div class="card"><h4 style="color: var(--primary-light); margin-bottom: 12px;"><i class="fas fa-address-book"></i> Official Contact Details</h4><p style="margin-bottom: 8px;"><strong>Email Support:</strong> <a href="mailto:Amasanfarm@gmail.com" style="color: var(--primary-light); text-decoration: none;">Amasanfarm@gmail.com</a></p><p style="margin-bottom: 8px;"><strong>Phone / WhatsApp:</strong> <a href="tel:08088375509" style="color: var(--primary-light); text-decoration: none;">08088375509</a></p><p style="margin-bottom: 8px;"><strong>Physical Location:</strong> Wukari, Taraba State, Nigeria</p></div><div class="card"><h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fas fa-university"></i> Approved Bank Accounts</h4><div style="background: var(--bg-dark); padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border);"><div style="font-weight: 700; color: var(--text);">OPay Digital Services</div><div style="font-size: 1.2rem; font-family: monospace; color: var(--accent); margin: 4px 0;">8104817797</div><div style="font-size: 0.8rem; color: var(--text-muted);">Account Name: Gideon Shadrach</div></div><div style="background: var(--bg-dark); padding: 12px; border-radius: 8px; border: 1px solid var(--border);"><div style="font-weight: 700; color: var(--text);">Zenith Bank</div><div style="font-size: 1.2rem; font-family: monospace; color: var(--accent); margin: 4px 0;">2260717656</div><div style="font-size: 0.8rem; color: var(--text-muted);">Account Name: Gideon Shadrach</div></div></div></div></div></section>
   </div>
-  <!-- LEAFLET JS FOR MAP RENDERING -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  <!-- JSPDF LIBRARY FOR SOFT COPY PDF GENERATION -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
-    // -------------------------------------------------------------
-    // 0. AUTHENTICATION, DARK MODE & SESSION PERSISTENCE
-    // -------------------------------------------------------------
     const CORRECT_PASS = "Amasan001";
     let attemptsRemaining = 3;
-    function toggleDarkMode() {
-      const body = document.body;
-      const icon = document.getElementById('theme-icon');
-      const text = document.getElementById('theme-text');
-      
-      body.classList.toggle('light-mode');
-      const isLight = body.classList.contains('light-mode');
-      
-      if (isLight) {
-        icon.className = 'fas fa-sun';
-        text.innerText = 'Light Mode';
-        localStorage.setItem('amasan_theme', 'light');
-      } else {
-        icon.className = 'fas fa-moon';
-        text.innerText = 'Dark Mode';
-        localStorage.setItem('amasan_theme', 'dark');
-      }
-    }
-    window.addEventListener('DOMContentLoaded', () => {
-      // Restore Theme Preference
-      const savedTheme = localStorage.getItem('amasan_theme');
-      if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
-        document.getElementById('theme-icon').className = 'fas fa-sun';
-        document.getElementById('theme-text').innerText = 'Light Mode';
-      }
-      const isLoggedIn = localStorage.getItem('amasan_admin_session');
-      if (isLoggedIn === 'true') {
-        document.getElementById('login-overlay').style.display = 'none';
-      }
-      listenToInventory();
-      listenToOrders();
-      initGPSMap();
-      listenToChatList();
-    });
-    function togglePasswordVisibility(inputId, iconId) {
-      const input = document.getElementById(inputId);
-      const icon = document.getElementById(iconId);
-      if (input.type === "password") {
-        input.type = "text";
-        icon.classList.remove("fa-eye");
-        icon.classList.add("fa-eye-slash");
-      } else {
-        input.type = "password";
-        icon.classList.remove("fa-eye-slash");
-        icon.classList.add("fa-eye");
-      }
-    }
-    function switchAuthView(view) {
-      const loginCard = document.getElementById('login-view-card');
-      const forgotCard = document.getElementById('forgot-view-card');
-      if (view === 'forgot') {
-        loginCard.style.display = 'none';
-        forgotCard.style.display = 'block';
-      } else {
-        forgotCard.style.display = 'none';
-        loginCard.style.display = 'block';
-      }
-    }
-    function checkPassword() {
-      const inputEl = document.getElementById('admin-pass-input');
-      const errorEl = document.getElementById('login-error');
-      const btnEl = document.getElementById('login-btn');
-      const enteredPass = inputEl.value;
-      if (enteredPass === CORRECT_PASS) {
-        localStorage.setItem('amasan_admin_session', 'true');
-        document.getElementById('login-overlay').style.display = 'none';
-      } else {
-        attemptsRemaining--;
-        inputEl.value = '';
-        errorEl.style.display = 'block';
-        if (attemptsRemaining > 0) {
-          errorEl.innerText = `Incorrect password. ${attemptsRemaining} attempt${attemptsRemaining > 1 ? 's' : ''} remaining.`;
-        } else {
-          errorEl.innerText = 'Access locked. Maximum attempts exceeded.';
-          inputEl.disabled = true;
-          btnEl.disabled = true;
-        }
-      }
-    }
-    function handlePasswordReset() {
-      const emailInput = document.getElementById('reset-email-input').value.trim();
-      const successEl = document.getElementById('reset-success');
-      const errorEl = document.getElementById('reset-error');
-      if (emailInput && emailInput.includes('@')) {
-        errorEl.style.display = 'none';
-        successEl.style.display = 'block';
-        setTimeout(() => {
-          successEl.style.display = 'none';
-          switchAuthView('login');
-        }, 2000);
-      } else {
-        successEl.style.display = 'none';
-        errorEl.style.display = 'block';
-      }
-    }
-    function logoutAdmin() {
-      localStorage.removeItem('amasan_admin_session');
-      attemptsRemaining = 3;
-      const inputEl = document.getElementById('admin-pass-input');
-      const btnEl = document.getElementById('login-btn');
-      const errorEl = document.getElementById('login-error');
-      inputEl.value = '';
-      inputEl.disabled = false;
-      btnEl.disabled = false;
-      errorEl.style.display = 'none';
-      switchAuthView('login');
-      document.getElementById('login-overlay').style.display = 'flex';
-    }
-    // -------------------------------------------------------------
-    // 1. FIREBASE CONFIGURATION
-    // -------------------------------------------------------------
-    var firebaseConfig = {
-      apiKey: "AIzaSyCnjkdRRgt4q7hgNLp204HgiV9UZ1Olmjs",
-      authDomain: "amasan-farm-a5637.firebaseapp.com",
-      databaseURL: "https://amasan-farm-a5637-default-rtdb.firebaseio.com",
-      projectId: "amasan-farm-a5637",
-      storageBucket: "amasan-farm-a5637.firebasestorage.app",
-      messagingSenderId: "30400827803",
-      appId: "1:30400827803:web:76b0beb1431ef847e6913e"
-    };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
-    let activeChatId = null;
-    let isInitialLoad = true;
-    db.ref('.info/connected').on('value', (snap) => {
-      const statusEl = document.getElementById('connection-status');
-      if (snap.val() === true) {
-        statusEl.innerText = "● Online (Firebase Connected)";
-        statusEl.style.color = "var(--primary-light)";
-      } else {
-        statusEl.innerText = "○ Offline";
-        statusEl.style.color = "var(--accent)";
-      }
-    });
-    // -------------------------------------------------------------
-    // 2. LIVE GPS MAP INTEGRATION
-    // -------------------------------------------------------------
-    let map, markers = {};
-    function initGPSMap() {
-      map = L.map('gps-map').setView([6.5244, 3.3792], 12);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
-      }).addTo(map);
-      
-      db.ref('dispatches').on('child_changed', (snapshot) => {
-        const data = snapshot.val();
-        if (data.lat && data.lng) {
-          updateDriverMarker(snapshot.key, data.lat, data.lng, `${data.driver} (${data.vehicle})`);
-        }
-      });
-      db.ref('dispatches').on('child_removed', (snapshot) => {
-        const orderRef = snapshot.key;
-        if (markers[orderRef]) {
-          map.removeLayer(markers[orderRef]);
-          delete markers[orderRef];
-        }
-      });
-    }
-    function updateDriverMarker(orderRef, lat, lng, title) {
-      if (markers[orderRef]) {
-        markers[orderRef].setLatLng([lat, lng]);
-      } else {
-        const marker = L.marker([lat, lng]).addTo(map)
-          .bindPopup(`<b>Order #${orderRef}</b><br>${title}`)
-          .openPopup();
-        markers[orderRef] = marker;
-      }
-    }
-    function focusOnDriver(lat, lng) {
-      if (map) {
-        map.setView([lat, lng], 15);
-      }
-    }
-    // -------------------------------------------------------------
-    // 3. REALTIME CHAT LISTENERS
-    // -------------------------------------------------------------
-    function insertCannedReply(text) {
-      const input = document.getElementById('message-input');
-      input.value = text;
-      input.focus();
-    }
-    function listenToChatList() {
-      const chatListRef = db.ref('chats');
-      
-      chatListRef.on('value', (snapshot) => {
-        const customerListEl = document.getElementById('customer-list');
-        customerListEl.innerHTML = '';
-        let count = 0;
-        snapshot.forEach((childSnapshot) => {
-          count++;
-          const chatId = childSnapshot.key;
-          const chatData = childSnapshot.val();
-          const customerName = chatData.customerName || 'Anonymous Customer';
-          const orderId = chatData.orderId || 'N/A';
-          const lastMsg = chatData.lastMessage || 'No recent messages';
-          
-          const item = document.createElement('div');
-          item.className = `customer-item ${chatId === activeChatId ? 'active' : ''}`;
-          item.style.display = 'flex';
-          item.style.justifyContent = 'space-between';
-          item.style.alignItems = 'center';
-          item.innerHTML = `
-            <div style="flex: 1; overflow: hidden;" onclick="selectCustomer('${chatId}', '${customerName}', '${orderId}')">
-              <div class="name">${customerName}</div>
-              <div class="preview">${lastMsg}</div>
-            </div>
-            <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem; margin-left: 8px;" onclick="event.stopPropagation(); deleteChat('${chatId}', '${customerName}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          `;
-          customerListEl.appendChild(item);
-        });
-        document.getElementById('unread-count').innerText = count;
-        if (!isInitialLoad) {
-          playChime();
-        }
-        isInitialLoad = false;
-      });
-    }
-    function deleteChat(chatId, customerName) {
-      if (confirm(`Are you sure you want to delete the chat conversation with "${customerName}"?`)) {
-        db.ref(`chats/${chatId}`).remove()
-          .then(() => {
-            if (activeChatId === chatId) {
-              activeChatId = null;
-              document.getElementById('active-customer-name').innerText = 'Select a Conversation';
-              document.getElementById('active-order-id').innerText = 'Order Ref: None';
-              document.getElementById('messages-container').innerHTML = `
-                <div class="message incoming">Select a customer on the left to start chatting in real time.</div>
-              `;
-            }
-          })
-          .catch((err) => console.error("Error deleting chat:", err));
-      }
-    }
-    function selectCustomer(chatId, name, orderId) {
-      activeChatId = chatId;
-      document.getElementById('active-customer-name').innerText = name;
-      document.getElementById('active-order-id').innerText = `Order #${orderId}`;
-      document.getElementById('dispatch-order-ref').value = orderId;
-      document.querySelectorAll('.customer-item').forEach(item => item.classList.remove('active'));
-      if(event && event.currentTarget) event.currentTarget.classList.add('active');
-      listenToMessages(chatId);
-    }
-    function listenToMessages(chatId) {
-      const messagesRef = db.ref(`chats/${chatId}/messages`);
-      messagesRef.on('value', (snapshot) => {
-        const container = document.getElementById('messages-container');
-        container.innerHTML = '';
-        snapshot.forEach((childSnapshot) => {
-          const msg = childSnapshot.val();
-          const msgEl = document.createElement('div');
-          msgEl.className = `message ${msg.sender === 'admin' ? 'outgoing' : 'incoming'}`;
-          msgEl.innerText = msg.text;
-          container.appendChild(msgEl);
-        });
-        container.scrollTop = container.scrollHeight;
-      });
-    }
-    function sendFirebaseMessage() {
-      const input = document.getElementById('message-input');
-      const text = input.value.trim();
-      
-      if (!text || !activeChatId) {
-        if (!activeChatId) alert('Please select a customer chat first.');
-        return;
-      }
-      const messageData = {
-        text: text,
-        sender: 'admin',
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      };
-      db.ref(`chats/${activeChatId}/messages`).push(messageData);
-      db.ref(`chats/${activeChatId}`).update({
-        lastMessage: text,
-        lastUpdated: firebase.database.ServerValue.TIMESTAMP
-      });
-      input.value = '';
-    }
-    function playChime() {
-      const chime = document.getElementById('chat-chime');
-      chime.play().catch(() => {});
-    }
-    // -------------------------------------------------------------
-    // 4. RECEIPT GENERATION FUNCTIONS (CHAT & SOFT COPY PDF)
-    // -------------------------------------------------------------
-    function sendReceiptInChat(orderRef, customerName, items, totalAmount) {
-      const targetChatId = activeChatId || `chat-${orderRef}`;
-      
-      const receiptText = 
-`🧾 *AMASAN FARM RECEIPT*
-----------------------------------
-Order Ref: #${orderRef}
-Customer: ${customerName}
-Items: ${items}
-Total Paid: ₦${Number(totalAmount).toLocaleString()}
-Status: CONFIRMED & DISPATCHED 🚚
-----------------------------------
-Thank you for shopping with Amasan Farm! Contact us at Amasanfarm@gmail.com`;
-      db.ref(`chats/${targetChatId}/messages`).push({
-        text: receiptText,
-        sender: 'admin',
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      });
-      db.ref(`chats/${targetChatId}`).update({
-        customerName: customerName,
-        orderId: orderRef,
-        lastMessage: `🧾 Sent receipt for Order #${orderRef}`,
-        lastUpdated: firebase.database.ServerValue.TIMESTAMP
-      });
+    function toggleDarkMode(){const body=document.body;const icon=document.getElementById('theme-icon');const text=document.getElementById('theme-text');body.classList.toggle('light-mode');const isLight=body.classList.contains('light-mode');if(isLight){icon.className='fas fa-sun';text.innerText='Light Mode';localStorage.setItem('amasan_theme','light');}else{icon.className='fas fa-moon';text.innerText='Dark Mode';localStorage.setItem('amasan_theme','dark');}}
+    window.addEventListener('DOMContentLoaded',()=>{const savedTheme=localStorage.getItem('amasan_theme');if(savedTheme==='light'){document.body.classList.add('light-mode');document.getElementById('theme-icon').className='fas fa-sun';document.getElementById('theme-text').innerText='Light Mode';}const isLoggedIn=localStorage.getItem('amasan_admin_session');if(isLoggedIn==='true'){document.getElementById('login-overlay').style.display='none';}listenToInventory();listenToOrders();initGPSMap();listenToChatList();});
+    function togglePasswordVisibility(inputId,iconId){const input=document.getElementById(inputId);const icon=document.getElementById(iconId);if(input.type==="password"){input.type="text";icon.classList.remove("fa-eye");icon.classList.add("fa-eye-slash");}else{input.type="password";icon.classList.remove("fa-eye-slash");icon.classList.add("fa-eye");}}
+    function switchAuthView(view){const loginCard=document.getElementById('login-view-card');const forgotCard=document.getElementById('forgot-view-card');if(view==='forgot'){loginCard.style.display='none';forgotCard.style.display='block';}else{forgotCard.style.display='none';loginCard.style.display='block';}}
+    function checkPassword(){const inputEl=document.getElementById('admin-pass-input');const errorEl=document.getElementById('login-error');const btnEl=document.getElementById('login-btn');const enteredPass=inputEl.value;if(enteredPass===CORRECT_PASS){localStorage.setItem('amasan_admin_session','true');document.getElementById('login-overlay').style.display='none';}else{attemptsRemaining--;inputEl.value='';errorEl.style.display='block';if(attemptsRemaining>0){errorEl.innerText=`Incorrect password. ${attemptsRemaining} attempt${attemptsRemaining>1?'s':''} remaining.`;}else{errorEl.innerText='Access locked. Maximum attempts exceeded.';inputEl.disabled=true;btnEl.disabled=true;}}}
+    function handlePasswordReset(){const emailInput=document.getElementById('reset-email-input').value.trim();const successEl=document.getElementById('reset-success');const errorEl=document.getElementById('reset-error');if(emailInput&&emailInput.includes('@')){errorEl.style.display='none';successEl.style.display='block';setTimeout(()=>{successEl.style.display='none';switchAuthView('login');},2000);}else{successEl.style.display='none';errorEl.style.display='block';}}
+    function logoutAdmin(){localStorage.removeItem('amasan_admin_session');attemptsRemaining=3;const inputEl=document.getElementById('admin-pass-input');const btnEl=document.getElementById('login-btn');const errorEl=document.getElementById('login-error');inputEl.value='';inputEl.disabled=false;btnEl.disabled=false;errorEl.style.display='none';switchAuthView('login');document.getElementById('login-overlay').style.display='flex';}
+    var firebaseConfig={apiKey:"AIzaSyCnjkdRRgt4q7hgNLp204HgiV9UZ1Olmjs",authDomain:"amasan-farm-a5637.firebaseapp.com",databaseURL:"https://amasan-farm-a5637-default-rtdb.firebaseio.com",projectId:"amasan-farm-a5637",storageBucket:"amasan-farm-a5637.firebasestorage.app",messagingSenderId:"30400827803",appId:"1:30400827803:web:76b0beb1431ef847e6913e"};
+    if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
+    const db=firebase.database();
+    let activeChatId=null;let isInitialLoad=true;
+    db.ref('.info/connected').on('value',(snap)=>{const statusEl=document.getElementById('connection-status');if(snap.val()===true){statusEl.innerText="● Online (Firebase Connected)";statusEl.style.color="var(--primary-light)";}else{statusEl.innerText="○ Offline";statusEl.style.color="var(--accent)";}});
+    let map,markers={};
+    function initGPSMap(){map=L.map('gps-map').setView([6.5244,3.3792],12);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);db.ref('dispatches').on('child_changed',(snapshot)=>{const data=snapshot.val();if(data.lat&&data.lng){updateDriverMarker(snapshot.key,data.lat,data.lng,`${data.driver} (${data.vehicle})`);}});db.ref('dispatches').on('child_removed',(snapshot)=>{const orderRef=snapshot.key;if(markers[orderRef]){map.removeLayer(markers[orderRef]);delete markers[orderRef];}});}
+    function updateDriverMarker(orderRef,lat,lng,title){if(markers[orderRef]){markers[orderRef].setLatLng([lat,lng]);}else{const marker=L.marker([lat,lng]).addTo(map).bindPopup(`<b>Order #${orderRef}</b><br>${title}`).openPopup();markers[orderRef]=marker;}}
+    function focusOnDriver(lat,lng){if(map){map.setView([lat,lng],15);}}
+    function insertCannedReply(text){const input=document.getElementById('message-input');input.value=text;input.focus();}
+    function listenToChatList(){const chatListRef=db.ref('chats');chatListRef.on('value',(snapshot)=>{const customerListEl=document.getElementById('customer-list');customerListEl.innerHTML='';let count=0;snapshot.forEach((childSnapshot)=>{count++;const chatId=childSnapshot.key;const chatData=childSnapshot.val();const customerName=chatData.customerName||'Anonymous Customer';const orderId=chatData.orderId||'N/A';const lastMsg=chatData.lastMessage||'No recent messages';const item=document.createElement('div');item.className=`customer-item ${chatId===activeChatId?'active':''}`;item.style.display='flex';item.style.justifyContent='space-between';item.style.alignItems='center';item.innerHTML=`<div style="flex: 1; overflow: hidden;" onclick="selectCustomer('${chatId}', '${customerName}', '${orderId}')"><div class="name">${customerName}</div><div class="preview">${lastMsg}</div></div><button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem; margin-left: 8px;" onclick="event.stopPropagation(); deleteChat('${chatId}', '${customerName}')"><i class="fas fa-trash"></i></button>`;customerListEl.appendChild(item);});document.getElementById('unread-count').innerText=count;if(!isInitialLoad){playChime();}isInitialLoad=false;});}
+    function deleteChat(chatId,customerName){if(confirm(`Are you sure you want to delete the chat conversation with "${customerName}"?`)){db.ref(`chats/${chatId}`).remove().then(()=>{if(activeChatId===chatId){activeChatId=null;document.getElementById('active-customer-name').innerText='Select a Conversation';document.getElementById('active-order-id').innerText='Order Ref: None';document.getElementById('messages-container').innerHTML=`<div class="message incoming">Select a customer on the left to start chatting in real time.</div>`;}}).catch((err)=>console.error("Error deleting chat:",err));}}
+    function selectCustomer(chatId,name,orderId){activeChatId=chatId;document.getElementById('active-customer-name').innerText=name;document.getElementById('active-order-id').innerText=`Order #${orderId}`;document.getElementById('dispatch-order-ref').value=orderId;document.querySelectorAll('.customer-item').forEach(item=>item.classList.remove('active'));if(event&&event.currentTarget)event.currentTarget.classList.add('active');listenToMessages(chatId);}
+    function listenToMessages(chatId){const messagesRef=db.ref(`chats/${chatId}/messages`);messagesRef.on('value',(snapshot)=>{const container=document.getElementById('messages-container');container.innerHTML='';snapshot.forEach((childSnapshot)=>{const msg=childSnapshot.val();const msgEl=document.createElement('div');msgEl.className=`message ${msg.sender==='admin'?'outgoing':'incoming'}`;msgEl.innerText=msg.text;container.appendChild(msgEl);});container.scrollTop=container.scrollHeight;});}
+    function sendFirebaseMessage(){const input=document.getElementById('message-input');const text=input.value.trim();if(!text||!activeChatId){if(!activeChatId)alert('Please select a customer chat first.');return;}const messageData={text:text,sender:'admin',timestamp:firebase.database.ServerValue.TIMESTAMP};db.ref(`chats/${activeChatId}/messages`).push(messageData);db.ref(`chats/${activeChatId}`).update({lastMessage:text,lastUpdated:firebase.database.ServerValue.TIMESTAMP});input.value='';}
+    function playChime(){const chime=document.getElementById('chat-chime');chime.play().catch(()=>{});}
+    function sendReceiptInChat(orderRef,customerName,items,totalAmount){
+      const targetChatId=activeChatId||`chat-${orderRef}`;
+      const receiptText=`🧾 *AMASAN FARM WUKARI - OFFICIAL RECEIPT*\n----------------------------------\nReceipt No: AFW-${orderRef}\nCustomer: ${customerName}\nItems: ${items}\nTotal Paid: ₦${Number(totalAmount).toLocaleString()}\nBank: OPay 8104817797 / Zenith 2260717656\nPhone: 08088375509\n----------------------------------\nThank you for shopping with Amasan Farm!`;
+      db.ref(`chats/${targetChatId}/messages`).push({text:receiptText,sender:'admin',timestamp:firebase.database.ServerValue.TIMESTAMP});
+      db.ref(`chats/${targetChatId}`).update({customerName:customerName,orderId:orderRef,lastMessage:`🧾 Sent receipt for Order #${orderRef}`,lastUpdated:firebase.database.ServerValue.TIMESTAMP});
       alert(`Receipt sent to ${customerName}'s chat!`);
     }
-    // SOFT COPY PDF RECEIPT GENERATOR WITH CENTERED LOGO AND AMASAN FARM HEADER
+    // === PREMIUM GOLD & GREEN PDF RECEIPT ===
     function downloadPDFReceipt(orderRef, customerName, items, totalAmount) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const logoImg = new Image();
-      logoImg.src = 'IMG-20260726-WA8808.jpg';
-      logoImg.onload = function () {
-        let yPos = 15;
-        // 1. CENTER LOGO
-        const logoWidth = 28;
-        const logoHeight = 28;
-        const logoX = (pageWidth - logoWidth) / 2;
-        doc.addImage(logoImg, 'JPEG', logoX, yPos, logoWidth, logoHeight);
-        yPos += logoHeight + 8;
-        // 2. CENTER ORGANIZATION NAME & SUBTITLE
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(20);
-        doc.setTextColor(46, 125, 50); // Farm Green Theme (#2e7d32)
-        doc.text('AMASAN FARM', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 7;
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text('Official Purchase Receipt | Email: Amasanfarm@gmail.com', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 10;
-        // Divider Line
-        doc.setDrawColor(200);
-        doc.line(20, yPos, pageWidth - 20, yPos);
-        yPos += 10;
-        // 3. RECEIPT & CUSTOMER DETAILS
-        doc.setTextColor(0);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`Receipt Ref: #${orderRef}`, 20, yPos);
-        doc.text(`Date: ${new Date().toLocaleDateString()}`, pageWidth - 20, yPos, { align: 'right' });
-        yPos += 8;
-        doc.setFont('helvetica', 'normal');
-        doc.text(`Customer: ${customerName}`, 20, yPos);
-        doc.text(`Status: Confirmed / Dispatched`, pageWidth - 20, yPos, { align: 'right' });
-        yPos += 12;
-        // 4. ITEMS TABLE HEADER
-        doc.setFont('helvetica', 'bold');
-        doc.setFillColor(240, 246, 240);
-        doc.rect(20, yPos, pageWidth - 40, 8, 'F');
-        doc.text('Item Description', 25, yPos + 6);
-        doc.text('Amount (NGN)', pageWidth - 25, yPos + 6, { align: 'right' });
-        yPos += 14;
-        // ITEM ROW
-        doc.setFont('helvetica', 'normal');
-        doc.text(String(items), 25, yPos);
-        doc.text(`NGN ${Number(totalAmount).toLocaleString()}`, pageWidth - 25, yPos, { align: 'right' });
-        yPos += 10;
-        // 5. TOTAL
-        doc.line(20, yPos, pageWidth - 20, yPos);
-        yPos += 8;
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(12);
-        doc.text('Total Paid:', 25, yPos);
-        doc.text(`NGN ${Number(totalAmount).toLocaleString()}`, pageWidth - 25, yPos, { align: 'right' });
-        // 6. FOOTER
-        yPos += 25;
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'italic');
-        doc.setTextColor(120);
-        doc.text('Thank you for choosing Amasan Farm!', pageWidth / 2, yPos, { align: 'center' });
-        // SAVE PDF FILE
-        doc.save(`Amasan_Farm_Receipt_${orderRef}.pdf`);
-      };
-      // Fallback if logo fails to load
-      logoImg.onerror = function () {
-        alert('Downloading receipt without logo image preview...');
-        doc.save(`Amasan_Farm_Receipt_${orderRef}.pdf`);
-      };
-    }
-    // -------------------------------------------------------------
-    // 5. INVENTORY MANAGEMENT (REALTIME FIREBASE SYNC)
-    // -------------------------------------------------------------
-    let inventoryItems = [];
-    const defaultInventory = [
-      { id: "INV-001", name: "Poultry Feed - Layers Mash (25kg)", price: 14500, qty: 3, threshold: 5 },
-      { id: "INV-002", name: "Poultry Feed - Broiler Starter (25kg)", price: 16000, qty: 45, threshold: 10 },
-      { id: "INV-003", name: "Fresh Farm Eggs (Crate)", price: 3200, qty: 2, threshold: 10 },
-      { id: "INV-004", name: "Organic Fertilizer (50kg)", price: 8500, qty: 18, threshold: 5 }
-    ];
-    function listenToInventory() {
-      const invRef = db.ref('inventory');
-      invRef.on('value', (snapshot) => {
-        inventoryItems = [];
-        if (!snapshot.exists()) {
-          defaultInventory.forEach(item => {
-            db.ref(`inventory/${item.id}`).set(item);
-          });
-          return;
-        }
-        let lowStockAlertCount = 0;
-        snapshot.forEach((child) => {
-          const item = child.val();
-          item.key = child.key;
-          inventoryItems.push(item);
-          if (Number(item.qty) <= Number(item.threshold)) {
-            lowStockAlertCount++;
-          }
-        });
-        renderInventoryTable(lowStockAlertCount);
+      const pageW = doc.internal.pageSize.getWidth();
+      const greenDark=[10,61,26]; const gold=[212,175,55]; const goldLight=[232,199,102]; const brownGold=[140,106,47];
+      doc.setDrawColor(gold[0],gold[1],gold[2]); doc.setLineWidth(0.8); doc.rect(4,4,pageW-8,289);
+      doc.setLineWidth(0.3); doc.rect(7,7,pageW-14,283);
+      let y=14;
+      doc.setFillColor(greenDark[0],greenDark[1],greenDark[2]); doc.setDrawColor(gold[0],gold[1],gold[2]); doc.setLineWidth(1.2);
+      doc.circle(pageW/2, y+10, 12, 'FD');
+      doc.setFontSize(8); doc.setTextColor(goldLight[0],goldLight[1],goldLight[2]); doc.setFont('helvetica','bold');
+      doc.text('AFW', pageW/2, y+12, {align:'center'});
+      y+=28;
+      doc.setFontSize(18); doc.setTextColor(brownGold[0],brownGold[1],brownGold[2]); doc.setFont('helvetica','bold');
+      doc.text('AMASAN FARM WUKARI', pageW/2, y, {align:'center'}); y+=5;
+      doc.setFontSize(8); doc.setTextColor(80,80,80); doc.setFont('helvetica','normal');
+      doc.text('Wukari, Taraba State, Nigeria • Phone: 08088375509 • Email: Amasanfarm@gmail.com', pageW/2, y, {align:'center'}); y+=4;
+      doc.setDrawColor(gold[0],gold[1],gold[2]); doc.setLineWidth(0.2); doc.line(20,y,pageW-20,y); y+=8;
+      const bannerW=70;
+      doc.setFillColor(greenDark[0],greenDark[1],greenDark[2]); doc.setDrawColor(gold[0],gold[1],gold[2]);
+      doc.rect((pageW-bannerW)/2,y,bannerW,9,'FD');
+      doc.setTextColor(goldLight[0],goldLight[1],goldLight[2]); doc.setFontSize(10); doc.setFont('helvetica','bold');
+      doc.text('OFFICIAL RECEIPT', pageW/2, y+6, {align:'center'}); y+=14;
+      doc.setTextColor(0,0,0); doc.setFontSize(9); doc.setFont('helvetica','normal');
+      const today=new Date().toLocaleDateString('en-GB');
+      doc.text(`Date: ${today}`,14,y); doc.text(`Receipt No: AFW-${orderRef}`,pageW-14,y,{align:'right'}); y+=6;
+      doc.setFont('helvetica','bold'); doc.text(`Customer Name:`,14,y); doc.setFont('helvetica','normal'); doc.text(`${customerName}`,40,y); y+=4;
+      doc.line(14,y,pageW-14,y); y+=8;
+      doc.setFillColor(gold[0],gold[1],gold[2]); doc.rect(14,y,pageW-28,7,'F');
+      doc.setTextColor(greenDark[0],greenDark[1],greenDark[2]); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+      doc.text('ITEMIZED DETAILS', pageW/2, y+5, {align:'center'}); y+=7;
+      doc.setFillColor(greenDark[0],greenDark[1],greenDark[2]); doc.rect(14,y,pageW-28,7,'F');
+      doc.setTextColor(goldLight[0],goldLight[1],goldLight[2]); doc.setFontSize(8);
+      doc.text('Description',16,y+5); doc.text('Qty',125,y+5,{align:'center'}); doc.text('Unit Price',148,y+5,{align:'center'}); doc.text('Amount (₦)',182,y+5,{align:'center'}); y+=7;
+      doc.setTextColor(0,0,0); doc.setFont('helvetica','normal'); doc.setFontSize(8);
+      let subtotal=0; let itemList=String(items).split(',').map(s=>s.trim()).filter(Boolean); if(itemList.length===0) itemList=[String(items)];
+      itemList.forEach((it,idx)=>{
+        let qtyMatch=it.match(/x\s*(\d+)/i); let qty=qtyMatch?parseInt(qtyMatch[1]):1;
+        let name=it.replace(/x\s*\d+/i,'').trim();
+        let unitPrice=Math.round(Number(totalAmount)/itemList.length/qty)||0;
+        if(itemList.length===1) unitPrice=Math.round((Number(totalAmount)-1500)/qty)||Number(totalAmount);
+        let amt=unitPrice*qty; subtotal+=amt;
+        if(idx%2===0){doc.setFillColor(255,253,245); doc.rect(14,y,pageW-28,6,'F');}
+        doc.setDrawColor(gold[0],gold[1],gold[2]); doc.setLineWidth(0.1); doc.rect(14,y,pageW-28,6);
+        doc.text(name.substring(0,55),16,y+4); doc.text(String(qty),125,y+4,{align:'center'});
+        doc.text(unitPrice.toLocaleString(),148,y+4,{align:'center'}); doc.text(amt.toLocaleString(),182,y+4,{align:'center'}); y+=6;
       });
+      y+=2; const boxX=pageW-14-60; doc.setDrawColor(gold[0],gold[1],gold[2]); doc.rect(boxX,y,60,14); doc.setFontSize(8);
+      doc.text('Subtotal:',boxX+2,y+4); doc.text(subtotal.toLocaleString(),boxX+58,y+4,{align:'right'});
+      doc.text('Delivery:',boxX+2,y+8); doc.text('1,500',boxX+58,y+8,{align:'right'});
+      doc.setFillColor(gold[0],gold[1],gold[2]); doc.rect(boxX,y+10,60,6,'F'); doc.setFont('helvetica','bold');
+      doc.setTextColor(greenDark[0],greenDark[1],greenDark[2]); doc.text('Total:',boxX+2,y+14); doc.text(Number(totalAmount).toLocaleString(),boxX+58,y+14,{align:'right'}); y+=22;
+      doc.setTextColor(gold[0],gold[1],gold[2]); doc.setDrawColor(gold[0],gold[1],gold[2]); doc.setFontSize(14); doc.setFont('helvetica','bold');
+      doc.text('PAID',30,y+8,{angle:-15}); doc.circle(35,y+6,12);
+      doc.setTextColor(0,0,0); doc.setFontSize(8); doc.setFont('helvetica','normal');
+      doc.text('Official Stamp:',14,y); doc.rect(14,y+2,40,18);
+      doc.text('Authorized Signature:',pageW-70,y); doc.line(pageW-70,y+12,pageW-14,y+12);
+      doc.setFont('helvetica','bolditalic'); doc.text('A. Musa',pageW-42,y+10,{align:'center'});
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.text('Farm Manager',pageW-42,y+15,{align:'center'});
+      y+=30;
+      doc.setFillColor(greenDark[0],greenDark[1],greenDark[2]); doc.rect(4,285,pageW-8,8,'F');
+      doc.setTextColor(goldLight[0],goldLight[1],goldLight[2]); doc.setFontSize(8); doc.setFont('helvetica','italic');
+      doc.text('— Thank you for your business — We appreciate your patronage!',pageW/2,290,{align:'center'});
+      doc.save(`Amasan_Farm_Receipt_AFW-${orderRef}.pdf`);
     }
-    function renderInventoryTable(lowStockCount) {
-      const tbody = document.getElementById('inventory-table-body');
-      tbody.innerHTML = '';
-      inventoryItems.forEach(item => {
-        const isLow = Number(item.qty) <= Number(item.threshold);
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${item.id || item.key}</td>
-          <td><strong>${item.name}</strong></td>
-          <td>₦ ${Number(item.price).toLocaleString()}</td>
-          <td class="${isLow ? 'stock-critical' : ''}">${item.qty} ${isLow ? '⚠️' : ''}</td>
-          <td>Below ${item.threshold} units</td>
-          <td>
-            ${isLow ? '<span class="stock-badge-low">Low / Out of Stock</span>' : '<span style="color:var(--primary-light);">In Stock</span>'}
-          </td>
-          <td>
-            <div style="display: flex; gap: 6px;">
-              <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="updateStock('${item.key}', ${item.qty})">
-                <i class="fas fa-boxes"></i> Stock
-              </button>
-              <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="updatePrice('${item.key}', ${item.price})">
-                <i class="fas fa-tag"></i> Price
-              </button>
-              <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteInventoryItem('${item.key}', '${item.name}')">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-      document.getElementById('dash-alerts').innerText = lowStockCount;
-      const badge = document.getElementById('low-stock-count');
-      if (lowStockCount > 0) {
-        badge.innerText = lowStockCount;
-        badge.style.display = 'inline-block';
-      } else {
-        badge.style.display = 'none';
-      }
-    }
-    function updateStock(itemKey, currentQty) {
-      const newQty = prompt(`Enter new stock quantity for this item:`, currentQty);
-      if (newQty !== null && !isNaN(newQty) && newQty !== '') {
-        db.ref(`inventory/${itemKey}`).update({ qty: Number(newQty) });
-      }
-    }
-    function updatePrice(itemKey, currentPrice) {
-      const newPrice = prompt(`Enter new unit price (₦):`, currentPrice);
-      if (newPrice !== null && !isNaN(newPrice) && newPrice !== '') {
-        db.ref(`inventory/${itemKey}`).update({ price: Number(newPrice) });
-      }
-    }
-    function deleteInventoryItem(itemKey, itemName) {
-      if (confirm(`Are you sure you want to delete "${itemName}" from inventory?`)) {
-        db.ref(`inventory/${itemKey}`).remove();
-      }
-    }
-    function openAddItemModal() {
-      document.getElementById('add-item-modal').style.display = 'flex';
-    }
-    function closeAddItemModal() {
-      document.getElementById('add-item-modal').style.display = 'none';
-    }
-    function saveNewProduct() {
-      const name = document.getElementById('new-item-name').value.trim();
-      const price = Number(document.getElementById('new-item-price').value);
-      const qty = Number(document.getElementById('new-item-qty').value);
-      const threshold = Number(document.getElementById('new-item-threshold').value);
-      const customId = `INV-${Math.floor(100 + Math.random() * 900)}`;
-      db.ref(`inventory/${customId}`).set({
-        id: customId,
-        name: name,
-        price: price,
-        qty: qty,
-        threshold: threshold
-      }).then(() => {
-        alert(`${name} added successfully!`);
-        closeAddItemModal();
-        document.getElementById('new-item-name').value = '';
-        document.getElementById('new-item-price').value = '';
-        document.getElementById('new-item-qty').value = '';
-      });
-    }
-    // -------------------------------------------------------------
-    // 6. REALTIME FIREBASE ORDERS, STATUS BUTTONS & CSV EXPORT
-    // -------------------------------------------------------------
-    let realTimeOrders = [];
-    let activeFilter = 'All';
-    function listenToOrders() {
-      const ordersRef = db.ref('orders');
-      ordersRef.on('value', (snapshot) => {
-        realTimeOrders = [];
-        let totalRevenueSum = 0;
-        snapshot.forEach((childSnapshot) => {
-          const order = childSnapshot.val();
-          order.firebaseKey = childSnapshot.key;
-          realTimeOrders.unshift(order);
-          if (order.total) {
-            totalRevenueSum += Number(order.total);
-          }
-        });
-        document.getElementById('dash-revenue').innerText = `₦ ${totalRevenueSum.toLocaleString()}`;
-        renderOrders();
-      });
-    }
-    function renderOrders() {
-      const tbody = document.getElementById('orders-table-body');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      const filtered = activeFilter === 'All' 
-        ? realTimeOrders 
-        : realTimeOrders.filter(o => (o.status || 'Pending').toLowerCase() === activeFilter.toLowerCase());
-      document.getElementById('dash-orders').innerText = realTimeOrders.length;
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No orders found.</td></tr>`;
-        return;
-      }
-      filtered.forEach(o => {
-        const tr = document.createElement('tr');
-        const statusClass = (o.status || 'pending').toLowerCase();
-        tr.innerHTML = `
-          <td><strong>#${o.ref || 'N/A'}</strong></td>
-          <td>${o.customer || 'Anonymous'}</td>
-          <td>${o.items || 'N/A'}</td>
-          <td>₦ ${Number(o.total || 0).toLocaleString()}</td>
-          <td><span class="status-tag status-${statusClass}">${o.status || 'Pending'}</span></td>
-          <td>
-            ${o.lat ? `<button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="focusOnDriver(${o.lat}, ${o.lng})"><i class="fas fa-location-arrow"></i> Track</button>` : '<span style="color:var(--text-muted); font-size: 0.8rem;">N/A</span>'}
-          </td>
-          <td>
-            <!-- STATUS ACTION BUTTONS -->
-            <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px;">
-              <button class="btn-status btn-confirm" title="Mark Confirmed" onclick="updateOrderStatus('${o.firebaseKey}', '${o.ref}', '${o.customer}', 'Confirmed')">
-                <i class="fas fa-check-circle"></i> Confirm
-              </button>
-              <button class="btn-status btn-dispatch" title="Mark Dispatched" onclick="updateOrderStatus('${o.firebaseKey}', '${o.ref}', '${o.customer}', 'Dispatched')">
-                <i class="fas fa-truck"></i> Dispatch
-              </button>
-              <button class="btn-status btn-deliver" title="Mark Delivered" onclick="updateOrderStatus('${o.firebaseKey}', '${o.ref}', '${o.customer}', 'Delivered')">
-                <i class="fas fa-box-open"></i> Deliver
-              </button>
-              <button class="btn-status btn-cancel" title="Mark Cancelled" onclick="updateOrderStatus('${o.firebaseKey}', '${o.ref}', '${o.customer}', 'Cancelled')">
-                <i class="fas fa-times-circle"></i> Cancel
-              </button>
-            </div>
-            <!-- UTILITY BUTTONS -->
-            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-              <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.75rem;" onclick="selectCustomer('chat-${o.ref}', '${o.customer}', '${o.ref}')">
-                <i class="fas fa-comment"></i> Chat
-              </button>
-              <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.75rem;" onclick="sendReceiptInChat('${o.ref}', '${o.customer}', '${o.items}', '${o.total}')">
-                <i class="fas fa-receipt"></i> Chat Receipt
-              </button>
-              <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.75rem;" onclick="downloadPDFReceipt('${o.ref}', '${o.customer}', '${o.items}', '${o.total}')">
-                <i class="fas fa-file-pdf"></i> PDF
-              </button>
-              <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.75rem;" onclick="deleteOrder('${o.firebaseKey}', '${o.ref}')">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-    // FUNCTION TO UPDATE ORDER STATUS IN FIREBASE & NOTIFY CUSTOMER CHAT
-    function updateOrderStatus(firebaseKey, orderRef, customerName, newStatus) {
-      if (confirm(`Change status of Order #${orderRef} to "${newStatus}"?`)) {
-        db.ref(`orders/${firebaseKey}`).update({ status: newStatus })
-          .then(() => {
-            const targetChatId = activeChatId || `chat-${orderRef}`;
-            const statusEmojis = {
-              'Confirmed': '✅',
-              'Dispatched': '🚚',
-              'Delivered': '🎉',
-              'Cancelled': '❌'
-            };
-            const notificationMsg = `${statusEmojis[newStatus] || '📋'} *ORDER UPDATE*: Your Order #${orderRef} status has been updated to *${newStatus.toUpperCase()}*.`;
-            db.ref(`chats/${targetChatId}/messages`).push({
-              text: notificationMsg,
-              sender: 'admin',
-              timestamp: firebase.database.ServerValue.TIMESTAMP
-            });
-            db.ref(`chats/${targetChatId}`).update({
-              customerName: customerName,
-              orderId: orderRef,
-              lastMessage: `Status updated to ${newStatus}`,
-              lastUpdated: firebase.database.ServerValue.TIMESTAMP
-            });
-          })
-          .catch(err => console.error("Error updating order status:", err));
-      }
-    }
-    function deleteOrder(orderKey, orderRef) {
-      if (confirm(`Are you sure you want to delete Order #${orderRef}?`)) {
-        db.ref(`orders/${orderKey}`).remove()
-          .then(() => {
-            if (orderRef && orderRef !== 'undefined') {
-              db.ref(`dispatches/${orderRef}`).remove();
-            }
-          })
-          .catch((err) => console.error("Error deleting order:", err));
-      }
-    }
-    function clearAllOrders() {
-      if (confirm("⚠️ WARNING: Are you sure you want to delete ALL orders and GPS dispatches permanently?")) {
-        db.ref('orders').remove();
-        db.ref('dispatches').remove();
-      }
-    }
-    function filterOrders(status, btn) {
-      activeFilter = status;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderOrders();
-    }
-    function exportOrdersCSV() {
-      let csvContent = "data:text/csv;charset=utf-8,Order Ref,Customer Name,Items Ordered,Total Amount (NGN),Status\n";
-      realTimeOrders.forEach(o => {
-        csvContent += `"${o.ref || ''}","${o.customer || ''}","${o.items || ''}","${o.total || 0}","${o.status || ''}"\n`;
-      });
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `amasan_orders_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-    function assignDispatch() {
-      const orderRef = document.getElementById('dispatch-order-ref').value;
-      const driver = document.getElementById('driver-select').value;
-      const vehicle = document.getElementById('vehicle-input').value.trim();
-      const eta = document.getElementById('eta-time').value;
-
-      if (!orderRef || orderRef === 'None') {
-        alert('Please select an active order/customer before assigning dispatch.');
-        return;
-      }
-      if (!vehicle) {
-        alert('Please enter a vehicle description.');
-        return;
-      }
-
-      db.ref(`dispatches/${orderRef}`).set({
-        driver: driver,
-        vehicle: vehicle,
-        eta: eta,
-        assignedAt: firebase.database.ServerValue.TIMESTAMP
-      }).then(() => {
-        alert(`Vehicle "${vehicle}" with driver ${driver} assigned to Order #${orderRef}!`);
-        toggleDispatchDrawer();
-      }).catch(err => console.error("Error assigning dispatch:", err));
-    }
-    // -------------------------------------------------------------
-    // 7. UI NAVIGATION CONTROLS
-    // -------------------------------------------------------------
-    function switchView(viewId, element) {
-      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(viewId).classList.add('active');
-      if(element) element.classList.add('active');
-      const titles = {
-        'dashboard-view': 'Dashboard Overview',
-        'chat-view': 'Customer Support Console',
-        'inventory-view': 'Inventory & Pricing Management',
-        'orders-view': 'Order Management & GPS Tracking',
-        'info-view': 'Farm Contact & Bank Information'
-      };
-      document.getElementById('page-title').innerText = titles[viewId] || 'Admin Hub';
-      document.getElementById('dispatch-drawer').classList.remove('open');
-      if (viewId === 'orders-view' && map) {
-        setTimeout(() => map.invalidateSize(), 200);
-      }
-    }
-    function filterCustomers() {
-      const query = document.getElementById('customer-search').value.toLowerCase();
-      document.querySelectorAll('.customer-item').forEach(item => {
-        const text = item.innerText.toLowerCase();
-        item.style.display = text.includes(query) ? 'flex' : 'none';
-      });
-    }
-    function toggleDispatchDrawer() {
-      document.getElementById('dispatch-drawer').classList.toggle('open');
-    }
+    let inventoryItems=[]; const defaultInventory=[{id:"INV-001",name:"Poultry Feed - Layers Mash (25kg)",price:14500,qty:3,threshold:5},{id:"INV-002",name:"Poultry Feed - Broiler Starter (25kg)",price:16000,qty:45,threshold:10},{id:"INV-003",name:"Fresh Farm Eggs (Crate)",price:3200,qty:2,threshold:10},{id:"INV-004",name:"Organic Fertilizer (50kg)",price:8500,qty:18,threshold:5}];
+    function listenToInventory(){const invRef=db.ref('inventory');invRef.on('value',(snapshot)=>{inventoryItems=[];if(!snapshot.exists()){defaultInventory.forEach(item=>{db.ref(`inventory/${item.id}`).set(item);});return;}let lowStockAlertCount=0;snapshot.forEach((child)=>{const item=child.val();item.key=child.key;inventoryItems.push(item);if(Number(item.qty)<=Number(item.threshold)){lowStockAlertCount++;}});renderInventoryTable(lowStockAlertCount);});}
+    function renderInventoryTable(lowStockCount){const tbody=document.getElementById('inventory-table-body');tbody.innerHTML='';inventoryItems.forEach(item=>{const isLow=Number(item.qty)<=Number(item.threshold);const tr=document.createElement('tr');tr.innerHTML=`<td>${item.id||item.key}</td><td><strong>${item.name}</strong></td><td>₦ ${Number(item.price).toLocaleString()}</td><td class="${isLow?'stock-critical':''}">${item.qty} ${isLow?'⚠️':''}</td><td>Below ${item.threshold} units</td><td>${isLow?'<span class="stock-badge-low">Low / Out of Stock</span>':'<span style="color:var(--primary-light);">In Stock</span>'}</td><td><div style="display: flex; gap: 6px;"><button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="updateStock('${item.key}', ${item.qty})"><i class="fas fa-boxes"></i> Stock</button><button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="updatePrice('${item.key}', ${item.price})"><i class="fas fa-tag"></i> Price</button><button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteInventoryItem('${item.key}', '${item.name}')"><i class="fas fa-trash"></i></button></div></td>`;tbody.appendChild(tr);});document.getElementById('dash-alerts').innerText=lowStockCount;const badge=document.getElementById('low-stock-count');if(lowStockCount>0){badge.innerText=lowStockCount;badge.style.display='inline-block';}else{badge.style.display='none';}}
+    function updateStock(itemKey,currentQty){const newQty=prompt(`Enter new stock quantity for this item:`,currentQty);if(newQty!==null&&!isNaN(newQty)&&newQty!==''){db.ref(`inventory/${itemKey}`).update({qty:Number(newQty)});}}
+    function updatePrice(itemKey,currentPrice){const newPrice=prompt(`Enter new unit price (₦):`,currentPrice);if(newPrice!==null&&!isNaN(newPrice)&&newPrice!==''){db.ref(`inventory/${itemKey}`).update({price:Number(newPrice)});}}
+    function deleteInventoryItem(itemKey,itemName){if(confirm(`Are you sure you want to delete "${itemName}" from inventory?`)){db.ref(`inventory/${itemKey}`).remove();}}
+    function openAddItemModal(){document.getElementById('add-item-modal').style.display='flex';}
+    function closeAddItemModal(){document.getElementById('add-item-modal').style.display='none';}
+    function saveNewProduct(){const name=document.getElementById('new-item-name').value.trim();const price=Number(document.getElementById('new-item-price').value);const qty=Number(document.getElementById('new-item-qty').value);const threshold=Number(document.getElementById('new-item-threshold').value);const customId=`INV-${Math.floor(100+Math.random()*900)}`;db.ref(`inventory/${customId}`).set({id:customId,name:name,price:price,qty:qty,threshold:threshold}).then(()=>{alert(`${name} added successfully!`);closeAddItemModal();document.getElementById('new-item-name').value='';document.getElementById('new-item-price').value='';document.getElementById('new-item-qty').value='';});}
+    let realTimeOrders=[]; let activeFilter='All';
+    function listenToOrders(){const ordersRef=db.ref('orders');ordersRef.on('value',(snapshot)=>{realTimeOrders=[];let totalRevenueSum=0;snapshot.forEach((childSnapshot)=>{const order=childSnapshot.val();order.firebaseKey=childSnapshot.key;realTimeOrders.unshift(order);if(order.total){totalRevenueSum+=Number(order.total);}});document.getElementById('dash-revenue').innerText=`₦ ${totalRevenueSum.toLocaleString()}`;renderOrders();});}
+    function renderOrders(){const tbody=document.getElementById('orders-table-body');if(!tbody)return;tbody.innerHTML='';const filtered=activeFilter==='All'?realTimeOrders:realTimeOrders.filter(o=>(o.status||'Pending').toLowerCase()===activeFilter.toLowerCase());document.getElementById('dash-orders').innerText=realTimeOrders.length;if(filtered.length===0){tbody.innerHTML=`<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No orders found.</td></tr>`;return;}filtered.forEach(o=>{const tr=document.createElement('tr');const statusClass=(o.status||'pending').toLowerCase();tr.innerHTML=`<td><strong>#${o.ref||'N/A'}</strong></td><td>${o.customer||'Anonymous'}</td><td>${o.items||'N/A'}</td><td>₦ ${Number(o.total||0).toLocaleString()}</td><td><span class="status-tag status-${statusClass}">${o.status||'Pending'}</span></td><td>${o.lat?`<button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="focusOnDriver(${o.lat}, ${o.lng})"><i class="fas fa-location-arrow"></i> Track</button>`:'<span style="color:var(--text-muted); font-size: 0.8rem;">N/A</span>'}</td><td><div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px;"><button class="btn-status btn-confirm" onclick="updateOrderStatus('${o.firebaseKey}', '${o.ref}', '${o.customer}', 'Confirmed')"><i class="fas fa-check-circle"></i> Confirm</button><button class="btn-status btn-dispatch" onclick="updateOrderStatus('${o.firebaseKey}', '${o.ref}', '${o.customer}', 'Dispatched')"><i class="fas fa-truck"></i> Dispatch</button><button class="btn-status btn-deliver" onclick="updateOrderStatus('${o.firebaseKey}', '${o.ref}', '${o.customer}', 'Delivered')"><i class="fas fa-box-open"></i> Deliver</button><button class="btn-status btn-cancel" onclick="updateOrderStatus('${o.firebaseKey}', '${o.ref}', '${o.customer}', 'Cancelled')"><i class="fas fa-times-circle"></i> Cancel</button></div><div style="display: flex; gap: 4px; flex-wrap: wrap;"><button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.75rem;" onclick="selectCustomer('chat-${o.ref}', '${o.customer}', '${o.ref}')"><i class="fas fa-comment"></i> Chat</button><button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.75rem;" onclick="sendReceiptInChat('${o.ref}', '${o.customer}', '${o.items}', '${o.total}')"><i class="fas fa-receipt"></i> Chat Receipt</button><button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.75rem; background:#d4af37; color:#000" onclick="downloadPDFReceipt('${o.ref}', '${o.customer}', '${o.items}', '${o.total}')"><i class="fas fa-file-pdf"></i> Download Receipt(PDF)</button><button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.75rem;" onclick="deleteOrder('${o.firebaseKey}', '${o.ref}')"><i class="fas fa-trash"></i></button></div></td>`;tbody.appendChild(tr);});}
+    function updateOrderStatus(firebaseKey,orderRef,customerName,newStatus){if(confirm(`Change status of Order #${orderRef} to "${newStatus}"?`)){db.ref(`orders/${firebaseKey}`).update({status:newStatus}).then(()=>{const targetChatId=activeChatId||`chat-${orderRef}`;const statusEmojis={'Confirmed':'✅','Dispatched':'🚚','Delivered':'🎉','Cancelled':'❌'};const notificationMsg=`${statusEmojis[newStatus]||'📋'} *ORDER UPDATE*: Your Order #${orderRef} status has been updated to *${newStatus.toUpperCase()}*.`;db.ref(`chats/${targetChatId}/messages`).push({text:notificationMsg,sender:'admin',timestamp:firebase.database.ServerValue.TIMESTAMP});db.ref(`chats/${targetChatId}`).update({customerName:customerName,orderId:orderRef,lastMessage:`Status updated to ${newStatus}`,lastUpdated:firebase.database.ServerValue.TIMESTAMP});}).catch(err=>console.error("Error updating order status:",err));}}
+    function deleteOrder(orderKey,orderRef){if(confirm(`Are you sure you want to delete Order #${orderRef}?`)){db.ref(`orders/${orderKey}`).remove().then(()=>{if(orderRef&&orderRef!=='undefined'){db.ref(`dispatches/${orderRef}`).remove();}}).catch((err)=>console.error("Error deleting order:",err));}}
+    function clearAllOrders(){if(confirm("⚠️ WARNING: Are you sure you want to delete ALL orders and GPS dispatches permanently?")){db.ref('orders').remove();db.ref('dispatches').remove();}}
+    function filterOrders(status,btn){activeFilter=status;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderOrders();}
+    function exportOrdersCSV(){let csvContent="data:text/csv;charset=utf-8,Order Ref,Customer Name,Items Ordered,Total Amount (NGN),Status\n";realTimeOrders.forEach(o=>{csvContent+=`"${o.ref||''}","${o.customer||''}","${o.items||''}","${o.total||0}","${o.status||''}"\n`;});const encodedUri=encodeURI(csvContent);const link=document.createElement("a");link.setAttribute("href",encodedUri);link.setAttribute("download",`amasan_orders_${new Date().toISOString().slice(0,10)}.csv`);document.body.appendChild(link);link.click();document.body.removeChild(link);}
+    function assignDispatch(){const orderRef=document.getElementById('dispatch-order-ref').value;const driver=document.getElementById('driver-select').value;const vehicle=document.getElementById('vehicle-input').value.trim();const eta=document.getElementById('eta-time').value;if(!orderRef||orderRef==='None'){alert('Please select an active order/customer before assigning dispatch.');return;}if(!vehicle){alert('Please enter a vehicle description.');return;}db.ref(`dispatches/${orderRef}`).set({driver:driver,vehicle:vehicle,eta:eta,assignedAt:firebase.database.ServerValue.TIMESTAMP}).then(()=>{alert(`Vehicle "${vehicle}" with driver ${driver} assigned to Order #${orderRef}!`);toggleDispatchDrawer();}).catch(err=>console.error("Error assigning dispatch:",err));}
+    function switchView(viewId,element){document.querySelectorAll('.view-section').forEach(sec=>sec.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(btn=>btn.classList.remove('active'));document.getElementById(viewId).classList.add('active');if(element)element.classList.add('active');const titles={'dashboard-view':'Dashboard Overview','chat-view':'Customer Support Console','inventory-view':'Inventory & Pricing Management','orders-view':'Order Management & GPS Tracking','info-view':'Farm Contact & Bank Information'};document.getElementById('page-title').innerText=titles[viewId]||'Admin Hub';document.getElementById('dispatch-drawer').classList.remove('open');if(viewId==='orders-view'&&map){setTimeout(()=>map.invalidateSize(),200);}}
+    function filterCustomers(){const query=document.getElementById('customer-search').value.toLowerCase();document.querySelectorAll('.customer-item').forEach(item=>{const text=item.innerText.toLowerCase();item.style.display=text.includes(query)?'flex':'none';});}
+    function toggleDispatchDrawer(){document.getElementById('dispatch-drawer').classList.toggle('open');}
   </script>
 </body>
 </html>
