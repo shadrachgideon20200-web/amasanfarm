@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amasan Farm | Quality Agricultural Supplies</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root { --bg-dark:#121212; --bg-card:#1e1e1e; --bg-hover:#282828; --primary:#2e7d32; --primary-light:#4caf50; --accent:#ff9800; --text:#f0f0f0; --text-muted:#8e8e8e; --border:#2a2a2a; --danger:#f44336; --whatsapp:#25D366; }
+    body.light-mode { --bg-dark:#f4f6f8; --bg-card:#ffffff; --bg-hover:#eef2f5; --text:#1a1a1a; --text-muted:#666; --border:#e0e0e0; }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif}
+    body{background:var(--bg-dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+    
+    /* Top Contact Bar */
+    .top-contact-bar { background: var(--primary); color: #fff; padding: 6px 16px; font-size: 0.8rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; text-align: center; }
+    .top-contact-bar a { color: #fff; text-decoration: none; font-weight: 600; }
+    navbar{background:var(--bg-card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
+   .brand-centered{display:flex;flex-direction:column;align-items:center;gap:10px}
+   .brand-logo{width:130px;height:130px;border-radius:50%;object-fit:cover;box-shadow:0 6px 16px rgba(76,175,80,.35);border:3px solid var(--primary-light)}
+   .brand-title{font-size:1.6rem;font-weight:800;color:var(--primary-light)}
+   .nav-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+   .nav-btn{background:var(--bg-hover);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.85rem;text-decoration:none}
+   .cart-badge{background:var(--accent);color:#000;font-size:.75rem;font-weight:700;padding:2px 6px;border-radius:10px}
+   .hero{padding:28px 24px;text-align:center;background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-dark) 100%);border-bottom:1px solid var(--border)}
+   .greeting-text{font-size:.9rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;margin-bottom:6px}
+   .contact-badges{display:flex;justify-content:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+   .contact-badge-item{background:var(--bg-hover);border:1px solid var(--border);padding:6px 12px;border-radius:20px;font-size:.8rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px}
+   
+   .container{max-width:1200px;margin:24px auto;padding:0 20px;flex:1;width:100%}
+   .stock-banner{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px 20px;margin-bottom:20px;display:flex;justify-content:space-between;flex-wrap:wrap}
+   .filter-bar{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+   .search-box{position:relative}.search-box input{width:100%;padding:12px 16px 12px 42px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text)}.search-box i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted)}
+   .categories-wrapper{display:flex;gap:8px;overflow-x:auto}.cat-pill{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:20px;font-size:.85rem;font-weight:600;cursor:pointer;white-space:nowrap}.cat-pill.active{background:var(--primary-light);color:#fff}
+   .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+   .product-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+   .product-title{font-weight:600;margin-bottom:8px}.product-price{font-size:1.25rem;font-weight:700;color:var(--primary-light);margin-bottom:12px}
+   .stock-tag{font-size:.8rem;padding:4px 8px;border-radius:4px;display:inline-block;margin-bottom:16px;width:fit-content}.in-stock{background:rgba(76,175,80,.15);color:var(--primary-light)}.out-stock{background:rgba(244,67,54,.15);color:var(--danger)}.low-stock{background:rgba(255,152,0,.15);color:var(--accent)}
+   .btn{width:100%;padding:10px;border:none;border-radius:8px;background:var(--primary-light);color:#fff;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+   .btn-sec{background:var(--bg-hover);border:1px solid var(--border);color:var(--text)}
+   .btn-wa{background:var(--whatsapp);color:#fff}
+   .modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:1050}
+   .modal-card{background:var(--bg-card);border:1px solid var(--border);padding:28px;border-radius:12px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+   .cart-item{display:flex;justify-content:space-between;margin-bottom:12px;font-size:.9rem}.qty-controls{display:flex;gap:8px;align-items:center}.qty-btn{background:var(--bg-hover);border:1px solid var(--border);width:26px;height:26px;border-radius:4px;cursor:pointer}
+   .form-group{margin-bottom:12px}.form-group label{font-size:.8rem;color:var(--text-muted);text-transform:uppercase}.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)}
+   .form-row{display:flex;gap:10px}.status-steps{display:flex;justify-content:space-between;margin:20px 0}.status-step{text-align:center;font-size:.75rem;color:var(--text-muted);flex:1}.status-step.active{color:var(--primary-light);font-weight:bold}
+   .chat-widget-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--primary-light);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99}
+   .chatbot-widget-btn{position:fixed;bottom:90px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99}
+   .chat-box-popup{position:fixed;bottom:90px;right:24px;width:380px;max-width:92vw;height:500px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;display:none;flex-direction:column;z-index:100;box-shadow:0 12px 30px rgba(0,0,0,.6);overflow:hidden}
+   .chat-box-header{background:var(--bg-hover);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;font-weight:700}
+   .chat-box-body{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg-dark)}
+   .chat-msg{padding:10px 14px;border-radius:14px;font-size:.88rem;max-width:85%;line-height:1.5;white-space:pre-wrap}.chat-msg.customer{background:var(--primary-light);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}.chat-msg.bot{background:var(--bg-card);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+   .chat-box-footer{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--bg-card)}.chat-box-footer input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text);outline:none}
+   .quick-chips{display:flex;gap:6px;overflow-x:auto;padding:8px 10px;border-top:1px solid var(--border)}.chip{background:var(--bg-hover);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:20px;font-size:.75rem;cursor:pointer;white-space:nowrap}
+   .bank-details-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:12px;margin:12px 0;font-size:.85rem}
+   .bank-details-box div{margin-bottom:4px}
+   footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px;text-align:center;font-size:.85rem;color:var(--text-muted);margin-top:40px}
+   footer a{color:var(--primary-light);text-decoration:none}
+  </style>
+</head>
+<body>
+<!-- Top Contact Bar -->
+<div class="top-contact-bar">
+  <div><i class="fas fa-location-dot"></i> Wukari, Taraba State, Nigeria</div>
+  <div>
+    <i class="fas fa-phone"></i> <a href="tel:08037558809">08037558809</a> | 
+    <i class="fas fa-envelope"></i> <a href="mailto:Amasanfarm@gmail.com">Amasanfarm@gmail.com</a>
+  </div>
+</div>
+<navbar>
+  <div class="brand-centered"><img src="IMG-20260726-WA8808.jpg" class="brand-logo"><span class="brand-title">Amasan Farm</span></div>
+  <div class="nav-actions">
+    <a class="nav-btn" href="tel:08037558809"><i class="fas fa-phone"></i> Call Us</a>
+    <a class="nav-btn" href="mailto:Amasanfarm@gmail.com"><i class="fas fa-envelope"></i> Email Us</a>
+    <button class="nav-btn" onclick="openAboutModal()"><i class="fas fa-seedling"></i> About Us</button>
+    <button class="nav-btn" onclick="openTrackModal()"><i class="fas fa-truck"></i> Track Order</button>
+    <button class="nav-btn" onclick="openFeedbackModal()"><i class="fas fa-comment-dots"></i> Feedback</button>
+    <a class="nav-btn" href="https://wa.me/2348037558809" target="_blank"><i class="fab fa-whatsapp" style="color:var(--whatsapp)"></i> WhatsApp</a>
+    <button class="nav-btn" id="install-app-btn" style="display:none;" onclick="installApp()"><i class="fas fa-download"></i> Install App</button>
+    <button class="nav-btn" onclick="toggleDarkMode()"><i class="fas fa-moon" id="theme-icon"></i></button>
+    <button class="nav-btn" onclick="openCartModal()"><i class="fas fa-shopping-basket"></i> Cart <span class="cart-badge" id="cart-count">0</span></button>
+  </div>
+</navbar>
+<div class="hero">
+  <div class="greeting-text" id="time-greeting">Welcome</div>
+  <h1>Quality Agricultural Supplies</h1>
+  <div class="contact-badges">
+    <a href="tel:08037558809" class="contact-badge-item" style="text-decoration:none;"><i class="fas fa-phone" style="color:var(--primary-light)"></i> 08037558809</a>
+    <a href="mailto:Amasanfarm@gmail.com" class="contact-badge-item" style="text-decoration:none;"><i class="fas fa-envelope" style="color:var(--accent)"></i> Amasanfarm@gmail.com</a>
+  </div>
+</div>
+<div class="container">
+  <div class="stock-banner"><div><strong>Live Stock:</strong> <span id="live-stock-count">0 items</span></div><div></div></div>
+  <div class="filter-bar"><div class="search-box"><i class="fas fa-search"></i><input type="text" id="search-input" placeholder="Search..." oninput="renderFilteredProducts()"></div>
+  <div class="categories-wrapper"><button class="cat-pill active" onclick="filterCategory('All',this)">All</button><button class="cat-pill" onclick="filterCategory('Feeds',this)">Feeds</button><button class="cat-pill" onclick="filterCategory('Fertilizer',this)">Fertilizer</button><button class="cat-pill" onclick="filterCategory('Produce',this)">Produce</button><button class="cat-pill" onclick="filterCategory('Equipment',this)">Equipment</button></div></div>
+  <div class="products-grid" id="products-grid"></div>
+</div>
+<!-- ABOUT US MODAL -->
+<div class="modal-overlay" id="about-modal">
+  <div class="modal-card" style="text-align: center;">
+    <h3 style="color: var(--primary-light); font-size: 1.5rem; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+      <span><i class="fas fa-seedling"></i> About Amasan Farm</span>
+      <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;" onclick="closeModal('about-modal')">✕</button>
+    </h3>
+    <p style="color: var(--text); font-size: 0.95rem; line-height: 1.6; margin-bottom: 14px; text-align: left;">
+      Located in Wukari, Taraba State, Nigeria, Amasan Farm is a premier agricultural enterprise led by CEO Gideon Shadrach. We are dedicated to supporting local agriculture and food security by supplying high-quality, dependable agricultural products.
+    </p>
+    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px; text-align: left;">
+      From top-grade poultry feeds and organic fertilizers to fresh farm produce like eggs and yams, our mission is to deliver excellence straight from our farm to your doorstep. Through our digital platform, we make ordering, customer support, and live delivery tracking seamless and transparent.
+    </p>
+    <button class="btn btn-sec" onclick="closeModal('about-modal')">Close</button>
+  </div>
+</div>
+<!-- Checkout Modal -->
+<div class="modal-overlay" id="cart-modal">
+  <div class="modal-card">
+    <h3>Your Checkout <button style="background:none;border:none;color:var(--text-muted);cursor:pointer" onclick="closeModal('cart-modal')">✕</button></h3>
+    <div id="cart-items-container"></div>
+    <div id="cart-subtotal"></div>
+    <div id="cart-total-price" style="font-weight:700;color:var(--primary-light);margin:10px 0"></div>
+    
+    <div class="bank-details-box">
+      <div style="font-weight:700;color:var(--accent);margin-bottom:6px"><i class="fas fa-university"></i> Bank Transfer Accounts</div>
+      <div><strong>OPay:</strong> 8104817797</div>
+      <div><strong>Zenith Bank:</strong> 2260717656</div>
+      <div><strong>Account Name:</strong> Amasan Farm</div>
+      <hr style="border-color:var(--border);margin:8px 0">
+      <div style="font-size:.8rem;color:var(--text-muted)">
+        <i class="fas fa-phone"></i> <strong>Support / Enquiries:</strong> <a href="tel:08037558809" style="color:var(--primary-light)">08037558809</a><br>
+        <i class="fas fa-envelope"></i> <strong>Email:</strong> <a href="mailto:Amasanfarm@gmail.com" style="color:var(--primary-light)">Amasanfarm@gmail.com</a>
+      </div>
+    </div>
+    <form onsubmit="event.preventDefault();submitOrder();">
+      <div class="form-group"><label>Full Name</label><input id="cust-name" required></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>State</label>
+          <select id="cust-state" required></select>
+        </div>
+        <div class="form-group">
+          <label>LGA</label>
+          <select id="cust-lga" disabled required>
+            <option value="">Select State First</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Address</label><input id="cust-address" required><button type="button" class="btn btn-sec" style="margin-top:6px;font-size:.8rem;padding:6px" onclick="detectLocation()"><i class="fas fa-location-arrow"></i> Get My GPS Location</button><input type="hidden" id="cust-gps"></div>
+      <button class="btn" style="margin-top:12px">Place Order</button>
+    </form>
+  </div>
+</div>
+<!-- Receipt Modal -->
+<div class="modal-overlay" id="receipt-modal">
+  <div class="modal-card" style="text-align:center">
+    <h2 style="color:var(--primary-light);margin-bottom:4px">Amasan Farm</h2>
+    <div style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px">
+      Wukari, Taraba State, Nigeria<br>
+      Phone / WhatsApp: <strong>08037558809</strong> | Email: <strong>Amasanfarm@gmail.com</strong>
+    </div>
+    <hr style="border-color:var(--border);margin-bottom:12px">
+    <h3>Order Placed Successfully!</h3>
+    <p style="margin:8px 0">Ref: <strong id="receipt-ref" style="color:var(--accent);"></strong> <button class="btn-sec" style="padding:2px 6px;font-size:0.75rem;border-radius:4px;cursor:pointer;" onclick="copyRef()"><i class="fas fa-copy"></i> Copy</button></p>
+    <div id="receipt-details" style="margin:12px 0;text-align:left;background:var(--bg-dark);padding:12px;border-radius:8px"></div>
+    <div id="receipt-total-display" style="font-weight:700;color:var(--primary-light);margin-bottom:12px"></div>
+    
+    <div class="bank-details-box" style="text-align:left;">
+      <div style="font-weight:700;color:var(--accent);margin-bottom:4px">Transfer Payment To:</div>
+      <div>OPay: <strong>8104817797</strong></div>
+      <div>Zenith Bank: <strong>2260717656</strong></div>
+      <div>Name: <strong>Amasan Farm</strong></div>
+    </div>
+    <div style="margin: 14px 0;">
+      <button class="btn" style="background: var(--primary);" onclick="confirmPaymentAction()"><i class="fas fa-check-circle"></i> I Have Made Payment</button>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <a id="whatsapp-receipt-btn" class="btn btn-wa" href="#" target="_blank"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+      <button class="btn btn-sec" onclick="closeModal('receipt-modal')">Done</button>
+    </div>
+  </div>
+</div>
+<!-- Track Modal -->
+<div class="modal-overlay" id="track-modal">
+  <div class="modal-card">
+    <h3>Track Order <button onclick="closeModal('track-modal')" style="background:none;border:none;cursor:pointer">✕</button></h3>
+    <div class="form-group" style="margin-top:10px;">
+      <input id="track-ref-input" placeholder="Enter 6-digit ref">
+    </div>
+    <button class="btn" onclick="checkOrderStatus()">Track Order</button>
+    
+    <!-- Saved Order History Section -->
+    <div id="saved-orders-history-section" style="margin-top:16px;border-top:1px solid var(--border);padding-top:12px;">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--text-muted);margin-bottom:8px;"><i class="fas fa-history"></i> Your Recent Orders on this Device:</div>
+      <div id="saved-orders-list" style="display:flex;flex-direction:column;gap:6px;max-height:120px;overflow-y:auto;"></div>
+    </div>
+    <div id="track-result" style="display:none;margin-top:16px">
+      <div class="status-steps">
+        <div class="status-step" id="step-pending">Pending</div>
+        <div class="status-step" id="step-processing">Packing</div>
+        <div class="status-step" id="step-dispatched">On Way</div>
+        <div class="status-step" id="step-delivered">Delivered</div>
+      </div>
+      <div id="track-info-body"></div>
+    </div>
+  </div>
+</div>
+<!-- Feedback Modal -->
+<div class="modal-overlay" id="feedback-modal"><div class="modal-card"><h3>Send Feedback / Complaint <button onclick="closeModal('feedback-modal')" style="background:none;border:none;color:var(--text-muted);cursor:pointer">✕</button></h3><form onsubmit="event.preventDefault();submitFeedback();"><div class="form-group"><label>Name</label><input id="fb-name" required></div><div class="form-group"><label>Email or Phone</label><input id="fb-contact" required></div><div class="form-group"><label>Message</label><textarea id="fb-msg" rows="4" required></textarea></div><button class="btn">Submit</button></form></div></div>
+<!-- AI Chatbot Widget -->
+<div class="chatbot-widget-btn" onclick="toggleBotBox()"><i class="fas fa-robot"></i></div>
+<div class="chat-box-popup" id="bot-box-popup">
+  <div class="chat-box-header"><span><i class="fas fa-wand-magic-sparkles"></i> Amasan AI Assistant</span><button onclick="toggleBotBox()" style="background:none;border:none;color:var(--text-muted);cursor:pointer">✕</button></div>
+  <div class="chat-box-body" id="bot-chat-body"><div class="chat-msg bot">Hello 👋 I'm your Amasan Farm AI assistant!\n\nI can help you with product stock, bank details (OPay & Zenith), or customer support (08037558809). How can I assist you?</div></div>
+  <div class="quick-chips">
+    <span class="chip" onclick="askBotPrompt('What feeds are in stock?')">📦 Feeds?</span>
+    <span class="chip" onclick="askBotPrompt('What is your contact and email?')">📞 Contact Info</span>
+    <span class="chip" onclick="askBotPrompt('Bank account details?')">💳 Bank Info</span>
+  </div>
+  <div class="chat-box-footer"><input id="bot-msg-input" placeholder="Ask anything..." onkeypress="if(event.key==='Enter')sendBotMessage()"><button class="btn" style="width:auto;border-radius:50%;padding:10px 14px;background:var(--accent);color:#000" onclick="sendBotMessage()"><i class="fas fa-paper-plane"></i></button></div>
+</div>
+<!-- Live Chat Widget -->
+<div class="chat-widget-btn" onclick="toggleChatBox()"><i class="fas fa-headset"></i></div>
+<div class="chat-box-popup" id="chat-box-popup"><div class="chat-box-header"><span>Human Support</span><button onclick="toggleChatBox()" style="background:none;border:none;cursor:pointer">✕</button></div><div class="chat-box-body" id="customer-chat-body"></div><div class="chat-box-footer"><input id="customer-msg-input" placeholder="Message admin..." onkeypress="if(event.key==='Enter')sendCustomerMessage()"><button class="btn" style="width:auto" onclick="sendCustomerMessage()"><i class="fas fa-paper-plane"></i></button></div></div>
+<footer>
+  <p><strong>Amasan Farm</strong> © 2026 | Wukari, Taraba State, Nigeria</p>
+  <p style="margin-top:6px;">
+    <i class="fas fa-phone"></i> <a href="tel:08037558809">08037558809</a> &nbsp;|&nbsp; 
+    <i class="fas fa-envelope"></i> <a href="mailto:Amasanfarm@gmail.com">Amasanfarm@gmail.com</a>
+  </p>
+</footer>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script>
+var firebaseConfig={apiKey:"AIzaSyCnjkdRRgt4q7hgNLp204HgiV9UZ1Olmjs",authDomain:"amasan-farm-a5637.firebaseapp.com",databaseURL:"https://amasan-farm-a5637-default-rtdb.firebaseio.com",projectId:"amasan-farm-a5637",storageBucket:"amasan-farm-a5637.firebasestorage.app",messagingSenderId:"30400827803",appId:"1:30400827803:web:76b0beb1431ef847e6913e"};
+if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+let customerSessionId=localStorage.getItem('amasan_cust_chat_id'); if(!customerSessionId){customerSessionId='chat-'+Math.floor(100000+Math.random()*900000);localStorage.setItem('amasan_cust_chat_id',customerSessionId);}
+const nigeriaStatesLGAs={
+  "Abia":["Aba North","Aba South","Arochukwu","Bende","Ikwuano","Isiala Ngwa North","Isiala Ngwa South","Isuikwuato","Obi Ngwa","Ohafia","Osisioma","Ugwunagbo","Ukwa East","Ukwa West","Umuahia North","Umuahia South","Umu Nneochi"],
+  "Adamawa":["Demsa","Fufure","Ganye","Gayuk","Gombi","Grie","Hong","Jada","Lamurde","Madagali","Maiha","Mayo Belwa","Michika","Mubi North","Mubi South","Numan","Shelleng","Song","Toungo","Yewa North","Yola South"],
+  "Akwa Ibom":["Abak","Eastern Obolo","Eket","Esit Eket","Essien Udim","Etim Ekpo","Etinan","Ibeno","Ibesikpo Asutan","Ibiono-Ibom","Ika","Ikono","Ikot Abasi","Ikot Ekpene","Ini","Itu","Mbo","Mkpat-Enin","Nsit-Atai","Nsit-Ibiom","Nsit-Ubium","Obot Akara","Okobo","Onna","Oron","Oruk Anam","Udung-Uko","Ukanafun","Uruan","Urue-Offong/Oruko","Uyo"],
+  "Anambra":["Aguata","Anambra East","Anambra West","Anaocha","Awka North","Awka South","Ayamelum","Dunukofia","Ekwusigo","Idemili North","Idemili South","Ihiala","Njikoka","Nnewi North","Nnewi South","Ogbaru","Onitsha North","Onitsha South","Orumba North","Orumba South","Oyi"],
+  "Bauchi":["Alkaleri","Bauchi","Bogoro","Damban","Darazo","Dass","Gamawa","Ganjuwa","Giade","Itas/Gadau","Jama'are","Katagum","Kirfi","Misau","Ningi","Shira","Tafawa Balewa","Toro","Warji","Zaki"],
+  "Bayelsa":["Brass","Ekeremor","Kolokuma/Opokuma","Nembe","Ogbia","Sagbama","Southern Ijaw","Yenagoa"],
+  "Benue":["Agatu","Apa","Ado","Buruku","Gboko","Guma","Gwer East","Gwer West","Katsina-Ala","Konshisha","Kwande","Logo","Makurdi","Obi","Ogbadibo","Ohimini","Oju","Okpokwu","Oturkpo","Tarka","Ukum","Ushongo","Vandeikya"],
+  "Borno":["Abadam","Askira/Uba","Bama","Bayo","Biu","Chibok","Damboa","Dikwa","Gubio","Guzamala","Gwoza","Hawul","Jere","Kaga","Kala/Balge","Konduga","Kukawa","Kwaya Kusar","Mafa","Magumeri","Maiduguri","Marte","Mobbar","Monguno","Ngala","Nganzai","Shani"],
+  "Cross River":["Abi","Akamkpa","Akpabuyo","Bakassi","Bekwarra","Biase","Boki","Calabar Municipal","Calabar South","Etung","Ikom","Obanliku","Obubra","Obudu","Odukpani","Ogoja","Yakuur","Yala"],
+  "Delta":["Aniocha North","Aniocha South","Bomadi","Burutu","Ethiope East","Ethiope West","Ika North East","Ika South","Isoko North","Isoko South","Ndokwa East","Ndokwa West","Okpe","Oshimili North","Oshimili South","Patani","Sapele","Udu","Ughelli North","Ughelli South","Ukwuani","Uvwie","Warri North","Warri South","Warri South West"],
+  "Ebonyi":["Abakaliki","Afikpo North","Afikpo South","Ebonyi","Ezza North","Ezza South","Ikwo","Ishielu","Ivo","Izzi","Ohaozara","Ohaukwu","Onicha"],
+  "Edo":["Akoko-Edo","Egor","Esan Central","Esan North-East","Esan South-East","Esan West","Etsako Central","Etsako East","Etsako West","Igueben","Ikpoba Okha","Oredo","Orhionmwon","Ovia North-East","Ovia South-West","Owan East","Owan West","Uhummwonde"],
+  "Ekiti":["Ado Ekiti","Efon","Ekiti East","Ekiti South-West","Ekiti West","Emure","Gbonyin","Ido Osi","Ijero","Ikere","Ikole","Ilejemeje","Irepodun/Ifelodun","Ise/Orun","Moba","Oye"],
+  "Enugu":["Aninri","Awgu","Enugu East","Enugu North","Enugu South","Ezeagu","Igbo Etiti","Igbo Eze North","Igbo Eze South","Isi Uzo","Nkanu East","Nkanu West","Nsukka","Oji River","Udenu","Udi","Uzo Uwani"],
+  "FCT (Abuja)":["Abaji","Bwari","Gwagwalada","Kuje","Kwali","Municipal Area Council"],
+  "Gombe":["Akko","Balanga","Billiri","Dukku","Funakaye","Gombe","Kaltungo","Kwami","Nafada","Shongom","Yamaltu/Deba"],
+  "Imo":["Aboh Mbaise","Ahiazu Mbaise","Ehime Mbano","Ezinihitte","Ideato North","Ideato South","Ihitte/Uboma","Ikeduru","Isiala Mbano","Isu","Mbaitoli","Ngor Okpala","Njaba","Nkwerre","Nwangele","Obowo","Oguta","Ohaji/Egbema","Okigwe","Orlu","Orsu","Oru East","Oru West","Owerri Municipal","Owerri North","Owerri South"],
+  "Jigawa":["Auyo","Babura","Biriniwa","Birnin Kudu","Buji","Dutse","Gagarawa","Garki","Gumel","Guri","Gwaram","Gwaram","Gwiwa","Hadejia","Jahun","Kafin Hausa","Kaugama","Kazaure","Kiri Kasama","Kiyawa","Maigatari","Malam Madori","Miga","Ringim","Roni","Sule Tankarkar","Taura","Yankwashi"],
+  "Kaduna":["Birnin Gwari","Chikun","Giwa","Igabi","Ikara","Jaba","Jema'a","Kachia","Kaduna North","Kaduna South","Kagarko","Kajuru","Kaura","Kauru","Kubau","Kudan","Lere","Makarfi","Sabon Gari","Sanga","Soba","Zangon Kataf","Zaria"],
+  "Kano":["Ajingi","Albasu","Bagwai","Bebeji","Bichi","Bunkure","Dala","Dambatta","Dawakin Kudu","Dawakin Tofa","Doguwa","Fagge","Gabasawa","Garko","Garun Mallam","Gaya","Gezawa","Gwale","Gwarzo","Kabo","Kano Municipal","Karaye","Kibiya","Kiru","Kumbotso","Kunchi","Kura","Madobi","Makoda","Minjibir","Nasarawa","Rano","Rimin Gado","Rogo","Shanono","Sumaila","Takai","Tarauni","Tofa","Tsanyawa","Tudun Wada","Ungogo","Warawa","Wudil"],
+  "Katsina":["Bakori","Batagarawa","Batsari","Baure","Bindawa","Charanchi","Dandume","Danja","Dan Musa","Daura","Dutsi","Dutsin Ma","Faskari","Funtua","Ingawa","Jibia","Kafur","Kaita","Kankara","Kankia","Katsina","Kurfi","Kusada","Mai'Adua","Malumfashi","Mani","Mashi","Matazu","Musawa","Rimi","Sabuwa","Safana","Sandamu","Zango"],
+  "Kebbi":["Aleiro","Arewa Dandi","Argungu","Augie","Bagudo","Birnin Kebbi","Bunza","Dandi","Fakai","Gwandu","Jega","Kalgo","Koko/Besse","Maiyama","Ngaski","Sakaba","Shanga","Suru","Danko/Wasagu","Yauri","Zuru"],
+  "Kogi":["Adavi","Ajaokuta","Ankpa","Bassa","Dekina","Ibaji","Idah","Igalamela Odolu","Ijumu","Kabba/Bunu","Kogi","Lokoja","Mopa Muro","Ofu","Ogori/Magongo","Okehi","Okene","Olamaboro","Omala","Yagba East","Yagba West"],
+  "Kwara":["Asa","Baruten","Edu","Ekiti","Ifelodun","Ilorin East","Ilorin South","Ilorin West","Irepodun","Isin","Kaiama","Moro","Offa","Oke Ero","Oyun","Pategi"],
+  "Lagos":["Agege","Ajeromi-Ifelodun","Alimosho","Amuwo-Odofin","Apapa","Badagry","Epe","Eti Osa","Ibeju-Lekki","Ifako-Ijaiye","Ikeja","Ikorodu","Kosofe","Lagos Island","Lagos Mainland","Mushin","Ojo","Oshodi-Isolo","Shomolu","Surulere"],
+  "Nasarawa":["Awanga","Awe","Doma","Karu","Keana","Keffi","Kokona","Lafia","Nasarawa","Nasarawa Egon","Obi","Toto","Wamba"],
+  "Niger":["Agaie","Agwara","Bida","Borgu","Bosso","Chanchaga","Edati","Gbako","Gurara","Katcha","Kontagora","Lapai","Lavun","Magama","Mariga","Mokwa","Moya","Paikoro","Rafi","Rijau","Shiroro","Suleja","Tafa","Wushishi"],
+  "Ogun":["Abeokuta North","Abeokuta South","Ado-Odo/Ota","Egbado North","Egbado South","Ewekoro","Ifo","Ikenne","Imeko Afon","Ijebu East","Ijebu North","Ijebu North East","Ijebu Ode","Ikenne","Ikenne","Odeda","Odogbolu","Ogun Waterside","Remo North","Shagamu"],
+  "Ondo":["Akoko North-East","Akoko North-West","Akoko South-East","Akoko South-West","Akure North","Akure South","Ese Odo","Idanre","Ifedore","Ilaje","Ile Oluji/Okeigbo","Irele","Odigbo","Okitipupa","Ondo East","Ondo West","Ose","Owo"],
+  "Osun":["Atakunmosa East","Atakunmosa West","Aiyedaade","Aiyedire","Boluwaduro","Boripe","Ede North","Ede South","Ife Central","Ife East","Ife North","Ife South","Egbedore","Ejigbo","Ife Odun","Ilesa East","Ilesa West","Irepodun","Irewole","Isokan","Iwo","Obokun","Odo Otin","Ola Oluwa","Olorunda","Oriade","Orolu","Osogbo"],
+  "Oyo":["Afijio","Akinyele","Atiba","Atisbo","Egbeda","Ibadan North","Ibadan North-East","Ibadan North-West","Ibadan South-East","Ibadan South-West","Ibarapa Central","Ibarapa East","Ibarapa North","Iddo","Irepo","Iseyin","Itesiwaju","Iwajowa","Iwajowa","Ogbomosho North","Ogbomosho South","Ogo Oluwa","Olorunsogo","Oluyole","Oona Ara","Oorelope","Oyo East","Oyo West","Saki East","Saki West","Surulere"],
+  "Plateau":["Barkin Ladi","Bassa","Bokkos","Janam","Jos East","Jos North","Jos South","Kanam","Kanke","Langtang North","Langtang South","Mangu","Mikang","Pankshin","Qua'an Pan","Riyom","Shendam","Wase"],
+  "Rivers":["Abua/Odual","Ahoada East","Ahoada West","Akuku-Toru","Andoni","Asari-Toru","Bonny","Degema","Eleme","Emuoha","Etche","Gokana","Ikwerre","Khana","Obio/Akpor","Ogba/Egbema/Ndoni","Ogu/Bolo","Okrika","Omuma","Opobo/Nkoro","Oyigbo","Port Harcourt","Tai"],
+  "Sokoto":["Binji","Bodinga","Dange Shuni","Gada","Goronyo","Gudu","Gwadabawa","Illela","Isa","Kware","Kebbe","Rabah","Sabon Birni","Shagari","Silame","Sokoto North","Sokoto South","Tambuwal","Tangaza","Tureta","Wamako","Wurno","Yabo"],
+  "Taraba":["Ardo Kola","Bali","Donga","Gashaka","Gassol","Ibi","Jalingo","Karim Lamido","Kumi","Lau","Sardauna","Takum","Ussa","Wukari","Yorro","Zing"],
+  "Yobe":["Bade","Bursari","Damaturu","Fika","Fune","Geidam","Gujba","Gulani","Jakusko","Karasuwa","Machina","Nangere","Potiskum","Tarmuwa","Yunusari","Yusufari"],
+  "Zamfara":["Anka","Bakura","Birnin Magaji/Kiyaw","Bukkuyum","Bungudu","Gummi","Gusau","Kaura Namoda","Maradun","Maru","Shinkafi","Talata Mafara","Chafe","Zurmi"]
+};
+
+function populateStates(){
+  const s=document.getElementById('cust-state');
+  if(!s) return;
+  s.innerHTML='<option value="">Select State</option>';
+  Object.keys(nigeriaStatesLGAs).sort().forEach(st=>{
+    const o=document.createElement('option');
+    o.value=st;
+    o.textContent=st;
+    s.appendChild(o);
+  });
+  s.removeEventListener('change', loadLGAOptions);
+  s.addEventListener('change', loadLGAOptions);
+}
+
+function loadLGAOptions(){
+  const stateSel = document.getElementById('cust-state');
+  const lgaSel = document.getElementById('cust-lga');
+  if(!stateSel || !lgaSel) return;
+  
+  const sel=stateSel.value;
+  lgaSel.innerHTML='<option value="">Select LGA</option>';
+  if(sel&&nigeriaStatesLGAs[sel]){
+    lgaSel.disabled=false;
+    nigeriaStatesLGAs[sel].forEach(l=>{
+      const o=document.createElement('option');
+      o.value=l;
+      o.textContent=l;
+      lgaSel.appendChild(o);
+    });
+  } else {
+    lgaSel.disabled=true;
+    lgaSel.innerHTML='<option value="">Select State First</option>';
+  }
+}
+
+function detectLocation(){
+  if(!navigator.geolocation) return alert('Geolocation is not supported by your browser.');
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const coords = `${pos.coords.latitude},${pos.coords.longitude}`;
+    document.getElementById('cust-gps').value = coords;
+    alert('📍 Location captured successfully!');
+  }, err => {
+    alert('Unable to retrieve location. Please check your browser permissions.');
+  });
+}
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('install-app-btn');
+  if(btn) btn.style.display = 'inline-flex';
+});
+function installApp(){
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+  }
+}
+function openAboutModal(){document.getElementById('about-modal').style.display='flex';}
+function openFeedbackModal(){document.getElementById('feedback-modal').style.display='flex';}
+function submitFeedback(){
+  const name = document.getElementById('fb-name').value;
+  const contact = document.getElementById('fb-contact').value;
+  const msg = document.getElementById('fb-msg').value;
+  db.ref('feedback').push({ name, contact, msg, timestamp: firebase.database.ServerValue.TIMESTAMP }).then(()=>{
+    alert('Thank you for your feedback!');
+    closeModal('feedback-modal');
+  });
+}
+let currentOrderRef = '';
+function copyRef(){
+  if(!currentOrderRef) return;
+  navigator.clipboard.writeText(currentOrderRef);
+  alert('Order reference copied to clipboard!');
+}
+function confirmPaymentAction(){
+  if(!currentOrderRef) return;
+  db.ref(`orders/${currentOrderRef}`).update({ paymentConfirmed: true, status: 'Payment Noted - Pending Verification' }).then(()=>{
+    alert('Payment notification sent to admin! We will verify and process your order shortly.');
+  });
+}
+let allProducts=[],cart=[],activeCategory='All'; 
+window.addEventListener('DOMContentLoaded',()=>{
+  populateStates();
+  setGreeting();
+  listenToProducts();
+  listenToCustomerChat();
+});
+function setGreeting(){const h=new Date().getHours();let g=h<12?"Good Morning":h<18?"Good Afternoon":"Good Evening";document.getElementById('time-greeting').innerText=`👋 ${g}, Welcome to Amasan Farm!`;}
+function toggleDarkMode(){document.body.classList.toggle('light-mode');}
+function closeModal(id){document.getElementById(id).style.display='none';}
+function listenToProducts(){
+  db.ref('inventory').on('value',snap=>{
+    allProducts=[];let total=0;
+    if(snap.exists()){
+      snap.forEach(ch=>{const item=ch.val();item.key=ch.key;total+=Number(item.qty||0);allProducts.push(item);});
+    }
+    document.getElementById('live-stock-count').innerText=`${total} units`;
+    renderFilteredProducts();
+  });
+}
+function filterCategory(cat,btn){activeCategory=cat;document.querySelectorAll('.cat-pill').forEach(e=>e.classList.remove('active'));btn.classList.add('active');renderFilteredProducts();}
+function renderFilteredProducts(){
+  const q=document.getElementById('search-input').value.toLowerCase();
+  const cont=document.getElementById('products-grid');
+  cont.innerHTML='';
+  const filtered=allProducts.filter(it=>{
+    const mc=(activeCategory==='All')||(it.category&&it.category.toLowerCase().includes(activeCategory.toLowerCase()));
+    return mc&&it.name.toLowerCase().includes(q);
+  });
+  filtered.forEach(item=>{
+    const qtyNum = Number(item.qty);
+    const isOut=qtyNum<=0;
+    const isLow=!isOut && qtyNum <= 5;
+    
+    let tagClass = 'in-stock';
+    let tagText = 'In Stock ' + qtyNum;
+    if(isOut) {
+      tagClass = 'out-stock';
+      tagText = 'Out of Stock';
+    } else if(isLow) {
+      tagClass = 'low-stock';
+      tagText = '🔥 Selling Fast (' + qtyNum + ' left)';
+    }
+    const card=document.createElement('div');
+    card.className='product-card';
+    card.innerHTML=`
+      <div>
+        <div style="font-size:.75rem;color:var(--text-muted)">${item.category||''}</div>
+        <div class="product-title">${item.name}</div>
+        <div class="product-price">₦ ${Number(item.price).toLocaleString()}</div>
+        <span class="stock-tag ${tagClass}">${tagText}</span>
+      </div>
+      <button class="btn" ${isOut?'disabled':''} onclick="addToCart('${item.key}','${item.name}',${item.price})">Add to Cart</button>
+    `;
+    cont.appendChild(card);
+  });
+}
+function addToCart(id,name,price){const ex=cart.find(i=>i.id===id);if(ex)ex.qty++;else cart.push({id,name,price,qty:1});updateCartUI();}
+function adjustQty(id,d){const it=cart.find(i=>i.id===id);if(!it)return;it.qty+=d;if(it.qty<=0)cart=cart.filter(i=>i.id!==id);updateCartUI();}
+function updateCartUI(){document.getElementById('cart-count').innerText=cart.reduce((s,i)=>s+i.qty,0);const c=document.getElementById('cart-items-container');c.innerHTML='';let sub=0;cart.forEach(i=>{sub+=i.price*i.qty;c.innerHTML+=`<div class="cart-item"><span>${i.name} x${i.qty}</span><span><button class="qty-btn" onclick="adjustQty('${i.id}',-1)">-</button> ${i.qty} <button class="qty-btn" onclick="adjustQty('${i.id}',1)">+</button></span></div>`;});document.getElementById('cart-subtotal').innerText=`Subtotal ₦ ${sub.toLocaleString()}`;document.getElementById('cart-total-price').innerText=`Total ₦ ${(sub+1500).toLocaleString()}`;}
+function openCartModal(){document.getElementById('cart-modal').style.display='flex';}
+function saveOrderToLocalStorage(ref, total){
+  let history = JSON.parse(localStorage.getItem('amasan_order_history') || '[]');
+  if(!history.some(o => o.ref === ref)){
+    history.unshift({ ref, total, date: new Date().toLocaleDateString() });
+    if(history.length > 5) history.pop(); 
+    localStorage.setItem('amasan_order_history', JSON.stringify(history));
+  }
+}
+function submitOrder(){
+  if(cart.length===0)return alert('Empty cart');
+  const name=document.getElementById('cust-name').value;
+  const state=document.getElementById('cust-state').value;
+  const lga=document.getElementById('cust-lga').value;
+  const addr=document.getElementById('cust-address').value;
+  const gps=document.getElementById('cust-gps').value || '';
+  const ref=Math.floor(100000+Math.random()*900000);
+  currentOrderRef = ref.toString();
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0)+1500;
+  const items=cart.map(i=>`${i.name} x${i.qty}`).join(', ');
+  
+  db.ref(`orders/${ref}`).set({
+    ref,customer:name,state,lga,address:addr,gps,fullAddress:`${addr}, ${lga}, ${state}`,items,total,status:'Pending',paymentConfirmed:false,timestamp:firebase.database.ServerValue.TIMESTAMP
+  }).then(()=>{
+    cart.forEach(cartItem => {
+      const productRef = db.ref(`inventory/${cartItem.id}`);
+      productRef.once('value', snap => {
+        if(snap.exists()) {
+          const currentQty = Number(snap.val().qty || 0);
+          const newQty = Math.max(0, currentQty - cartItem.qty);
+          productRef.update({ qty: newQty });
+        }
+      });
+    });
+
+    saveOrderToLocalStorage(ref.toString(), total);
+    document.getElementById('receipt-ref').innerText='#'+ref;
+    document.getElementById('receipt-details').innerHTML=`
+      <div><strong>Customer:</strong> ${name}</div>
+      <div><strong>Delivery Address:</strong> ${addr}, ${lga}, ${state}</div>
+      <div><strong>Items Ordered:</strong> ${items}</div>
+    `;
+    document.getElementById('receipt-total-display').innerText=`Total Due: ₦ ${total.toLocaleString()}`;
+    
+    const waText = encodeURIComponent(`Hello Amasan Farm! I just placed an order.\n\nOrder Ref: #${ref}\nName: ${name}\nTotal: ₦${total.toLocaleString()}\nItems: ${items}`);
+    document.getElementById('whatsapp-receipt-btn').href = `https://wa.me/2348037558809?text=${waText}`;
+    cart=[];
+    updateCartUI();
+    closeModal('cart-modal');
+    document.getElementById('receipt-modal').style.display='flex';
+  });
+}
+function openTrackModal(){
+  document.getElementById('track-modal').style.display='flex';
+  renderSavedOrdersHistory();
+}
+function renderSavedOrdersHistory(){
+  const container = document.getElementById('saved-orders-list');
+  container.innerHTML = '';
+  let history = JSON.parse(localStorage.getItem('amasan_order_history') || '[]');
+  if(history.length === 0){
+    container.innerHTML = '<div style="font-size:0.75rem;color:var(--text-muted)">No recent orders found on this browser.</div>';
+    return;
+  }
+  history.forEach(ord => {
+    const row = document.createElement('div');
+    row.style.cssText = "display:flex;justify-content:space-between;align-items:center;background:var(--bg-dark);padding:6px 10px;border-radius:4px;font-size:0.8rem;";
+    row.innerHTML = `
+      <span>Ref: <strong>#${ord.ref}</strong> (₦${ord.total.toLocaleString()})</span>
+      <button class="btn btn-sec" style="padding:2px 6px;font-size:0.7rem;" onclick="trackSpecificRef('${ord.ref}')">Track</button>
+    `;
+    container.appendChild(row);
+  });
+}
+function trackSpecificRef(refCode){
+  document.getElementById('track-ref-input').value = refCode;
+  checkOrderStatus();
+}
+function checkOrderStatus(){
+  const ref=document.getElementById('track-ref-input').value.trim();
+  db.ref(`orders/${ref}`).once('value',snap=>{
+    const res=document.getElementById('track-result');
+    res.style.display='block';
+    if(snap.exists()){
+      const d=snap.val();
+      document.getElementById('track-info-body').innerHTML=`Customer: ${d.customer}<br>Status: ${d.status}<br>Total: ₦ ${d.total.toLocaleString()}`;
+      const st=(d.status||'pending').toLowerCase();
+      document.querySelectorAll('.status-step').forEach(e=>e.classList.remove('active'));
+      if(st.includes('pending'))document.getElementById('step-pending').classList.add('active');
+      if(st.includes('packing'))document.getElementById('step-processing').classList.add('active');
+      if(st.includes('dispatched')||st.includes('way'))document.getElementById('step-dispatched').classList.add('active');
+      if(st.includes('delivered'))document.getElementById('step-delivered').classList.add('active');
+    }else document.getElementById('track-info-body').innerText='Order reference not found.';
+  });
+}
+function toggleChatBox(){const b=document.getElementById('chat-box-popup');document.getElementById('bot-box-popup').style.display='none';b.style.display=b.style.display==='flex'?'none':'flex';}
+const GROQ_API_KEY = "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";
+let botHistory=[{role:"system",content:"You are Amasan Farm AI, friendly farm expert. Delivery ₦1500."}];
+function toggleBotBox(){const box=document.getElementById('bot-box-popup');document.getElementById('chat-box-popup').style.display='none';box.style.display=box.style.display==='flex'?'none':'flex';}
+function askBotPrompt(t){document.getElementById('bot-msg-input').value=t;sendBotMessage();}
+async function sendBotMessage(){
+  const input=document.getElementById('bot-msg-input');const text=input.value.trim();if(!text)return;
+  const body=document.getElementById('bot-chat-body');
+  const custDiv=document.createElement('div');custDiv.className='chat-msg customer';custDiv.innerText=text;body.appendChild(custDiv);input.value='';body.scrollTop=body.scrollHeight;
+  botHistory[0].content=`You are Amasan Farm AI for Wukari, Taraba. ChatGPT-style: helpful, concise, warm. Delivery ₦1500. Phone: 08037558809. Accounts: OPay 8104817797, Zenith 2260717656. Email: Amasanfarm@gmail.com. LIVE inventory: ${allProducts.map(p=>`${p.name} - ₦${p.price} (${p.qty} left) cat:${p.category}`).join(' | ')}. Date: Monday, Jul 27, 2026`;
+  botHistory.push({role:"user",content:text});if(botHistory.length>12)botHistory=[botHistory[0],...botHistory.slice(-10)];
+  const typing=document.createElement('div');typing.className='chat-msg bot';typing.id='typing';typing.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> Thinking...';body.appendChild(typing);body.scrollTop=body.scrollHeight;
+  try{
+    const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Authorization":`Bearer ${GROQ_API_KEY}`,"Content-Type":"application/json"},body:JSON.stringify({model:"llama-3.1-8b-instant",messages:botHistory,temperature:0.7,max_tokens:500})});
+    const data=await res.json();document.getElementById('typing')?.remove();
+    let reply=data.choices?.[0]?.message?.content||"Sorry, network error. Try again.";
+    botHistory.push({role:"assistant",content:reply});
+    const botDiv=document.createElement('div');botDiv.className='chat-msg bot';botDiv.innerText=reply;body.appendChild(botDiv);body.scrollTop=body.scrollHeight;
+  }catch(e){document.getElementById('typing')?.remove();const botDiv=document.createElement('div');botDiv.className='chat-msg bot';botDiv.innerText="Network error, check data.";body.appendChild(botDiv);}
+}
+function sendCustomerMessage(){const input=document.getElementById('customer-msg-input');const text=input.value.trim();if(!text)return;db.ref(`chats/${customerSessionId}/messages`).push({text,sender:'customer',timestamp:firebase.database.ServerValue.TIMESTAMP});db.ref(`chats/${customerSessionId}`).update({lastMessage:text,lastUpdated:firebase.database.ServerValue.TIMESTAMP});input.value='';}
+function listenToCustomerChat(){db.ref(`chats/${customerSessionId}/messages`).on('value',snap=>{const body=document.getElementById('customer-chat-body');body.innerHTML='';if(!snap.exists()){body.innerHTML='<div class="chat-msg bot">Hello! How can we help?</div>';return;}snap.forEach(ch=>{const m=ch.val();const div=document.createElement('div');div.className=`chat-msg ${m.sender==='customer'?'customer':'bot'}`;div.innerText=m.text;body.appendChild(div);});body.scrollTop=body.scrollHeight;});}
+</script>
+</body>
+</html>

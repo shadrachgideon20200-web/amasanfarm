@@ -1,0 +1,22 @@
+{
+  "name": "Amasan Farm - Wukari Yam & Potato Supply",
+  "short_name": "Amasan Farm",
+  "description": "Direct from Wukari Farms to 774 LGAs. CEO Gideon Shadrach - 08088375509 - Amasanfarm@gmail.com",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F3820",
+  "theme_color": "#0F3820",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2909/2909753.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2909/2909753.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
