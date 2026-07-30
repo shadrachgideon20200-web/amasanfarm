@@ -58,14 +58,14 @@
 <div class="top-contact-bar">
   <div><i class="fas fa-location-dot"></i> Wukari, Taraba State, Nigeria</div>
   <div>
-    <i class="fas fa-phone"></i> <a href="tel:08037558809">08037558809</a> |
+    <i class="fas fa-phone"></i> <a href="tel:08088375509">08088375509</a> |
     <i class="fas fa-envelope"></i> <a href="mailto:Amasanfarm@gmail.com">Amasanfarm@gmail.com</a>
   </div>
 </div>
 <navbar>
   <div class="brand-centered"><img src="IMG-20260726-WA8808.jpg" class="brand-logo"><span class="brand-title">Amasan Farm</span></div>
   <div class="nav-actions">
-    <a class="nav-btn" href="tel:08037558809"><i class="fas fa-phone"></i> Call Us</a>
+    <a class="nav-btn" href="tel:08088375509"><i class="fas fa-phone"></i> Call Us</a>
     <a class="nav-btn" href="mailto:Amasanfarm@gmail.com"><i class="fas fa-envelope"></i> Email Us</a>
     <button class="nav-btn" onclick="openAboutModal()"><i class="fas fa-seedling"></i> About Us</button>
     <button class="nav-btn" onclick="openTrackModal()"><i class="fas fa-truck"></i> Track Order</button>
@@ -80,7 +80,7 @@
   <div class="greeting-text" id="time-greeting">Welcome</div>
   <h1>Quality Agricultural Supplies</h1>
   <div class="contact-badges">
-    <a href="tel:08037558809" class="contact-badge-item" style="text-decoration:none;"><i class="fas fa-phone" style="color:var(--primary-light)"></i> 08037558809</a>
+    <a href="tel:08088375509" class="contact-badge-item" style="text-decoration:none;"><i class="fas fa-phone" style="color:var(--primary-light)"></i> 08088375509</a>
     <a href="mailto:Amasanfarm@gmail.com" class="contact-badge-item" style="text-decoration:none;"><i class="fas fa-envelope" style="color:var(--accent)"></i> Amasanfarm@gmail.com</a>
   </div>
 </div>
@@ -118,7 +118,7 @@
       <div><strong>Account Name:</strong> Amasan Farm</div>
       <hr style="border-color:var(--border);margin:8px 0">
       <div style="font-size:.8rem;color:var(--text-muted)">
-        <i class="fas fa-phone"></i> <strong>Support / Enquiries:</strong> <a href="tel:08037558809" style="color:var(--primary-light)">08037558809</a><br>
+        <i class="fas fa-phone"></i> <strong>Support / Enquiries:</strong> <a href="tel:08088375509" style="color:var(--primary-light)">08088375509</a><br>
         <i class="fas fa-envelope"></i> <strong>Email:</strong> <a href="mailto:Amasanfarm@gmail.com" style="color:var(--primary-light)">Amasanfarm@gmail.com</a>
       </div>
     </div>
@@ -146,7 +146,7 @@
     <h2 style="color:var(--primary-light);margin-bottom:4px">Amasan Farm</h2>
     <div style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px">
       Wukari, Taraba State, Nigeria<br>
-      Phone / WhatsApp: <strong>08037558809</strong> | Email: <strong>Amasanfarm@gmail.com</strong>
+      Phone / WhatsApp: <strong>08088375509</strong> | Email: <strong>Amasanfarm@gmail.com</strong>
     </div>
     <hr style="border-color:var(--border);margin-bottom:12px">
     <h3>Order Placed Successfully!</h3>
@@ -194,7 +194,7 @@
 <div class="chatbot-widget-btn" onclick="toggleBotBox()"><i class="fas fa-robot"></i></div>
 <div class="chat-box-popup" id="bot-box-popup">
   <div class="chat-box-header"><span><i class="fas fa-wand-magic-sparkles"></i> Amasan AI Assistant</span><button onclick="toggleBotBox()" style="background:none;border:none;color:var(--text-muted);cursor:pointer">✕</button></div>
-  <div class="chat-box-body" id="bot-chat-body"><div class="chat-msg bot">Hello 👋 I'm your Amasan Farm AI assistant!\n\nI can help you with product stock, bank details (OPay & Zenith), or customer support (08037558809). How can I assist you?</div></div>
+  <div class="chat-box-body" id="bot-chat-body"><div class="chat-msg bot">Hello 👋 I'm your Amasan Farm AI assistant!\n\nI can help you with product stock, bank details (OPay & Zenith), or customer support (08088375509). How can I assist you?</div></div>
   <div class="quick-chips">
     <span class="chip" onclick="askBotPrompt('What feeds are in stock?')">📦 Feeds?</span>
     <span class="chip" onclick="askBotPrompt('What is your contact and email?')">📞 Contact Info</span>
@@ -207,7 +207,7 @@
 <footer>
   <p><strong>Amasan Farm</strong> © 2026 | Wukari, Taraba State, Nigeria</p>
   <p style="margin-top:6px;">
-    <i class="fas fa-phone"></i> <a href="tel:08037558809">08037558809</a> &nbsp;|&nbsp;
+    <i class="fas fa-phone"></i> <a href="tel:08088375509">08088375509</a> &nbsp;|&nbsp;
     <i class="fas fa-envelope"></i> <a href="mailto:Amasanfarm@gmail.com">Amasanfarm@gmail.com</a>
   </p>
 </footer>
@@ -494,7 +494,7 @@ async function sendBotMessage(){
   const input=document.getElementById('bot-msg-input');const text=input.value.trim();if(!text)return;
   const body=document.getElementById('bot-chat-body');
   const custDiv=document.createElement('div');custDiv.className='chat-msg customer';custDiv.innerText=text;body.appendChild(custDiv);input.value='';body.scrollTop=body.scrollHeight;
-  botHistory[0].content=`You are Amasan Farm AI for Wukari, Taraba. ChatGPT-style: helpful, concise, warm. Delivery ₦1500. Phone: 08037558809. Accounts: OPay 8104817797, Zenith 2260717656. Email: Amasanfarm@gmail.com. LIVE inventory: ${allProducts.map(p=>`${p.name} - ₦${p.price} (${p.qty} left) cat:${p.category}`).join(' | ')}. Date: Monday, Jul 27, 2026`;
+  botHistory[0].content=`You are Amasan Farm AI for Wukari, Taraba. ChatGPT-style: helpful, concise, warm. Delivery ₦1500. Phone: 08088375509. Accounts: OPay 8104817797, Zenith 2260717656. Email: Amasanfarm@gmail.com. LIVE inventory: ${allProducts.map(p=>`${p.name} - ₦${p.price} (${p.qty} left) cat:${p.category}`).join(' | ')}. Date: Monday, Jul 27, 2026`;
   botHistory.push({role:"user",content:text});if(botHistory.length>12)botHistory=[botHistory[0],...botHistory.slice(-10)];
   const typing=document.createElement('div');typing.className='chat-msg bot';typing.id='typing';typing.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> Thinking...';body.appendChild(typing);body.scrollTop=body.scrollHeight;
   try{
