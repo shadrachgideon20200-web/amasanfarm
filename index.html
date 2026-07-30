@@ -11,65 +11,66 @@
     body.light-mode { --bg-dark:#f4f6f8; --bg-card:#ffffff; --bg-hover:#eef2f5; --text:#1a1a1a; --text-muted:#666; --border:#e0e0e0; }
     *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif}
     body{background:var(--bg-dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
-  .top-contact-bar { background: var(--primary); color: #fff; padding: 6px 16px; font-size: 0.8rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; text-align: center; }
-  .top-contact-bar a { color: #fff; text-decoration: none; font-weight: 600; }
+ .top-contact-bar { background: var(--primary); color: #fff; padding: 6px 16px; font-size: 0.8rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; text-align: center; }
+ .top-contact-bar a { color: #fff; text-decoration: none; font-weight: 600; }
     navbar{background:var(--bg-card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
- .brand-centered{display:flex;flex-direction:column;align-items:center;gap:10px}
- .brand-logo{width:130px;height:130px;border-radius:50%;object-fit:cover;box-shadow:0 6px 16px rgba(76,175,80,.35);border:3px solid var(--primary-light)}
- .brand-title{font-size:1.6rem;font-weight:800;color:var(--primary-light)}
- .nav-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
- .nav-btn{background:var(--bg-hover);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.85rem;text-decoration:none}
- .cart-badge{background:var(--accent);color:#000;font-size:.75rem;font-weight:700;padding:2px 6px;border-radius:10px}
- .hero{padding:28px 24px;text-align:center;background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-dark) 100%);border-bottom:1px solid var(--border)}
- .greeting-text{font-size:.9rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;margin-bottom:6px}
- .contact-badges{display:flex;justify-content:center;gap:12px;margin-top:12px;flex-wrap:wrap}
- .contact-badge-item{background:var(--bg-hover);border:1px solid var(--border);padding:6px 12px;border-radius:20px;font-size:.8rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px}
- .container{max-width:1200px;margin:24px auto;padding:0 20px;flex:1;width:100%}
- .stock-banner{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px 20px;margin-bottom:20px;display:flex;justify-content:space-between;flex-wrap:wrap}
- .filter-bar{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
- .search-box{position:relative}.search-box input{width:100%;padding:12px 16px 12px 42px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text)}.search-box i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted)}
- .categories-wrapper{display:flex;gap:8px;overflow-x:auto}.cat-pill{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:20px;font-size:.85rem;font-weight:600;cursor:pointer;white-space:nowrap}.cat-pill.active{background:var(--primary-light);color:#fff}
- .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
- .product-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
- .product-title{font-weight:600;margin-bottom:8px}.product-price{font-size:1.25rem;font-weight:700;color:var(--primary-light);margin-bottom:12px}
- .stock-tag{font-size:.8rem;padding:4px 8px;border-radius:4px;display:inline-block;margin-bottom:16px;width:fit-content}.in-stock{background:rgba(76,175,80,.15);color:var(--primary-light)}.out-stock{background:rgba(244,67,54,.15);color:var(--danger)}.low-stock{background:rgba(255,152,0,.15);color:var(--accent)}
- .btn{width:100%;padding:10px;border:none;border-radius:8px;background:var(--primary-light);color:#fff;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
- .btn-sec{background:var(--bg-hover);border:1px solid var(--border);color:var(--text)}
- .btn-wa{background:var(--whatsapp);color:#fff}
- .modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:1050}
- .modal-card{background:var(--bg-card);border:1px solid var(--border);padding:28px;border-radius:12px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
- .cart-item{display:flex;justify-content:space-between;margin-bottom:12px;font-size:.9rem}.qty-controls{display:flex;gap:8px;align-items:center}.qty-btn{background:var(--bg-hover);border:1px solid var(--border);width:26px;height:26px;border-radius:4px;cursor:pointer}
- .form-group{margin-bottom:12px}.form-group label{font-size:.8rem;color:var(--text-muted);text-transform:uppercase}.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)}
- .form-row{display:flex;gap:10px}.status-steps{display:flex;justify-content:space-between;margin:20px 0}.status-step{text-align:center;font-size:.75rem;color:var(--text-muted);flex:1}.status-step.active{color:var(--primary-light);font-weight:bold}
- .chat-widget-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--primary-light);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99}
- .chatbot-widget-btn{position:fixed;bottom:90px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99}
- .chat-box-popup{position:fixed;bottom:90px;right:24px;width:380px;max-width:92vw;height:500px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;display:none;flex-direction:column;z-index:100;box-shadow:0 12px 30px rgba(0,0,0,.6);overflow:hidden}
- .chat-box-header{background:var(--bg-hover);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;font-weight:700}
- .chat-box-body{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg-dark)}
- .chat-msg{padding:10px 14px;border-radius:14px;font-size:.88rem;max-width:85%;line-height:1.5;white-space:pre-wrap}.chat-msg.customer{background:var(--primary-light);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}.chat-msg.bot{background:var(--bg-card);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
- .chat-box-footer{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--bg-card)}.chat-box-footer input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text);outline:none}
- .quick-chips{display:flex;gap:6px;overflow-x:auto;padding:8px 10px;border-top:1px solid var(--border)}.chip{background:var(--bg-hover);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:20px;font-size:.75rem;cursor:pointer;white-space:nowrap}
- .bank-details-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:12px;margin:12px 0;font-size:.85rem}
- .bank-details-box div{margin-bottom:4px}
+.brand-centered{display:flex;flex-direction:column;align-items:center;gap:10px}
+.brand-logo{width:130px;height:130px;border-radius:50%;object-fit:cover;box-shadow:0 6px 16px rgba(76,175,80,.35);border:3px solid var(--primary-light)}
+.brand-title{font-size:1.6rem;font-weight:800;color:var(--primary-light)}
+.nav-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.nav-btn{background:var(--bg-hover);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.85rem;text-decoration:none}
+.cart-badge{background:var(--accent);color:#000;font-size:.75rem;font-weight:700;padding:2px 6px;border-radius:10px}
+.hero{padding:28px 24px;text-align:center;background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-dark) 100%);border-bottom:1px solid var(--border)}
+.greeting-text{font-size:.9rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;margin-bottom:6px}
+.contact-badges{display:flex;justify-content:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.contact-badge-item{background:var(--bg-hover);border:1px solid var(--border);padding:6px 12px;border-radius:20px;font-size:.8rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px}
+.container{max-width:1200px;margin:24px auto;padding:0 20px;flex:1;width:100%}
+.stock-banner{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px 20px;margin-bottom:20px;display:flex;justify-content:space-between;flex-wrap:wrap}
+.filter-bar{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+.search-box{position:relative}.search-box input{width:100%;padding:12px 16px 12px 42px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text)}.search-box i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted)}
+.categories-wrapper{display:flex;gap:8px;overflow-x:auto}.cat-pill{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:20px;font-size:.85rem;font-weight:600;cursor:pointer;white-space:nowrap}.cat-pill.active{background:var(--primary-light);color:#fff}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.product-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+.product-title{font-weight:600;margin-bottom:8px}.product-price{font-size:1.25rem;font-weight:700;color:var(--primary-light);margin-bottom:12px}
+.stock-tag{font-size:.8rem;padding:4px 8px;border-radius:4px;display:inline-block;margin-bottom:16px;width:fit-content}.in-stock{background:rgba(76,175,80,.15);color:var(--primary-light)}.out-stock{background:rgba(244,67,54,.15);color:var(--danger)}.low-stock{background:rgba(255,152,0,.15);color:var(--accent)}
+.btn{width:100%;padding:10px;border:none;border-radius:8px;background:var(--primary-light);color:#fff;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn-sec{background:var(--bg-hover);border:1px solid var(--border);color:var(--text)}
+.btn-wa{background:var(--whatsapp);color:#fff}
+.modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:1050}
+.modal-card{background:var(--bg-card);border:1px solid var(--border);padding:28px;border-radius:12px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.cart-item{display:flex;justify-content:space-between;margin-bottom:12px;font-size:.9rem}.qty-controls{display:flex;gap:8px;align-items:center}.qty-btn{background:var(--bg-hover);border:1px solid var(--border);width:26px;height:26px;border-radius:4px;cursor:pointer}
+.form-group{margin-bottom:12px}.form-group label{font-size:.8rem;color:var(--text-muted);text-transform:uppercase}.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)}
+.form-row{display:flex;gap:10px}.status-steps{display:flex;justify-content:space-between;margin:20px 0}.status-step{text-align:center;font-size:.75rem;color:var(--text-muted);flex:1}.status-step.active{color:var(--primary-light);font-weight:bold}
+.chat-widget-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--primary-light);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99}
+.chatbot-widget-btn{position:fixed;bottom:90px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99}
+.chat-box-popup{position:fixed;bottom:90px;right:24px;width:380px;max-width:92vw;height:500px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;display:none;flex-direction:column;z-index:100;box-shadow:0 12px 30px rgba(0,0,0,.6);overflow:hidden}
+.chat-box-header{background:var(--bg-hover);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;font-weight:700}
+.chat-box-body{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg-dark)}
+.chat-msg{padding:10px 14px;border-radius:14px;font-size:.88rem;max-width:85%;line-height:1.5;white-space:pre-wrap}.chat-msg.customer{background:var(--primary-light);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}.chat-msg.bot{background:var(--bg-card);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+.chat-box-footer{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--bg-card)}.chat-box-footer input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text);outline:none}
+.quick-chips{display:flex;gap:6px;overflow-x:auto;padding:8px 10px;border-top:1px solid var(--border)}.chip{background:var(--bg-hover);border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;border-radius:20px;font-size:.75rem;cursor:pointer;white-space:nowrap}
+.bank-details-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:12px;margin:12px 0;font-size:.85rem}
+.bank-details-box div{margin-bottom:4px}
    footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px;text-align:center;font-size:.85rem;color:var(--text-muted);margin-top:40px}
    footer a{color:var(--primary-light);text-decoration:none}
-  /* PREMIUM RECEIPT STYLES */
- .premium-receipt-wrap{background:#fffdf5;color:#222;width:100%;max-width:780px;margin:auto;border:3px double #c9a86a;box-shadow:0 0 0 6px #fffdf5, 0 0 0 9px #c9a86a;font-family:'Merriweather',serif}
- .premium-inner{border:1px solid #c9a86a;margin:8px;padding:20px 25px}
- .p-logo{width:110px;height:110px;background:#0a2e1a;border-radius:50%;border:4px solid #d4af37;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:45px;box-shadow:0 0 0 3px #0a2e1a}
- .p-title{font-family:'Cinzel';font-size:28px;color:#8c6a2f;text-align:center;margin:8px 0 4px;font-weight:700}
- .p-contact{font-size:11px;text-align:center;margin-bottom:8px}
- .p-banner{background:#0a3d1a;color:#e8c766;font-family:'Cinzel';text-align:center;padding:7px;font-size:16px;letter-spacing:2px;margin:12px auto;width:fit-content;border:2px solid #d4af37;padding-left:25px;padding-right:25px}
- .p-fields{display:flex;justify-content:space-between;margin:10px 0;font-size:12px;flex-wrap:wrap;gap:8px}
- .p-fields span{border-bottom:1px solid #000;min-width:140px;display:inline-block}
- .p-table-header{background:linear-gradient(90deg,#d4af37,#f0d78a,#d4af37);color:#0a3d1a;text-align:center;padding:5px;font-family:'Cinzel';font-weight:700;border:1px solid #c9a86a;font-size:13px}
- .p-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:0}
- .p-table th{background:#0a3d1a;color:#e8c766;padding:6px;border:1px solid #c9a86a;font-family:'Cinzel';font-size:11px}
- .p-table td{border:1px solid #d4af37;padding:6px;background:#fffef8}
- .p-total-box{width:240px;margin-left:auto;margin-top:6px;border:1px solid #c9a86a;font-size:12px}
- .p-total-box div{display:flex;justify-content:space-between;padding:4px 8px;border-bottom:1px solid #e8d5a3}
- .p-total-box.gold{background:linear-gradient(90deg,#d4af37,#f0d78a);font-weight:bold}
- .p-footer{background:#0a3d1a;color:#e8c766;text-align:center;padding:10px;font-size:12px;font-style:italic;margin-top:10px}
+.premium-receipt-wrap{background:#fffdf5;color:#222;width:100%;max-width:780px;margin:auto;border:3px double #c9a86a;box-shadow:0 0 0 6px #fffdf5, 0 0 0 9px #c9a86a;font-family:'Merriweather',serif;position:relative}
+.premium-inner{border:1px solid #c9a86a;margin:8px;padding:20px 25px}
+.p-logo-wrap{width:140px;height:140px;margin:0 auto;border-radius:50%;border:4px solid #c9a86a;overflow:hidden;background:white;box-shadow:0 4px 10px rgba(0,0,0,.2)}
+.p-logo-wrap img{width:100%;height:100%;object-fit:cover}
+.p-title{font-family:'Cinzel';font-size:28px;color:#8c6a2f;text-align:center;margin:10px 0 4px;font-weight:700}
+.p-contact{font-size:11px;text-align:center;margin-bottom:8px}
+.p-banner{background:#0a3d1a;color:#e8c766;font-family:'Cinzel';text-align:center;padding:8px;font-size:16px;letter-spacing:2px;margin:12px auto;width:fit-content;border:2px solid #d4af37;padding-left:30px;padding-right:30px}
+.p-fields{display:flex;justify-content:space-between;margin:10px 0;font-size:12px;flex-wrap:wrap;gap:8px}
+.p-fields span{border-bottom:1px solid #000;min-width:140px;display:inline-block;padding-bottom:2px}
+.p-table-header{background:linear-gradient(90deg,#d4af37,#f0d78a,#d4af37);color:#0a3d1a;text-align:center;padding:6px;font-family:'Cinzel';font-weight:700;border:1px solid #c9a86a;font-size:13px}
+.p-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:0}
+.p-table th{background:#0a3d1a;color:#e8c766;padding:7px;border:1px solid #c9a86a;font-family:'Cinzel';font-size:11px}
+.p-table td{border:1px solid #d4af37;padding:6px;background:#fffef8}
+.p-total-box{width:240px;margin-left:auto;margin-top:6px;border:1px solid #c9a86a;font-size:12px;background:white}
+.p-total-box div{display:flex;justify-content:space-between;padding:5px 8px;border-bottom:1px solid #e8d5a3}
+.p-total-box.gold{background:linear-gradient(90deg,#d4af37,#f0d78a);font-weight:bold}
+.p-pay-row{text-align:center;margin:12px 0;border-top:1px solid #e8d5a3;border-bottom:1px solid #e8d5a3;padding:10px;font-size:11px}
+.p-footer{background:#0a3d1a;color:#e8c766;text-align:center;padding:10px;font-size:12px;font-style:italic;margin-top:15px}
   @media print{body *{visibility:hidden}.premium-receipt-wrap,.premium-receipt-wrap *{visibility:visible}.premium-receipt-wrap{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:none}}
   </style>
 </head>
@@ -104,67 +105,44 @@
   <div class="categories-wrapper"><button class="cat-pill active" onclick="filterCategory('All',this)">All</button><button class="cat-pill" onclick="filterCategory('Feeds',this)">Feeds</button><button class="cat-pill" onclick="filterCategory('Fertilizer',this)">Fertilizer</button><button class="cat-pill" onclick="filterCategory('Produce',this)">Produce</button><button class="cat-pill" onclick="filterCategory('Equipment',this)">Equipment</button></div></div>
   <div class="products-grid" id="products-grid"></div>
 </div>
+<div class="modal-overlay" id="about-modal"><div class="modal-card" style="text-align: center;"><h3 style="color: var(--primary-light); font-size: 1.5rem; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;"><span><i class="fas fa-seedling"></i> About Amasan Farm</span><button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;" onclick="closeModal('about-modal')">✕</button></h3><p style="color: var(--text); font-size: 0.95rem; line-height: 1.6; margin-bottom: 14px; text-align: left;">Located in Wukari, Taraba State, Nigeria, Amasan Farm is a premier agricultural enterprise led by CEO Gideon Shadrach. We are dedicated to supporting local agriculture and food security by supplying high-quality, dependable agricultural products.</p><button class="btn btn-sec" onclick="closeModal('about-modal')">Close</button></div></div>
+<div class="modal-overlay" id="cart-modal"><div class="modal-card"><h3>Your Checkout <button style="background:none;border:none;color:var(--text-muted);cursor:pointer" onclick="closeModal('cart-modal')">✕</button></h3><div id="cart-items-container"></div><div id="cart-subtotal"></div><div id="cart-total-price" style="font-weight:700;color:var(--primary-light);margin:10px 0"></div><div class="bank-details-box"><div style="font-weight:700;color:var(--accent)"><i class="fas fa-university"></i> Bank Transfer Accounts</div><div><strong>OPay:</strong> 8104817797</div><div><strong>Zenith Bank:</strong> 2260717656</div><div><strong>Name:</strong> Amasan Farm</div></div><form onsubmit="event.preventDefault();submitOrder();"><div class="form-group"><label>Full Name</label><input id="cust-name" required></div><div class="form-row"><div class="form-group"><label>State</label><select id="cust-state" required></select></div><div class="form-group"><label>LGA</label><select id="cust-lga" disabled required><option value="">Select State First</option></select></div></div><div class="form-group"><label>Address</label><input id="cust-address" required><button type="button" class="btn btn-sec" style="margin-top:6px;font-size:.8rem;padding:6px" onclick="detectLocation()"><i class="fas fa-location-arrow"></i> Get My GPS Location</button><input type="hidden" id="cust-gps"></div><button class="btn" style="margin-top:12px">Place Order</button></form></div></div>
 
-<div class="modal-overlay" id="about-modal">
-  <div class="modal-card" style="text-align: center;">
-    <h3 style="color: var(--primary-light); font-size: 1.5rem; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
-      <span><i class="fas fa-seedling"></i> About Amasan Farm</span>
-      <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;" onclick="closeModal('about-modal')">✕</button>
-    </h3>
-    <p style="color: var(--text); font-size: 0.95rem; line-height: 1.6; margin-bottom: 14px; text-align: left;">
-      Located in Wukari, Taraba State, Nigeria, Amasan Farm is a premier agricultural enterprise led by CEO Gideon Shadrach. We are dedicated to supporting local agriculture and food security by supplying high-quality, dependable agricultural products.
-    </p>
-    <button class="btn btn-sec" onclick="closeModal('about-modal')">Close</button>
-  </div>
-</div>
-
-<div class="modal-overlay" id="cart-modal">
-  <div class="modal-card">
-    <h3>Your Checkout <button style="background:none;border:none;color:var(--text-muted);cursor:pointer" onclick="closeModal('cart-modal')">✕</button></h3>
-    <div id="cart-items-container"></div>
-    <div id="cart-subtotal"></div>
-    <div id="cart-total-price" style="font-weight:700;color:var(--primary-light);margin:10px 0"></div>
-    <div class="bank-details-box">
-      <div style="font-weight:700;color:var(--accent)"><i class="fas fa-university"></i> Bank Transfer Accounts</div>
-      <div><strong>OPay:</strong> 8104817797</div><div><strong>Zenith Bank:</strong> 2260717656</div><div><strong>Name:</strong> Amasan Farm</div>
-    </div>
-    <form onsubmit="event.preventDefault();submitOrder();">
-      <div class="form-group"><label>Full Name</label><input id="cust-name" required></div>
-      <div class="form-row">
-        <div class="form-group"><label>State</label><select id="cust-state" required></select></div>
-        <div class="form-group"><label>LGA</label><select id="cust-lga" disabled required><option value="">Select State First</option></select></div>
-      </div>
-      <div class="form-group"><label>Address</label><input id="cust-address" required><button type="button" class="btn btn-sec" style="margin-top:6px;font-size:.8rem;padding:6px" onclick="detectLocation()"><i class="fas fa-location-arrow"></i> Get My GPS Location</button><input type="hidden" id="cust-gps"></div>
-      <button class="btn" style="margin-top:12px">Place Order</button>
-    </form>
-  </div>
-</div>
-
-<!-- PREMIUM RECEIPT MODAL - NEW DESIGN -->
+<!-- FIXED RECEIPT MODAL -->
 <div class="modal-overlay" id="receipt-modal" style="overflow-y:auto;padding:20px">
   <div class="modal-card" style="max-width:820px;width:100%;padding:0;background:transparent;border:none;max-height:95vh;overflow-y:auto">
     <div class="premium-receipt-wrap" id="premiumReceipt">
       <div class="premium-inner">
-        <div style="text-align:center"><div class="p-logo">🌿</div></div>
+        <div style="text-align:center"><div class="p-logo-wrap"><img src="IMG-20260726-WA8808.jpg" alt="Logo"></div></div>
         <div class="p-title">AMASAN FARM WUKARI</div>
         <div class="p-contact">Wukari, Taraba State, Nigeria • Phone: 08088375509 • Email: Amasanfarm@gmail.com</div>
         <div style="border-top:1px solid #d4af37;border-bottom:1px solid #d4af37;height:3px;margin:8px auto;width:85%"></div>
         <div class="p-banner">OFFICIAL RECEIPT</div>
         <div class="p-fields"><div>Date: <span id="pDate"></span></div><div>Receipt No: <span id="pNo"></span></div></div>
-        <div class="p-fields"><div style="width:100%">Customer Name: <span id="pCust" style="min-width:350px"></span></div></div>
-        <div style="margin-top:12px"><div class="p-table-header">ITEMIZED DETAILS</div>
-          <table class="p-table"><thead><tr><th>Description</th><th style="width:45px">Qty</th><th style="width:95px">Unit Price (₦)</th><th style="width:95px">Amount (₦)</th></tr></thead><tbody id="pItems"></tbody></table>
-          <div class="p-total-box"><div><span>Subtotal:</span><span id="pSub"></span></div><div><span>Delivery:</span><span id="pDel">1,500</span></div><div class="gold"><span>Total Amount:</span><span id="pTotal"></span></div></div>
+        <div class="p-fields" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div style="width:100%">Customer Name: <span id="pCustName" style="min-width:400px"></span></div>
+          <div style="width:100%">Customer Address: <span id="pCustAddr" style="min-width:400px"></span></div>
         </div>
-        <div style="text-align:center;margin:12px 0;border-top:1px solid #e8d5a3;border-bottom:1px solid #e8d5a3;padding:8px;font-size:11px">
-          <b>Payment Method:</b> <span id="pPay">Transfer</span> | <b>PAID</b> <span style="border:2px solid #c9a86a;color:#c9a86a;padding:2px 8px;border-radius:50%;transform:rotate(-10deg);display:inline-block">PAID AMASAN FARM WUKARI</span>
+        <div style="margin-top:12px"><div class="p-table-header">ITEMIZED DETAILS</div><table class="p-table"><thead><tr><th>Description</th><th style="width:45px">Qty</th><th style="width:95px">Unit Price (₦)</th><th style="width:95px">Amount (₦)</th></tr></thead><tbody id="pItems"></tbody></table><div class="p-total-box"><div><span>Subtotal:</span><span id="pSub"></span></div><div><span>Delivery:</span><span id="pDel">1,500</span></div><div class="gold"><span>Total Amount:</span><span id="pTotal"></span></div></div></div>
+        <div class="p-pay-row"><b>Payment Method:</b> ☐ Cash &nbsp; ☑ Transfer &nbsp; ☐ POS | <span id="pPay">Transfer</span></div>
+        <div style="display:flex;justify-content:space-between;margin-top:25px">
+          <div style="position:relative;width:240px"><div style="font-weight:700;font-size:12px">Official Stamp:</div><div style="border:1.5px dashed #8c6a2f;width:220px;height:90px;margin-top:5px"></div>
+            <div style="position:absolute;top:15px;left:15px;width:115px;height:115px;border:3px solid #b89b4a;border-radius:50%;background:rgba(255,253,245,0.95);display:flex;align-items:center;justify-content:center;transform:rotate(-14deg);">
+              <div style="width:96px;height:96px;border:1px solid #b89b4a;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+                <div style="font-size:22px;font-weight:900;color:#9c7a2a;letter-spacing:1px">PAID</div>
+                <div style="font-size:7px;font-weight:800;color:#7a5a1f;line-height:1.1">AMASAN FARM<br>WUKARI</div>
+                <div style="width:60px;height:1px;background:#b89b4a;margin:3px 0"></div>
+                <div style="font-size:7px;font-weight:700;color:#222" id="stampDate"></div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:center;width:220px"><div style="font-weight:700;font-size:12px">Authorized Signature:</div><div style="font-family:cursive;font-size:22px;margin-top:20px">A. Musa</div><div style="border-top:1px solid #000;margin-top:5px;padding-top:5px;font-size:10px">Name: A. Musa - Farm Manager<br>Date: <span id="sigDate"></span></div></div>
         </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;margin-top:10px"><div><b>Official Stamp:</b><div style="border:1px dashed #8c6a2f;width:160px;height:60px;margin-top:5px"></div></div><div style="text-align:center"><b>Authorized Signature:</b><div style="border-bottom:1px solid #000;min-width:150px;margin-top:25px;font-family:cursive;font-size:18px">A. Musa</div><div style="font-size:10px">Name: A. Musa - Farm Manager</div></div></div>
       </div>
       <div class="p-footer">— Thank you for your business —<br>We appreciate your patronage!</div>
     </div>
     <div style="background:white;padding:12px;display:flex;gap:8px;justify-content:center;margin-top:10px;border-radius:8px">
-      <button class="btn" style="width:auto" onclick="window.print()"><i class="fas fa-print"></i> Print / Save PDF</button>
+      <button class="btn" style="width:auto" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
       <a id="whatsapp-receipt-btn" class="btn btn-wa" style="width:auto" href="#" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       <button class="btn btn-sec" style="width:auto" onclick="closeModal('receipt-modal')">Close</button>
     </div>
@@ -172,13 +150,7 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="track-modal">
-  <div class="modal-card"><h3>Track Order <button onclick="closeModal('track-modal')" style="background:none;border:none;cursor:pointer">✕</button></h3>
-    <div class="form-group" style="margin-top:10px;"><input id="track-ref-input" placeholder="Enter 6-digit ref"></div><button class="btn" onclick="checkOrderStatus()">Track Order</button>
-    <div id="saved-orders-history-section" style="margin-top:16px;border-top:1px solid var(--border);padding-top:12px;"><div style="font-size:0.8rem;font-weight:700;color:var(--text-muted);margin-bottom:8px;"><i class="fas fa-history"></i> Your Recent Orders:</div><div id="saved-orders-list" style="display:flex;flex-direction:column;gap:6px;max-height:120px;overflow-y:auto;"></div></div>
-    <div id="track-result" style="display:none;margin-top:16px"><div class="status-steps"><div class="status-step" id="step-pending">Pending</div><div class="status-step" id="step-processing">Packing</div><div class="status-step" id="step-dispatched">On Way</div><div class="status-step" id="step-delivered">Delivered</div></div><div id="track-info-body"></div></div>
-  </div>
-</div>
+<div class="modal-overlay" id="track-modal"><div class="modal-card"><h3>Track Order <button onclick="closeModal('track-modal')" style="background:none;border:none;cursor:pointer">✕</button></h3><div class="form-group" style="margin-top:10px;"><input id="track-ref-input" placeholder="Enter 6-digit ref"></div><button class="btn" onclick="checkOrderStatus()">Track Order</button><div id="saved-orders-history-section" style="margin-top:16px;border-top:1px solid var(--border);padding-top:12px;"><div style="font-size:0.8rem;font-weight:700;color:var(--text-muted);margin-bottom:8px;"><i class="fas fa-history"></i> Your Recent Orders:</div><div id="saved-orders-list" style="display:flex;flex-direction:column;gap:6px;max-height:120px;overflow-y:auto;"></div></div><div id="track-result" style="display:none;margin-top:16px"><div class="status-steps"><div class="status-step" id="step-pending">Pending</div><div class="status-step" id="step-processing">Packing</div><div class="status-step" id="step-dispatched">On Way</div><div class="status-step" id="step-delivered">Delivered</div></div><div id="track-info-body"></div></div></div></div>
 <div class="modal-overlay" id="feedback-modal"><div class="modal-card"><h3>Send Feedback <button onclick="closeModal('feedback-modal')" style="background:none;border:none;color:var(--text-muted);cursor:pointer">✕</button></h3><form onsubmit="event.preventDefault();submitFeedback();"><div class="form-group"><label>Name</label><input id="fb-name" required></div><div class="form-group"><label>Email or Phone</label><input id="fb-contact" required></div><div class="form-group"><label>Message</label><textarea id="fb-msg" rows="4" required></textarea></div><button class="btn">Submit</button></form></div></div>
 <div class="chatbot-widget-btn" onclick="toggleBotBox()"><i class="fas fa-robot"></i></div>
 <div class="chat-box-popup" id="bot-box-popup"><div class="chat-box-header"><span><i class="fas fa-wand-magic-sparkles"></i> Amasan AI Assistant</span><button onclick="toggleBotBox()" style="background:none;border:none;color:var(--text-muted);cursor:pointer">✕</button></div><div class="chat-box-body" id="bot-chat-body"><div class="chat-msg bot">Hello 👋 I'm your Amasan Farm AI assistant! Phone 08088375509. How can I help?</div></div><div class="quick-chips"><span class="chip" onclick="askBotPrompt('What feeds are in stock?')">📦 Feeds?</span><span class="chip" onclick="askBotPrompt('Contact Info')">📞 Contact</span><span class="chip" onclick="askBotPrompt('Bank details')">💳 Bank</span></div><div class="chat-box-footer"><input id="bot-msg-input" placeholder="Ask anything..." onkeypress="if(event.key==='Enter')sendBotMessage()"><button class="btn" style="width:auto;border-radius:50%;padding:10px 14px;background:var(--accent);color:#000" onclick="sendBotMessage()"><i class="fas fa-paper-plane"></i></button></div></div>
@@ -232,12 +204,14 @@ function submitOrder(){
       productRef.once('value',snap=>{if(snap.exists()){const currentQty=Number(snap.val().qty||0);const newQty=Math.max(0,currentQty-cartItem.qty);productRef.update({qty:newQty});}});
     });
     saveOrderToLocalStorage(ref.toString(),total);
-    // PREMIUM RECEIPT FILL
-    const now=new Date();
+    const now=new Date(); const dateStr=now.toLocaleDateString('en-GB');
     document.getElementById('receipt-ref').innerText='#'+ref;
     document.getElementById('pNo').innerText='AFW-'+ref;
-    document.getElementById('pDate').innerText=now.toLocaleDateString('en-GB');
-    document.getElementById('pCust').innerText=name+' - '+addr+', '+lga+', '+state;
+    document.getElementById('pDate').innerText=dateStr;
+    document.getElementById('stampDate').innerText=dateStr;
+    document.getElementById('sigDate').innerText=dateStr;
+    document.getElementById('pCustName').innerText=name;
+    document.getElementById('pCustAddr').innerText=addr+', '+lga+', '+state;
     const tbody=document.getElementById('pItems');tbody.innerHTML='';
     cart.forEach(i=>{
       const amt=i.price*i.qty;
