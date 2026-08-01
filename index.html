@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Amasan Farm | Quality Agricultural Supplies</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="manifest" href="manifest.json">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Merriweather:wght@400;700&display=swap');
 :root{--bg-dark:#121212;--bg-card:#1e1e1e;--bg-hover:#282828;--primary:#2e7d32;--primary-light:#4caf50;--accent:#ff9800;--text:#f0f0f0;--text-muted:#8e8e8e;--border:#2a2a2a;--danger:#f44336;--whatsapp:#25D366}
@@ -124,6 +125,15 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 <script>
+// Register Service Worker to satisfy PWA installation criteria
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Service Worker registered successfully!', reg))
+      .catch(err => console.log('Service Worker registration failed:', err));
+  });
+}
+
 var firebaseConfig={apiKey:"AIzaSyCnjkdRRgt4q7hgNLp204HgiV9UZ1Olmjs",authDomain:"amasan-farm-a5637.firebaseapp.com",databaseURL:"https://amasan-farm-a5637-default-rtdb.firebaseio.com",projectId:"amasan-farm-a5637",storageBucket:"amasan-farm-a5637.firebasestorage.app",messagingSenderId:"30400827803",appId:"1:30400827803:web:76b0beb1431ef847e6913e"};
 if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);const db=firebase.database();
 let customerSessionId=localStorage.getItem('amasan_cust_chat_id');if(!customerSessionId){customerSessionId='chat-'+Math.floor(100000+Math.random()*900000);localStorage.setItem('amasan_cust_chat_id',customerSessionId);}
@@ -131,7 +141,26 @@ const nigeriaStatesLGAs={"Abia":["Aba North","Aba South","Arochukwu","Bende","Ik
 function populateStates(){const s=document.getElementById('cust-state');s.innerHTML='<option value="">Select State</option>';Object.keys(nigeriaStatesLGAs).sort().forEach(st=>{const o=document.createElement('option');o.value=st;o.textContent=st;s.appendChild(o);});s.addEventListener('change',loadLGAOptions);}
 function loadLGAOptions(){const sel=document.getElementById('cust-state').value;const lgaSel=document.getElementById('cust-lga');lgaSel.innerHTML='<option value="">Select LGA</option>';if(sel&&nigeriaStatesLGAs[sel]){lgaSel.disabled=false;nigeriaStatesLGAs[sel].forEach(l=>{const o=document.createElement('option');o.value=l;o.textContent=l;lgaSel.appendChild(o);});}else{lgaSel.disabled=true;}}
 function detectLocation(){navigator.geolocation.getCurrentPosition(pos=>{document.getElementById('cust-gps').value=`${pos.coords.latitude},${pos.coords.longitude}`;alert('📍 GPS Captured');});}
-let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('install-app-btn').style.display='inline-flex';});function installApp(){if(deferredPrompt){deferredPrompt.prompt();}}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('install-app-btn').style.display = 'inline-flex';
+});
+
+function installApp(){
+    if(deferredPrompt){
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+            if(choiceResult.outcome === 'accepted'){
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    }
+}
+
 function openAboutModal(){document.getElementById('about-modal').style.display='flex';}
 function openFeedbackModal(){document.getElementById('feedback-modal').style.display='flex';}
 function openTrackModal(){document.getElementById('track-modal').style.display='flex';}
