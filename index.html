@@ -25,7 +25,6 @@ body.light-mode navbar{background:rgba(255, 255, 255, 0.85);}
 .brand-title{font-size:clamp(1.3rem, 2.5vw, 1.8rem);font-weight:800;color:var(--primary-light)}
 .nav-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .nav-btn{background:var(--bg-hover);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.85rem;text-decoration:none;transition:all 0.2s ease}
-.nav-btn:hover{background:linear-gradient(135deg, var(--bg-hover), var(--border))}
 .cart-badge{background:var(--accent);color:#000;font-size:.75rem;font-weight:700;padding:2px 6px;border-radius:10px}
 .hero{padding:28px 24px;text-align:center;background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-dark) 100%);border-bottom:1px solid var(--border)}
 .greeting-text{font-size:.9rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;margin-bottom:6px}
@@ -66,7 +65,6 @@ body.light-mode navbar{background:rgba(255, 255, 255, 0.85);}
 .chat-widget-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--primary-light);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
 .chatbot-widget-btn{position:fixed;bottom:90px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
 .chat-box-popup{position:fixed;bottom:90px;right:24px;width:380px;max-width:92vw;height:500px;background:rgba(30,30,30,0.95);backdrop-filter: blur(14px);-webkit-backdrop-filter: blur(14px);border:1px solid var(--border);border-radius:16px;display:none;flex-direction:column;z-index:100;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.4)}
-body.light-mode.chat-box-popup{background:rgba(255,255,255,0.95);}
 .chat-box-header{background:var(--bg-hover);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;font-weight:700}
 .chat-box-body{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg-dark)}
 .chat-msg{padding:10px 14px;border-radius:14px;font-size:.88rem;max-width:85%;line-height:1.5;white-space:pre-wrap}
@@ -142,60 +140,54 @@ if ('serviceWorker' in navigator) {
 var firebaseConfig={apiKey:"AIzaSyCnjkdRRgt4q7hgNLp204HgiV9UZ1Olmjs",authDomain:"amasan-farm-a5637.firebaseapp.com",databaseURL:"https://amasan-farm-a5637-default-rtdb.firebaseio.com",projectId:"amasan-farm-a5637",storageBucket:"amasan-farm-a5637.firebasestorage.app",messagingSenderId:"30400827803",appId:"1:30400827803:web:76b0beb1431ef847e6913e"};
 if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);const db=firebase.database();
 let customerSessionId=localStorage.getItem('amasan_cust_chat_id');if(!customerSessionId){customerSessionId='chat-'+Math.floor(100000+Math.random()*900000);localStorage.setItem('amasan_cust_chat_id',customerSessionId);}
-
-const nigeriaStatesLGAs={"Abia":["Aba North","Aba South","Arochukwu","Bende","Ikwuano","Isiala Ngwa North","Isiala Ngwa South","Isuikwuato","Obi Ngwa","Ohafia","Osisioma","Ugwunagbo","Ukwa East","Ukwa West","Umuahia North","Umuahia South","Umu Nneochi"],"Adamawa":["Demsa","Fufure","Ganye","Gayuk","Gombi","Grie","Hong","Jada","Lamurde","Madagali","Maiha","Mayo Belwa","Michika","Mubi North","Mubi South","Numan","Shelleng","Song","Toungo","Yola North","Yola South"],"Akwa Ibom":["Abak","Eastern Obolo","Eket","Esit Eket","Essien Udim","Etim Ekpo","Etinan","Ibeno","Ibesikpo Asutan","Ibiono Ibom","Ika","Ikono","Ikot Abasi","Ikot Ekpene","Ini","Itu","Mbo","Mkpat Enin","Nsit Atai","Nsit Ibom","Nsit Ubium","Obot Akara","Okobo","Onna","Oron","Oruk Anam","Udung Uko","Ukanafun","Uruan","Urue-Offong/Oruko","Uyo"],"Anambra":["Aguata","Anambra East","Anambra West","Anaocha","Awka North","Awka South","Ayamelum","Dunukofia","Ekwusigo","Idemili North","Idemili South","Ihiala","Njikoka","Nnewi North","Nnewi South","Ogbaru","Onitsha North","Onitsha South","Orumba North","Orumba South","Oyi"],"Bauchi":["Alkaleri","Bauchi","Bogoro","Damban","Darazo","Dass","Gamawa","Ganjuwa","Giade","Itas/Gadau","Jama'are","Katagum","Kirfi","Misau","Ningi","Shira","Tafawa Balewa","Toro","Warji","Zaki"],"Bayelsa":["Brass","Ekeremor","Kolokuma/Opokuma","Nembe","Ogbia","Sagbama","Southern Ijaw","Yenagoa"],"Benue":["Ado","Agatu","Apa","Buruku","Gboko","Guma","Gwer East","Gwer West","Katsina-Ala","Konshisha","Kwande","Logo","Makurdi","Obi","Ogbadibo","Ohimini","Oju","Okpokwu","Otukpo","Tarka","Ukum","Ushongo","Vandeikya"],"Borno":["Abadam","Askira/Uba","Bama","Bayo","Biu","Chibok","Damboa","Dikwa","Gubio","Guzamala","Gwoza","Hawul","Jere","Kaga","Kala/Balge","Konduga","Kukawa","Kwaya Kusar","Mafa","Magumeri","Maiduguri","Marte","Mobbar","Monguno","Ngala","Nganzai","Shani"],"Cross River":["Abi","Akamkpa","Akpabuyo","Bakassi","Bekwarra","Biase","Boki","Calabar Municipal","Calabar South","Etung","Ikom","Obanliku","Obubra","Obudu","Odukpani","Ogoja","Yakuur","Yala"],"Delta":["Aniocha North","Aniocha South","Bomadi","Burutu","Ethiope East","Ethiope West","Ika North East","Ika South","Isoko North","Isoko South","Ndokwa East","Ndokwa West","Okpe","Oshimili North","Oshimili South","Patani","Sapele","Udu","Ughelli North","Ughelli South","Ukwuani","Uvwie","Warri North","Warri South West"],"Ebonyi":["Abakaliki","Afikpo North","Afikpo South","Ebonyi","Ezza North","Ezza South","Ikwo","Ishielu","Ivo","Izzi","Ohaozara","Ohaukwu","Onicha"],"Edo":["Akoko-Edo","Egor","Esan Central","Esan North-East","Esan South-East","Esan West","Etsako Central","Etsako East","Etsako West","Igueben","Ikpoba Okha","Oredo","Orhionmwon","Ovia North-East","Ovia South-West","Owan East","Owan West","Uhunmwonde"],"Ekiti":["Ado Ekiti","Efon","Ekiti East","Ekiti South-West","Ekiti West","Emure","Gbonyin","Ido Osi","Ijero","Ikere","Ikole","Ilejemeje","Irepodun/Ifelodun","Ise/Orun","Moba","Oye"],"Enugu":["Aninri","Awgu","Enugu East","Enugu North","Enugu South","Ezeagu","Igbo Etiti","Igbo Eze North","Igbo Eze South","Isi Uzo","Nkanu East","Nkanu West","Nsukka","Oji River","Udenu","Udi","Uzo Uwani"],"FCT (Abuja)":["Abaji","Bwari","Gwagwalada","Kuje","Kwali","Municipal Area Council"],"Gombe":["Akko","Balanga","Billiri","Dukku","Funakaye","Gombe","Kaltungo","Kwami","Nafada","Shongom","Yamaltu/Deba"],"Imo":["Aboh Mbaise","Ahiazu Mbaise","Ehime Mbano","Ezinihitte","Ideato North","Ideato South","Ihitte/Uboma","Ikeduru","Isiala Mbano","Isu","Mbaitoli","Ngor Okpala","Njaba","Nkwerre","Nwangele","Obowo","Oguta","Ohaji/Egbema","Okigwe","Orlu","Orsu","Oru East","Oru West","Owerri Municipal","Owerri North","Owerri West","Unuimo"],"Jigawa":["Auyo","Babura","Biriniwa","Birnin Kudu","Buji","Dutse","Gagarawa","Garki","Gumel","Guri","Gwaram","Gwiwa","Hadejia","Jahun","Kafin Hausa","Kaugama","Kazaure","Kiri Kasama","Kiyawa","Maigatari","Malam Madori","Miga","Ringim","Roni","Sule Tankarkar","Taura","Yankwashi"],"Kaduna":["Birnin Gwari","Chikun","Giwa","Igabi","Ikara","Jaba","Jema'a","Kachia","Kaduna North","Kaduna South","Kagarko","Kajuru","Kaura","Kauru","Kubau","Kudan","Lere","Makarfi","Sabon Gari","Sanga","Soba","Zangon Kataf","Zaria"],"Kano":["Ajingi","Albasu","Bagwai","Bebeji","Bichi","Bunkure","Dala","Dambatta","Dawakin Kudu","Dawakin Tofa","Doguwa","Fagge","Gabasawa","Garko","Garun Mallam","Gaya","Gezawa","Gwale","Gwarzo","Kabo","Kano Municipal","Karaye","Kibiya","Kiru","Kumbotso","Kunchi","Kura","Madobi","Makoda","Minjibir","Nasarawa","Rano","Rimin Gado","Rogo","Shanono","Sumaila","Takai","Tarauni","Tofa","Tsanyawa","Tudun Wada","Ungogo","Warawa","Wudil"],"Katsina":["Bakori","Batagarawa","Batsari","Baure","Bindawa","Charanchi","Dandume","Danja","Dan Musa","Daura","Dutsi","Dutsin Ma","Faskari","Funtua","Ingawa","Jibia","Kafur","Kaita","Kankara","Kankia","Katsina","Kurfi","Kusada","Mai'Adua","Malumfashi","Mani","Mashi","Matazu","Musawa","Rimi","Sabuwa","Safana","Sandamu","Zango"],"Kebbi":["Aleiro","Arewa Dandi","Argungu","Augie","Bagudo","Birnin Kebbi","Bunza","Dandi","Fakai","Gwandu","Jega","Kalgo","Koko/Besse","Maiyama","Ngaski","Sakaba","Shanga","Suru","Wasagu/Danko","Yauri","Zuru"],"Kogi":["Adavi","Ajaokuta","Ankpa","Bassa","Dekina","Ibaji","Idah","Igalamela Odolu","Ijumu","Kabba/Bunu","Kogi","Lokoja","Mopa Muro","Ofu","Ogori/Magongo","Okehi","Okene","Olamaboro","Omala","Yagba East","Yagba West"],"Kwara":["Asa","Baruten","Edu","Ekiti","Ifelodun","Ilorin East","Ilorin South","Ilorin West","Irepodun","Isin","Kaiama","Moro","Offa","Oke Ero","Oyun","Pategi"],"Lagos":["Agege","Ajeromi-Ifelodun","Alimosho","Amuwo-Odofin","Apapa","Badagry","Epe","Eti Osa","Ibeju-Lekki","Ifako-Ijaiye","Ikeja","Ikorodu","Kosofe","Lagos Island","Lagos Mainland","Mushin","Ojo","Oshodi-Isolo","Shomolu","Surulere"],"Nasarawa":["Akwanga","Awe","Doma","Karu","Keana","Keffi","Kokona","Lafia","Nasarawa","Nasarawa Egon","Obi","Toto","Wamba"],"Niger":["Agaie","Agwara","Bida","Borgu","Bosso","Chanchaga","Edati","Gbako","Gurara","Katcha","Kontagora","Lapai","Lavun","Magama","Mariga","Mashegu","Mokwa","Moya","Paikoro","Rafi","Rijau","Shiroro","Suleja","Tafa","Wushishi"],"Ogun":["Abeokuta North","Abeokuta South","Ado-Odo/Ota","Egbado North","Egbado South","Ewekoro","Ifo","Ijebu East","Ijebu North","Ijebu North East","Ijebu Ode","Ikenne","Imeko Afon","Ipokia","Obafemi Owode","Odeda","Odogbolu","Ogun Waterside","Remo North","Shagamu"],"Ondo":["Akoko North-East","Akoko North-West","Akoko South-East","Akoko South-West","Akure North","Akure South","Ese Odo","Idanre","Ifedore","Ilaje","Ile Oluji/Okeigbo","Irele","Odigbo","Okitipupa","Ondo East","Ondo West","Ose","Owo"],"Osun":["Atakunmosa East","Atakunmosa West","Aiyedaade","Aiyedire","Boluwaduro","Boripe","Ede North","Ede South","Ife Central","Ife East","Ife North","Ife South","Egbedore","Ejigbo","Ifedayo","Ifelodun","Ila","Ilesa East","Ilesa West","Irepodun","Irewole","Isokan","Iwo","Obokun","Odo Otin","Ola Oluwa","Olorunda","Oriade","Orolu","Osogbo"],"Oyo":["Afijio","Akinyele","Atiba","Atisbo","Egbeda","Ibadan North-East","Ibadan North-West","Ibadan South-East","Ibadan South-West","Ibarapa Central","Ibarapa East","Ibarapa North","Ido","Irepo","Iseyin","Itesiwaju","Iwajowa","Kajola","Lagelu","Ogbomosho North","Ogbomosho South","Ogo Oluwa","Olorunsogo","Oluyole","Ona Ara","Orelope","Ori Ire","Oyo","Oyo East","Saki West","Surulere"],"Plateau":["Bokkos","Barkin Ladi","Bassa","Jos East","Jos North","Jos South","Kanam","Kanke","Langtang South","Langtang North","Mangu","Mikang","Pankshin","Qua'an Pan","Riyom","Shendam","Wase"],"Rivers":["Abua/Odual","Ahoada East","Ahoada West","Akuku-Toru","Andoni","Asari-Toru","Bonny","Degema","Eleme","Emohua","Etche","Gokana","Ikwerre","Khana","Obio/Akpor","Ogba/Egbema/Ndoni","Ogu/Bolo","Okrika","Omuma","Opobo/Nkoro","Oyigbo","Port Harcourt","Tai"],"Sokoto":["Binji","Bodinga","Dange Shuni","Gada","Goronyo","Gudu","Gwadabawa","Illela","Isa","Kebbe","Kware","Rabah","Sabon Birni","Shagari","Silame","Sokoto North","Sokoto South","Tambuwal","Tangaza","Tureta","Wamako","Wurno","Yabo"],"Taraba":["Ardo Kola","Bali","Donga","Gashaka","Gassol","Ibi","Jalingo","Karim Lamido","Kumi","Lau","Sardauna","Takum","Ussa","Wukari","Yorro","Zing"],"Yobe":["Bade","Bursari","Damaturu","Fika","Fune","Geidam","Gujba","Gulani","Jakusko","Karasuwa","Machina","Nangere","Nguru","Potiskum","Tarmuwa","Yunusari","Yusufari"],"Zamfara":["Anka","Bakura","Birnin Magaji/Kiyaw","Bukkuyum","Bungudu","Gummi","Gusau","Kaura Namoda","Maradun","Maru","Shinkafi","Talata Mafara","Chafe","Zurmi"]};
-
-// FIXED LGA FUNCTIONS - 100% WORKING
+const nigeriaStatesLGAs={"Abia":["Aba North","Aba South","Arochukwu","Bende","Ikwuano","Isiala Ngwa North","Isiala Ngwa South","Isuikwuato","Obi Ngwa","Ohafia","Osisioma","Ugwunagbo","Ukwa East","Ukwa West","Umuahia North","Umuahia South","Umu Nneochi"],"Adamawa":["Demsa","Fufure","Ganye","Gayuk","Gombi","Grie","Hong","Jada","Lamurde","Madagali","Maiha","Mayo Belwa","Michika","Mubi North","Mubi South","Numan","Shelleng","Song","Toungo","Yola North","Yola South"],"Akwa Ibom":["Abak","Eastern Obolo","Eket","Esit Eket","Essien Udim","Etim Ekpo","Etinan","Ibeno","Ibesikpo Asutan","Ibiono Ibom","Ika","Ikono","Ikot Abasi","Ikot Ekpene","Ini","Itu","Mbo","Mkpat Enin","Nsit Atai","Nsit Ibom","Nsit Ubium","Obot Akara","Okobo","Onna","Oron","Oruk Anam","Udung Uko","Ukanafun","Uruan","Urue-Offong/Oruko","Uyo"],"Anambra":["Aguata","Anambra East","Anambra West","Anaocha","Awka North","Awka South","Ayamelum","Dunukofia","Ekwusigo","Idemili North","Idemili South","Ihiala","Njikoka","Nnewi North","Nnewi South","Ogbaru","Onitsha North","Onitsha South","Orumba North","Orumba South","Oyi"],"Bauchi":["Alkaleri","Bauchi","Bogoro","Damban","Darazo","Dass","Gamawa","Ganjuwa","Giade","Itas/Gadau","Jama'are","Katagum","Kirfi","Misau","Ningi","Shira","Tafawa Balewa","Toro","Warji","Zaki"],"Bayelsa":["Brass","Ekeremor","Kolokuma/Opokuma","Nembe","Ogbia","Sagbama","Southern Ijaw","Yenagoa"],"Benue":["Ado","Agatu","Apa","Buruku","Gboko","Guma","Gwer East","Gwer West","Katsina-Ala","Konshisha","Kwande","Logo","Makurdi","Obi","Ogbadibo","Ohimini","Oju","Okpokwu","Otukpo","Tarka","Ukum","Ushongo","Vandeikya"],"Borno":["Abadam","Askira/Uba","Bama","Bayo","Biu","Chibok","Damboa","Dikwa","Gubio","Guzamala","Gwoza","Hawul","Jere","Kaga","Kala/Balge","Konduga","Kukawa","Kwaya Kusar","Mafa","Magumeri","Maiduguri","Marte","Mobbar","Monguno","Ngala","Nganzai","Shani"],"Cross River":["Abi","Akamkpa","Akpabuyo","Bakassi","Bekwarra","Biase","Boki","Calabar Municipal","Calabar South","Etung","Ikom","Obanliku","Obubra","Obudu","Odukpani","Ogoja","Yakuur","Yala"],"Delta":["Aniocha North","Aniocha South","Bomadi","Burutu","Ethiope East","Ethiope West","Ika North East","Ika South","Isoko North","Isoko South","Ndokwa East","Ndokwa West","Okpe","Oshimili North","Oshimili South","Patani","Sapele","Udu","Ughelli North","Ughelli South","Ukwuani","Uvwie","Warri North","Warri South West"],"Ebonyi":["Abakaliki","Afikpo North","Afikpo South","Ebonyi","Ezza North","Ezza South","Ikwo","Ishielu","Ivo","Izzi","Ohaozara","Ohaukwu","Onicha"],"Edo":["Akoko-Edo","Egor","Esan Central","Esan North-East","Esan South-East","Esan West","Etsako Central","Etsako East","Etsako West","Igueben","Ikpoba Okha","Oredo","Orhionmwon","Ovia North-East","Ovia South-West","Owan East","Owan West","Uhunmwonde"],"Ekiti":["Ado Ekiti","Efon","Ekiti East","Ekiti South-West","Ekiti West","Emure","Gbonyin","Ido Osi","Ijero","Ikere","Ikole","Ilejemeje","Irepodun/Ifelodun","Ise/Orun","Moba","Oye"],"Enugu":["Aninri","Awgu","Enugu East","Enugu North","Enugu South","Ezeagu","Igbo Etiti","Igbo Eze North","Igbo Eze South","Isi Uzo","Nkanu East","Nkanu West","Nsukka","Oji River","Udenu","Udi","Uzo Uwani"],"FCT (Abuja)":["Abaji","Bwari","Gwagwalada","Kuje","Kwali","Municipal Area Council"],"Gombe":["Akko","Balanga","Billiri","Dukku","Funakaye","Gombe","Kaltungo","Kwami","Nafada","Shongom","Yamaltu/Deba"],"Imo":["Aboh Mbaise","Ahiazu Mbaise","Ehime Mbano","Ezinihitte","Ideato North","Ideato South","Ihitte/Uboma","Ikeduru","Isiala Mbano","Isu","Mbaitoli","Ngor Okpala","Njaba","Nkwerre","Nwangele","Obowo","Oguta","Ohaji/Egbema","Okigwe","Orlu","Orsu","Oru East","Oru West","Owerri Municipal","Owerri North","Owerri West","Unuimo"],"Jigawa":["Auyo","Babura","Biriniwa","Birnin Kudu","Buji","Dutse","Gagarawa","Garki","Gumel","Guri","Gwaram","Gwiwa","Hadejia","Jahun","Kafin Hausa","Kaugama","Kazaure","Kiri Kasama","Kiyawa","Maigatari","Malam Madori","Miga","Ringim","Roni","Sule Tankarkar","Taura","Yankwashi"],"Kaduna":["Birnin Gwari","Chikun","Giwa","Igabi","Ikara","Jaba","Jema'a","Kachia","Kaduna North","Kaduna South","Kagarko","Kajuru","Kaura","Kauru","Kubau","Kudan","Lere","Makarfi","Sabon Gari","Sanga","Soba","Zangon Kataf","Zaria"],"Kano":["Ajingi","Albasu","Bagwai","Bebeji","Bichi","Bunkure","Dala","Dambatta","Dawakin Kudu","Dawakin Tofa","Doguwa","Fagge","Gabasawa","Garko","Garun Mallam","Gaya","Gezawa","Gwale","Gwarzo","Kabo","Kano Municipal","Karaye","Kibiya","Kiru","Kumbotso","Kunchi","Kura","Madobi","Makoda","Minjibir","Nasarawa","Rano","Rimin Gado","Rogo","Shanono","Sumaila","Takai","Tarauni","Tofa","Tsanyawa","Tudun Wada","Ungogo","Warawa","Wudil"],"Katsina":["Bakori","Batagarawa","Batsari","Baure","Bindawa","Charanchi","Dandume","Danja","Dan Musa","Daura","Dutsi","Dutsin Ma","Faskari","Funtua","Ingawa","Jibia","Kafur","Kaita","Kankara","Kankia","Katsina","Kurfi","Kusada","Mai'Adua","Malumfashi","Mani","Mashi","Matazu","Musawa","Rimi","Sabuwa","Safana","Sandamu","Zango"],"Kebbi":["Aleiro","Arewa Dandi","Argungu","Augie","Bagudo","Birnin Kebbi","Bunza","Dandi","Fakai","Gwandu","Jega","Kalgo","Koko/Besse","Maiyama","Ngaski","Sakaba","Shanga","Suru","Wasagu/Danko","Yauri","Zuru"],"Kogi":["Adavi","Ajaokuta","Ankpa","Bassa","Dekina","Ibaji","Idah","Igalamela Odolu","Ijumu","Kabba/Bunu","Kogi","Lokoja","Mopa Muro","Ofu","Ogori/Magongo","Okehi","Okene","Olamaboro","Omala","Yagba East","Yagba West"],"Kwara":["Asa","Baruten","Edu","Ekiti","Ifelodun","Ilorin East","Ilorin South","Ilorin West","Irepodun","Isin","Kaiama","Moro","Offa","Oke Ero","Oyun","Pategi"],"Lagos":["Agege","Ajeromi-Ifelodun","Alimosho","Amuwo-Odofin","Apapa","Badagry","Epe","Eti Osa","Ibeju-Lekki","Ifako-Ijaiye","Ikeja","Ikorodu","Kosofe","Lagos Island","Lagos Mainland","Mushin","Ojo","Oshodi-Isolo","Shomolu","Surulere"],"Nasarawa":["Akwanga","Awe","Doma","Karu","Keana","Keffi","Kokona","Lafia","Nasarawa Egon","Obi","Toto","Wamba"],"Niger":["Agaie","Agwara","Bida","Borgu","Bosso","Chanchaga","Edati","Gbako","Gurara","Katcha","Kontagora","Lapai","Lavun","Magama","Mariga","Mashegu","Mokwa","Moya","Paikoro","Rafi","Rijau","Shiroro","Suleja","Tafa","Wushishi"],"Ogun":["Abeokuta North","Abeokuta South","Ado-Odo/Ota","Egbado North","Egbado South","Ewekoro","Ifo","Ijebu East","Ijebu North","Ijebu North East","Ijebu Ode","Ikenne","Imeko Afon","Ipokia","Obafemi Owode","Odeda","Odogbolu","Ogun Waterside","Remo North","Shagamu"],"Ondo":["Akoko North-East","Akoko North-West","Akoko South-East","Akoko South-West","Akure North","Akure South","Ese Odo","Idanre","Ifedore","Ilaje","Ile Oluji/Okeigbo","Irele","Odigbo","Okitipupa","Ondo East","Ondo West","Ose","Owo"],"Osun":["Atakunmosa East","Atakunmosa West","Aiyedaade","Aiyedire","Boluwaduro","Boripe","Ede North","Ede South","Ife Central","Ife East","Ife North","Ife South","Egbedore","Ejigbo","Ifedayo","Ifelodun","Ila","Ilesa East","Ilesa West","Irepodun","Irewole","Isokan","Iwo","Obokun","Odo Otin","Ola Oluwa","Olorunda","Oriade","Orolu","Osogbo"],"Oyo":["Afijio","Akinyele","Atiba","Atisbo","Egbeda","Ibadan North-East","Ibadan North-West","Ibadan South-East","Ibadan South-West","Ibarapa Central","Ibarapa East","Ibarapa North","Ido","Irepo","Iseyin","Itesiwaju","Iwajowa","Kajola","Lagelu","Ogbomosho North","Ogbomosho South","Ogo Oluwa","Olorunsogo","Oluyole","Ona Ara","Orelope","Ori Ire","Oyo","Oyo East","Saki West","Surulere"],"Plateau":["Bokkos","Barkin Ladi","Bassa","Jos East","Jos North","Jos South","Kanam","Kanke","Langtang South","Langtang North","Mangu","Mikang","Pankshin","Qua'an Pan","Riyom","Shendam","Wase"],"Rivers":["Abua/Odual","Ahoada East","Ahoada West","Akuku-Toru","Andoni","Asari-Toru","Bonny","Degema","Eleme","Emohua","Etche","Gokana","Ikwerre","Khana","Obio/Akpor","Ogba/Egbema/Ndoni","Ogu/Bolo","Okrika","Omuma","Opobo/Nkoro","Oyigbo","Port Harcourt","Tai"],"Sokoto":["Binji","Bodinga","Dange Shuni","Gada","Goronyo","Gudu","Gwadabawa","Illela","Isa","Kebbe","Kware","Rabah","Sabon Birni","Shagari","Silame","Sokoto North","Sokoto South","Tambuwal","Tangaza","Tureta","Wamako","Wurno","Yabo"],"Taraba":["Ardo Kola","Bali","Donga","Gashaka","Gassol","Ibi","Jalingo","Karim Lamido","Kumi","Lau","Sardauna","Takum","Ussa","Wukari","Yorro","Zing"],"Yobe":["Bade","Bursari","Damaturu","Fika","Fune","Geidam","Gujba","Gulani","Jakusko","Karasuwa","Machina","Nangere","Nguru","Potiskum","Tarmuwa","Yunusari","Yusufari"],"Zamfara":["Anka","Bakura","Birnin Magaji/Kiyaw","Bukkuyum","Bungudu","Gummi","Gusau","Kaura Namoda","Maradun","Maru","Shinkafi","Talata Mafara","Chafe","Zurmi"]};
 function populateStates(){
-  const stateSel = document.getElementById('cust-state');
-  const lgaSel = document.getElementById('cust-lga');
-  if(!stateSel ||!lgaSel){ setTimeout(populateStates,300); return; }
+  const stateSel=document.getElementById('cust-state');
+  const lgaSel=document.getElementById('cust-lga');
+  if(!stateSel||!lgaSel){setTimeout(populateStates,300);return;}
   stateSel.innerHTML='<option value="">Select State</option>';
   Object.keys(nigeriaStatesLGAs).sort().forEach(st=>{
-    const o=document.createElement('option'); o.value=st; o.textContent=st;
+    const o=document.createElement('option');o.value=st;o.textContent=st;
     stateSel.appendChild(o);
   });
   stateSel.value='Taraba';
   loadLGAOptions(true);
 }
-
 function loadLGAOptions(isInitial=false){
-  const stateSel = document.getElementById('cust-state');
-  const lgaSel = document.getElementById('cust-lga');
-  if(!stateSel ||!lgaSel) return;
-  const sel = stateSel.value;
+  const stateSel=document.getElementById('cust-state');
+  const lgaSel=document.getElementById('cust-lga');
+  if(!stateSel||!lgaSel)return;
+  const sel=stateSel.value;
   lgaSel.innerHTML='<option value="">Select LGA</option>';
-  lgaSel.disabled = true;
-  if(sel && nigeriaStatesLGAs[sel]){
+  lgaSel.disabled=true;
+  if(sel&&nigeriaStatesLGAs[sel]){
     lgaSel.disabled=false;
     nigeriaStatesLGAs[sel].forEach(l=>{
-      const o=document.createElement('option'); o.value=l; o.textContent=l;
+      const o=document.createElement('option');o.value=l;o.textContent=l;
       lgaSel.appendChild(o);
     });
-    if(isInitial && sel==='Taraba') lgaSel.value='Wukari';
+    if(isInitial&&sel==='Taraba')lgaSel.value='Wukari';
   }
 }
-
 function detectLocation(){
-  if(!navigator.geolocation) return alert('GPS not supported');
+  if(!navigator.geolocation)return alert('GPS not supported');
   navigator.geolocation.getCurrentPosition(pos=>{
     document.getElementById('cust-gps').value=`${pos.coords.latitude},${pos.coords.longitude}`;
     alert('📍 GPS Captured');
   });
 }
-
 let deferredPrompt;
-const installBtn = document.getElementById('install-app-btn');
-window.addEventListener('beforeinstallprompt', e => {
+const installBtn=document.getElementById('install-app-btn');
+window.addEventListener('beforeinstallprompt',e=>{
     e.preventDefault();
-    deferredPrompt = e;
-    if(installBtn) installBtn.style.display = 'inline-flex';
+    deferredPrompt=e;
+    if(installBtn)installBtn.style.display='inline-flex';
 });
 function installApp(){
     if(deferredPrompt){
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then(r=>{
-            if(r.outcome==='accepted' && installBtn) installBtn.style.display='none';
+            if(r.outcome==='accepted'&&installBtn)installBtn.style.display='none';
             deferredPrompt=null;
         });
     } else {
@@ -206,27 +198,69 @@ function installApp(){
         }
     }
 }
-window.addEventListener('appinstalled', ()=>{ if(installBtn) installBtn.style.display='none'; });
+window.addEventListener('appinstalled',()=>{if(installBtn)installBtn.style.display='none';});
 
-function openAboutModal(){document.getElementById('about-modal').style.display='flex';}
-function openFeedbackModal(){document.getElementById('feedback-modal').style.display='flex';}
-function openTrackModal(){document.getElementById('track-modal').style.display='flex';}
-function submitFeedback(){const name=document.getElementById('fb-name').value,contact=document.getElementById('fb-contact').value,msg=document.getElementById('fb-msg').value;db.ref('feedback').push({name,contact,msg,timestamp:firebase.database.ServerValue.TIMESTAMP}).then(()=>{alert('Thanks!');closeModal('feedback-modal');});}
+/* === PERSISTENCE + CART PERSISTENCE === */
+function saveIndexState(id){if(id)localStorage.setItem('amasan_index_modal',id);}
+function clearIndexState(){localStorage.removeItem('amasan_index_modal');}
+function saveCartToStorage(){localStorage.setItem('amasan_cart', JSON.stringify(cart));}
+function loadCartFromStorage(){
+  try{
+    const saved = localStorage.getItem('amasan_cart');
+    if(saved){ cart = JSON.parse(saved) || []; }
+  }catch(e){ cart = []; }
+}
+function restoreIndexState(){
+  const saved=localStorage.getItem('amasan_index_modal');
+  if(saved&&document.getElementById(saved)){
+    document.getElementById(saved).style.display='flex';
+  }
+  const scroll=localStorage.getItem('amasan_index_scroll');
+  if(scroll){setTimeout(()=>window.scrollTo(0,parseInt(scroll)),80);}
+}
+window.addEventListener('scroll',()=>{localStorage.setItem('amasan_index_scroll',window.scrollY);});
+
+function openAboutModal(){document.getElementById('about-modal').style.display='flex';saveIndexState('about-modal');}
+function openFeedbackModal(){document.getElementById('feedback-modal').style.display='flex';saveIndexState('feedback-modal');}
+function openTrackModal(){document.getElementById('track-modal').style.display='flex';saveIndexState('track-modal');}
+function openCartModal(){document.getElementById('cart-modal').style.display='flex';saveIndexState('cart-modal');}
+function toggleChatBox(){
+  const b=document.getElementById('chat-box-popup');
+  document.getElementById('bot-box-popup').style.display='none';
+  const show=b.style.display!=='flex';
+  b.style.display=show?'flex':'none';
+  if(show)saveIndexState('chat-box-popup');else clearIndexState();
+}
+function toggleBotBox(){
+  const box=document.getElementById('bot-box-popup');
+  document.getElementById('chat-box-popup').style.display='none';
+  const show=box.style.display!=='flex';
+  box.style.display=show?'flex':'none';
+  if(show)saveIndexState('bot-box-popup');else clearIndexState();
+}
+function closeModal(id){
+  document.getElementById(id).style.display='none';
+  if(localStorage.getItem('amasan_index_modal')===id)clearIndexState();
+}
+
 let currentOrderRef='';function copyRef(){navigator.clipboard.writeText(currentOrderRef);alert('Copied');}
 let allProducts=[],cart=[],activeCategory='All';
-let lastOrderData = null;
+let lastOrderData=null;
 window.addEventListener('DOMContentLoaded',()=>{
+    loadCartFromStorage();
     populateStates();
-    document.getElementById('cust-state').addEventListener('change', ()=>loadLGAOptions(false));
+    document.getElementById('cust-state').addEventListener('change',()=>loadLGAOptions(false));
     setGreeting();
     listenToProducts();
     listenToCustomerChat();
     initScrollObserver();
     if(localStorage.getItem('amasan_theme')==='light')document.body.classList.add('light-mode');
+    restoreIndexState();
+    updateCartUI(); // show saved cart on load
 });
 function setGreeting(){const h=new Date().getHours();let g=h<12?"Good Morning":h<18?"Good Afternoon":"Good Evening";document.getElementById('time-greeting').innerText=`👋 ${g}, Welcome!`;}
 function toggleDarkMode(){document.body.classList.toggle('light-mode');localStorage.setItem('amasan_theme',document.body.classList.contains('light-mode')?'light':'dark');}
-function closeModal(id){document.getElementById(id).style.display='none';}
+function submitFeedback(){const name=document.getElementById('fb-name').value,contact=document.getElementById('fb-contact').value,msg=document.getElementById('fb-msg').value;db.ref('feedback').push({name,contact,msg,timestamp:firebase.database.ServerValue.TIMESTAMP}).then(()=>{alert('Thanks!');closeModal('feedback-modal');});}
 function listenToProducts(){
     db.ref('inventory').on('value',snap=>{
         allProducts=[];let total=0;
@@ -269,10 +303,33 @@ function renderFilteredProducts(){
     });
     initScrollObserver();
 }
-function addToCart(id,name,price){const ex=cart.find(i=>i.id===id);if(ex)ex.qty++;else cart.push({id,name,price,qty:1});updateCartUI();}
-function adjustQty(id,d){const it=cart.find(i=>i.id===id);if(!it)return;it.qty+=d;if(it.qty<=0)cart=cart.filter(i=>i.id!==id);updateCartUI();}
-function updateCartUI(){document.getElementById('cart-count').innerText=cart.reduce((s,i)=>s+i.qty,0);const c=document.getElementById('cart-items-container');c.innerHTML='';let sub=0;cart.forEach(i=>{sub+=i.price*i.qty;c.innerHTML+=`<div class="cart-item"><span>${i.name} x${i.qty}</span><span><button class="qty-btn" onclick="adjustQty('${i.id}',-1)">-</button> ${i.qty} <button class="qty-btn" onclick="adjustQty('${i.id}',1)">+</button></span></div>`;});document.getElementById('cart-subtotal').innerText=`Subtotal ₦ ${sub.toLocaleString()}`;document.getElementById('cart-total-price').innerText=`Total ₦ ${(sub+1500).toLocaleString()}`;}
-function openCartModal(){document.getElementById('cart-modal').style.display='flex';}
+function addToCart(id,name,price){
+  const ex=cart.find(i=>i.id===id);
+  if(ex)ex.qty++;else cart.push({id,name,price,qty:1});
+  saveCartToStorage();
+  updateCartUI();
+}
+function adjustQty(id,d){
+  const it=cart.find(i=>i.id===id);
+  if(!it)return;
+  it.qty+=d;
+  if(it.qty<=0)cart=cart.filter(i=>i.id!==id);
+  saveCartToStorage();
+  updateCartUI();
+}
+function updateCartUI(){
+  document.getElementById('cart-count').innerText=cart.reduce((s,i)=>s+i.qty,0);
+  const c=document.getElementById('cart-items-container');
+  c.innerHTML='';
+  let sub=0;
+  cart.forEach(i=>{
+    sub+=i.price*i.qty;
+    c.innerHTML+=`<div class="cart-item"><span>${i.name} x${i.qty}</span><span><button class="qty-btn" onclick="adjustQty('${i.id}',-1)">-</button> ${i.qty} <button class="qty-btn" onclick="adjustQty('${i.id}',1)">+</button></span></div>`;
+  });
+  document.getElementById('cart-subtotal').innerText=`Subtotal ₦ ${sub.toLocaleString()}`;
+  document.getElementById('cart-total-price').innerText=`Total ₦ ${(sub+1500).toLocaleString()}`;
+  saveCartToStorage();
+}
 function submitOrder(){
     if(cart.length===0)return alert('Empty');
     const name=document.getElementById('cust-name').value,state=document.getElementById('cust-state').value,lga=document.getElementById('cust-lga').value,addr=document.getElementById('cust-address').value,gps=document.getElementById('cust-gps').value||'';
@@ -285,7 +342,7 @@ function submitOrder(){
         document.getElementById('receipt-ref').innerText='#'+ref;document.getElementById('pNo').innerText='AFW-'+ref;document.getElementById('pDate').innerText=dateStr;document.getElementById('stampDate').innerText=dateStr;document.getElementById('sigDate').innerText=dateStr;document.getElementById('pCustName').innerText=name;document.getElementById('pCustAddr').innerText=addr+', '+lga+', '+state;
         const tbody=document.getElementById('pItems');tbody.innerHTML='';cart.forEach(i=>{tbody.innerHTML+=`<tr><td>${i.name}</td><td style="text-align:center">${i.qty}</td><td style="text-align:center">${Number(i.price).toLocaleString()}</td><td style="text-align:center">${(i.price*i.qty).toLocaleString()}</td></tr>`;});
         document.getElementById('pSub').innerText=subtotal.toLocaleString();document.getElementById('pTotal').innerText=total.toLocaleString();
-        cart=[];updateCartUI();closeModal('cart-modal');document.getElementById('receipt-modal').style.display='flex';
+        cart=[];saveCartToStorage();updateCartUI();closeModal('cart-modal');document.getElementById('receipt-modal').style.display='flex';saveIndexState('receipt-modal');
     });
 }
 function sendReceiptPDFToWhatsApp() {
@@ -300,8 +357,6 @@ function triggerWhatsAppShare() {
     }
 }
 function checkOrderStatus(){const ref=document.getElementById('track-ref-input').value.trim();db.ref(`orders/${ref}`).once('value',snap=>{const res=document.getElementById('track-result');res.style.display='block';if(snap.exists()){const d=snap.val();document.getElementById('track-info-body').innerHTML=`Customer: ${d.customer}<br>Status: ${d.status}<br>Total: ₦ ${d.total.toLocaleString()}`;}else document.getElementById('track-info-body').innerText='Not found';});}
-function toggleChatBox(){const b=document.getElementById('chat-box-popup');document.getElementById('bot-box-popup').style.display='none';b.style.display=b.style.display==='flex'?'none':'flex';}
-function toggleBotBox(){const box=document.getElementById('bot-box-popup');document.getElementById('chat-box-popup').style.display='none';box.style.display=box.style.display==='flex'?'none':'flex';}
 function sendCustomerMessage(){const input=document.getElementById('customer-msg-input'),text=input.value.trim();if(!text)return;db.ref(`chats/${customerSessionId}/messages`).push({text,sender:'customer',timestamp:firebase.database.ServerValue.TIMESTAMP});db.ref(`chats/${customerSessionId}`).update({lastMessage:text});input.value='';}
 function listenToCustomerChat(){db.ref(`chats/${customerSessionId}/messages`).on('value',snap=>{const body=document.getElementById('customer-chat-body');body.innerHTML='';if(!snap.exists()){body.innerHTML='<div class="chat-msg bot">Hello! How can I help? Call 08088375509</div>';return;}snap.forEach(ch=>{const m=ch.val();const div=document.createElement('div');div.className=`chat-msg ${m.sender==='customer'?'customer':'bot'}`;div.innerText=m.text;body.appendChild(div);});});}
 async function sendBotMessage(){
