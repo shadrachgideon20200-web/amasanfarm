@@ -142,6 +142,7 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     <button class="nav-btn" onclick="switchView('chat-view',this)"><div><i class="fas fa-comments"></i> Support</div><span class="badge" id="unread-count">0</span></button>
     <button class="nav-btn" onclick="switchView('inventory-view',this)"><div><i class="fas fa-boxes"></i> Inventory</div><span class="badge badge-danger" id="low-stock-count" style="display:none">0</span></button>
     <button class="nav-btn" onclick="switchView('orders-view',this)"><div><i class="fas fa-truck"></i> Orders</div></button>
+    <button class="nav-btn" onclick="switchView('feedback-view',this)"><div><i class="fas fa-comment-dots"></i> Feedback</div><span class="badge" id="feedback-count">0</span></button>
     <button class="nav-btn" onclick="switchView('info-view',this)"><div><i class="fas fa-info-circle"></i> Info</div></button>
   </div>
   <div class="sidebar-footer"><button class="nav-btn" onclick="logoutAdmin()"><div><i class="fas fa-sign-out-alt"></i> Logout</div></button></div>
@@ -233,6 +234,18 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       </table>
     </div>
   </section>
+  <section id="feedback-view" class="view-section">
+    <div class="dashboard-padding">
+      <div class="table-controls">
+        <h3><i class="fas fa-comment-dots"></i> Customer Feedback</h3>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary" onclick="exportFeedbackCSV()">Export CSV</button>
+          <button class="btn btn-danger" onclick="clearAllFeedback()">Clear All</button>
+        </div>
+      </div>
+      <div id="feedback-list" style="display:grid;gap:12px"></div>
+    </div>
+  </section>
   <section id="info-view" class="view-section">
     <div class="dashboard-padding">
       <h3>🏦 Farm Info</h3>
@@ -264,8 +277,26 @@ window.addEventListener('DOMContentLoaded',()=>{
   }
   listenToInventory();
   listenToOrders();
+  listenFeedback();
   initGPSMap();
   listenToChatList();
+  // FIXED RESTORE - HEADER + PAGE BOTH STAY
+  const lastView = localStorage.getItem('amasan_admin_view');
+  const lastTitle = localStorage.getItem('amasan_admin_title');
+  if(lastView){
+    document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.sidebar-menu.nav-btn').forEach(b=>b.classList.remove('active'));
+    const targetSection = document.getElementById(lastView);
+    if(targetSection){
+      targetSection.classList.add('active');
+      document.getElementById('page-title').innerText = lastTitle || lastView.replace('-view','').replace(/^\w/,c=>c.toUpperCase());
+      document.querySelectorAll('.sidebar-menu.nav-btn').forEach(btn=>{
+        if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(lastView)){
+          btn.classList.add('active');
+        }
+      });
+    }
+  }
 });
 function toggleTheme(){document.body.classList.toggle('light-mode');localStorage.setItem('amasan_theme',document.body.classList.contains('light-mode')?'light':'dark');}
 function togglePasswordVisibility(a,b){
@@ -332,30 +363,20 @@ function sendFirebaseMessage(){
 function downloadPDFReceipt(orderRef, customerName, fullAddr, items, totalAmount){
   const {jsPDF}=window.jspdf;const doc=new jsPDF();const pageW=doc.internal.pageSize.getWidth();
   const greenDark=[10,61,26],gold=[184,155,74],goldDark=[120,80,20],goldLight=[232,199,102];
-  
-  // Border setup
   doc.setDrawColor(gold[0],gold[1],gold[2]);doc.setLineWidth(0.8);doc.rect(4,4,pageW-8,289);
   doc.setLineWidth(0.3);doc.rect(7,7,pageW-14,283);let y=14;
-  
-  // Header Logo & Branding
   doc.setFillColor(greenDark[0],greenDark[1],greenDark[2]);doc.circle(pageW/2,y+10,12,'FD');
   doc.setFontSize(8);doc.setTextColor(goldLight[0],goldLight[1],goldLight[2]);doc.setFont('helvetica','bold');doc.text('AFW',pageW/2,y+12,{align:'center'});y+=28;
   doc.setFontSize(18);doc.setTextColor(goldDark[0],goldDark[1],goldDark[2]);doc.text('AMASAN FARM WUKARI',pageW/2,y,{align:'center'});y+=5;
   doc.setFontSize(8);doc.setTextColor(80,80,80);doc.setFont('helvetica','normal');doc.text('Wukari, Taraba • 08088375509 • Amasanfarm@gmail.com',pageW/2,y,{align:'center'});y+=4;
   doc.setDrawColor(gold[0],gold[1],gold[2]);doc.line(20,y,pageW-20,y);y+=8;
-  
-  // Title Banner
   const bannerW=70;doc.setFillColor(greenDark[0],greenDark[1],greenDark[2]);doc.rect((pageW-bannerW)/2,y,bannerW,9,'FD');
   doc.setTextColor(goldLight[0],goldLight[1],goldLight[2]);doc.setFontSize(10);doc.setFont('helvetica','bold');doc.text('OFFICIAL RECEIPT',pageW/2,y+6,{align:'center'});y+=14;
-  
-  // Customer & Meta Info
   const today=new Date().toLocaleDateString('en-GB');doc.setTextColor(0,0,0);doc.setFontSize(9);doc.setFont('helvetica','normal');
   doc.text(`Date: ${today}`,14,y);doc.text(`Receipt No: AFW-${orderRef}`,pageW-14,y,{align:'right'});y+=7;
   doc.setFont('helvetica','bold');doc.text(`Customer Name:`,14,y);doc.setFont('helvetica','normal');doc.text(`${customerName}`,42,y);y+=6;
   doc.setFont('helvetica','bold');doc.text(`Customer Address:`,14,y);doc.setFont('helvetica','normal');
   const addrLines=doc.splitTextToSize(fullAddr||'N/A',125);doc.text(addrLines,46,y);y+=(addrLines.length*4)+6;
-  
-  // --- TABLE HEADERS ---
   doc.setFillColor(240,240,240);
   doc.rect(14, y, pageW - 28, 7, 'FD');
   doc.setFont('helvetica','bold');
@@ -363,10 +384,8 @@ function downloadPDFReceipt(orderRef, customerName, fullAddr, items, totalAmount
   doc.text('Item Description', 18, y + 5);
   doc.text('Total (NGN)', pageW - 18, y + 5, { align: 'right' });
   y += 11;
-  // --- ITEMIZED LIST ---
   doc.setFont('helvetica','normal');
-  const parsedItems = typeof items === 'string' ? items.split(',') : [items];
-  
+  const parsedItems = typeof items === 'string'? items.split(',') : [items];
   parsedItems.forEach(item => {
     const itemLines = doc.splitTextToSize(item.trim(), pageW - 45);
     doc.text(itemLines, 18, y);
@@ -376,13 +395,11 @@ function downloadPDFReceipt(orderRef, customerName, fullAddr, items, totalAmount
   doc.setDrawColor(200, 200, 200);
   doc.line(14, y, pageW - 14, y);
   y += 8;
-  // --- TOTAL AMOUNT ---
   doc.setFont('helvetica','bold');
   doc.setFontSize(11);
   doc.setTextColor(greenDark[0],greenDark[1],greenDark[2]);
   doc.text('TOTAL AMOUNT:', 14, y);
   doc.text(`NGN ${Number(totalAmount).toLocaleString()}`, pageW - 14, y, { align: 'right' });
-  // Save PDF
   doc.save(`Receipt_AFW-${orderRef}.pdf`);
 }
 let inventoryItems=[];
@@ -423,7 +440,7 @@ function saveNewProduct(){
 let realTimeOrders=[],activeFilter='All',revChart;
 function listenToOrders(){
   db.ref('orders').on('value',s=>{
-    realTimeOrders=[];let sum=0;let daily=[0,0,0,0,0,0,0];
+    realTimeOrders=[];let sum=0;let daily=[0,0,0];
     s.forEach(ch=>{
       const o=ch.val();o.firebaseKey=ch.key;realTimeOrders.unshift(o);sum+=Number(o.total||0);
       let d=new Date(o.timestamp||Date.now());let day=d.getDay();let idx=day===0?6:day-1;if(idx>=0&&idx<7)daily[idx]+=Number(o.total||0);
@@ -471,11 +488,22 @@ function assignDispatch(){
   db.ref(`dispatches/${ref}`).set({driver:drv,vehicle:veh}).then(()=>alert('Assigned'));
 }
 function switchView(id,el){
+  const titles = {
+    'dashboard-view':'Dashboard',
+    'chat-view':'Support Chat',
+    'inventory-view':'Inventory',
+    'orders-view':'Orders',
+    'feedback-view':'Feedback',
+    'info-view':'Farm Info'
+  };
   document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if(el)el.classList.add('active');
-  document.getElementById('page-title').innerText=id;
+  const title = titles[id] || id;
+  document.getElementById('page-title').innerText = title;
+  localStorage.setItem('amasan_admin_view', id);
+  localStorage.setItem('amasan_admin_title', title);
   if(id==='orders-view'&&map)setTimeout(()=>map.invalidateSize(),200);
 }
 function filterCustomers(){
@@ -485,6 +513,55 @@ function filterCustomers(){
   });
 }
 function toggleDispatchDrawer(){document.getElementById('dispatch-drawer').classList.toggle('open')}
+
+let feedbackData=[];
+function listenFeedback(){
+  db.ref('feedback').on('value', snap=>{
+    const listEl = document.getElementById('feedback-list');
+    const countEl = document.getElementById('feedback-count');
+    feedbackData = [];
+    listEl.innerHTML = '';
+    if(!snap.exists()){
+      listEl.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted)">No feedback yet</div>';
+      if(countEl) countEl.innerText='0';
+      return;
+    }
+    snap.forEach(child=>{
+      const fb = child.val();
+      fb.key = child.key;
+      feedbackData.push(fb);
+    });
+    feedbackData.reverse();
+    if(countEl) countEl.innerText = feedbackData.length;
+    feedbackData.forEach(fb=>{
+      const date = fb.timestamp? new Date(fb.timestamp).toLocaleString() : 'Just now';
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><b><i class="fas fa-user"></i> ${fb.name}</b> <small style="color:var(--text-muted)">- ${fb.contact}</small></div>
+          <small style="color:var(--text-muted)">${date}</small>
+        </div>
+        <p style="margin:12px 0;line-height:1.6;background:var(--bg-dark);padding:10px;border-radius:6px;border:1px solid var(--border)">${fb.msg}</p>
+        <div style="display:flex;gap:8px">
+          <a href="https://wa.me/${String(fb.contact).replace(/[^0-9]/g,'')}" target="_blank" class="btn btn-secondary" style="padding:5px 10px;font-size:.75rem"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <button class="btn btn-danger" style="padding:5px 10px;font-size:.75rem" onclick="deleteFeedback('${fb.key}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      `;
+      listEl.appendChild(div);
+    });
+  });
+}
+function deleteFeedback(key){ if(confirm('Delete this feedback?')){ db.ref('feedback/'+key).remove(); } }
+function clearAllFeedback(){ if(confirm('Delete ALL feedback?')){ db.ref('feedback').remove(); } }
+function exportFeedbackCSV(){
+  let csv = "data:text/csv;charset=utf-8,Name,Contact,Message,Date\n";
+  feedbackData.forEach(f=>{
+    const date = f.timestamp? new Date(f.timestamp).toLocaleString() : '';
+    csv += `"${(f.name||'').replace(/"/g,'""')}","${(f.contact||'').replace(/"/g,'""')}","${(f.msg||'').replace(/"/g,'""')}","${date}"\n`;
+  });
+  const a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'feedback.csv'; a.click();
+}
 </script>
 </body>
 </html>
