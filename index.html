@@ -92,6 +92,13 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 .p-total-box.gold{background:linear-gradient(90deg,#d4af37,#f0d78a);font-weight:bold}
 .p-pay-row{text-align:center;margin:12px 0;border-top:1px solid #e8d5a3;border-bottom:1px solid #e8d5a3;padding:10px;font-size:11px}
 .p-footer{background:#0a3d1a;color:#e8c766;text-align:center;padding:10px;font-size:12px;font-style:italic;margin-top:15px}
+/* === NEW ADDED CSS - ADVERT BANNER + COMPLAINT - NO REMOVAL === */
+.advert-banner{background:linear-gradient(90deg,#0a3d1a,#2e7d32,#4caf50,#2e7d32,#0a3d1a);color:#fff;overflow:hidden;white-space:nowrap;padding:12px 0;border-top:2px solid #ffb300;border-bottom:2px solid #ffb300;position:relative;z-index:5}
+.advert-track{display:flex;gap:28px;animation:scrollAdvert 60s linear infinite;will-change:transform;width:max-content}
+.advert-item{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:7px 16px;border-radius:24px;font-weight:700;font-size:.85rem;white-space:nowrap;backdrop-filter:blur(4px)}
+.advert-item img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #fff;background:#fff}
+@keyframes scrollAdvert{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.advert-banner:hover.advert-track{animation-play-state:paused}
 </style>
 </head>
 <body>
@@ -102,12 +109,18 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <button class="nav-btn" onclick="openAboutModal()"><i class="fas fa-seedling"></i> About</button>
 <button class="nav-btn" onclick="openTrackModal()"><i class="fas fa-truck"></i> Track</button>
 <button class="nav-btn" onclick="openFeedbackModal()"><i class="fas fa-comment-dots"></i> Feedback</button>
+<!-- NEW ADDED BUTTON - COMPLAINT -->
+<button class="nav-btn" style="background:#d32f2f;color:#fff;border-color:#d32f2f" onclick="openComplaintModal()"><i class="fas fa-exclamation-triangle"></i> Complaint</button>
 <a class="nav-btn" href="https://wa.me/2348088375509" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
 <button class="nav-btn" id="install-app-btn" style="background:var(--accent);color:#000" onclick="installApp()"><i class="fas fa-download"></i> Install App</button>
 <button class="nav-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
 <button class="nav-btn" onclick="openCartModal()"><i class="fas fa-shopping-basket"></i> Cart <span class="cart-badge" id="cart-count">0</span></button>
 </div></navbar>
 <div class="hero"><div class="greeting-text" id="time-greeting">Welcome</div><h1>Quality Agricultural Supplies</h1></div>
+
+<!-- NEW ADDED - ADVERT BANNER DISPLAYING IN-STOCK PRODUCTS -->
+<div class="advert-banner" id="advert-banner"><div class="advert-track" id="advert-track"><div class="advert-item">🌾 Loading Available Products at Amasan Farm...</div></div></div>
+
 <div class="container"><div class="stock-banner"><div><strong>Live Stock:</strong> <span id="live-stock-count">0 items</span></div></div>
 <div class="filter-bar"><div class="search-box"><i class="fas fa-search"></i><input id="search-input" placeholder="Search products..." oninput="renderFilteredProducts()"></div>
 <div class="categories-wrapper"><button class="cat-pill active" onclick="filterCategory('All',this)">All</button><button class="cat-pill" onclick="filterCategory('Feeds',this)">Feeds</button><button class="cat-pill" onclick="filterCategory('Fertilizer',this)">Fertilizer</button><button class="cat-pill" onclick="filterCategory('Produce',this)">Produce</button><button class="cat-pill" onclick="filterCategory('Equipment',this)">Equipment</button></div></div>
@@ -124,6 +137,10 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <div style="text-align:center;margin-top:8px"><button class="btn btn-sec" style="width:auto; color: #222;" onclick="copyRef()">Copy Ref: <span id="receipt-ref"></span></button></div></div></div>
 <div class="modal-overlay" id="track-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between">Track Order <button onclick="closeModal('track-modal')" class="qty-btn">✕</button></h3><input id="track-ref-input" placeholder="Enter 6-digit ref" style="width:100%;padding:10px;margin:10px 0;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)"><button class="btn" onclick="checkOrderStatus()">Track</button><div id="track-result" style="display:none;margin-top:16px"><div id="track-info-body"></div></div></div></div>
 <div class="modal-overlay" id="feedback-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between">Feedback <button onclick="closeModal('feedback-modal')" class="qty-btn">✕</button></h3><form onsubmit="event.preventDefault();submitFeedback();"><input id="fb-name" placeholder="Name" required style="width:100%;padding:10px;margin-bottom:8px;background:var(--bg-dark);color:var(--text);border:1px solid var(--border);border-radius:6px;"><input id="fb-contact" placeholder="Contact" required style="width:100%;padding:10px;margin-bottom:8px;background:var(--bg-dark);color:var(--text);border:1px solid var(--border);border-radius:6px;"><textarea id="fb-msg" rows="4" placeholder="Your message..." required style="width:100%;padding:10px;background:var(--bg-dark);color:var(--text);border:1px solid var(--border);border-radius:6px;"></textarea><button class="btn" style="margin-top:8px">Submit</button></form></div></div>
+
+<!-- NEW ADDED - COMPLAINT BOX MODAL - NO REMOVAL -->
+<div class="modal-overlay" id="complaint-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between"><span><i class="fas fa-exclamation-triangle" style="color:#f44336"></i> Complaint Box</span><button onclick="closeModal('complaint-modal')" class="qty-btn">✕</button></h3><p style="font-size:.85rem;color:var(--text-muted);margin:10px 0">Not satisfied? Tell us, we will fix it fast.</p><form onsubmit="event.preventDefault();submitComplaint();"><div class="form-group"><label>Your Name</label><input id="comp-name" placeholder="Full Name" required></div><div class="form-group"><label>Phone / WhatsApp</label><input id="comp-phone" placeholder="080..." required></div><div class="form-group"><label>Order Ref (Optional)</label><input id="comp-ref" placeholder="e.g 123456"></div><div class="form-group"><label>Complaint Type</label><select id="comp-type" required><option value="">Select Type</option><option>Wrong Product</option><option>Damaged Product</option><option>Late Delivery</option><option>Payment Issue</option><option>Bad Quality</option><option>Other</option></select></div><div class="form-group"><label>Describe Your Complaint</label><textarea id="comp-msg" rows="4" placeholder="Write your complaint in detail..." required></textarea></div><button class="btn" style="background:#d32f2f"><i class="fas fa-paper-plane"></i> Submit Complaint</button></form><div style="font-size:.75rem;color:var(--text-muted);margin-top:10px;text-align:center">We reply within 2hrs via WhatsApp/Call: 08088375509</div></div></div>
+
 <div class="chatbot-widget-btn" onclick="toggleBotBox()"><i class="fas fa-robot"></i></div>
 <div class="chat-box-popup" id="bot-box-popup"><div class="chat-box-header"><span>AI Assistant</span><button onclick="toggleBotBox()" class="qty-btn">✕</button></div><div class="chat-box-body" id="bot-chat-body"><div class="chat-msg bot">Hello 👋 Welcome to Amasan Farm! How can I help you today?</div></div><div class="chat-box-footer"><input id="bot-msg-input" placeholder="Ask..." onkeypress="if(event.key==='Enter')sendBotMessage()"><button class="btn" style="width:auto" onclick="sendBotMessage()">Send</button></div></div>
 <div class="chat-widget-btn" onclick="toggleChatBox()"><i class="fas fa-headset"></i></div>
@@ -256,7 +273,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     initScrollObserver();
     if(localStorage.getItem('amasan_theme')==='light')document.body.classList.add('light-mode');
     restoreIndexState();
-    updateCartUI(); // show saved cart on load
+    updateCartUI();
 });
 function setGreeting(){const h=new Date().getHours();let g=h<12?"Good Morning":h<18?"Good Afternoon":"Good Evening";document.getElementById('time-greeting').innerText=`👋 ${g}, Welcome!`;}
 function toggleDarkMode(){document.body.classList.toggle('light-mode');localStorage.setItem('amasan_theme',document.body.classList.contains('light-mode')?'light':'dark');}
@@ -378,6 +395,41 @@ function initScrollObserver(){
     if(!scrollObserver){scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('active'); scrollObserver.unobserve(e.target); } });},{threshold:0.15});}
     document.querySelectorAll('.reveal').forEach(el=>scrollObserver.observe(el));
 }
+
+// === NEW ADDED JS - COMPLAINT + ADVERT - NO REMOVAL OF OLD CODE ===
+function openComplaintModal(){document.getElementById('complaint-modal').style.display='flex';saveIndexState('complaint-modal');}
+function submitComplaint(){
+  const name=document.getElementById('comp-name').value.trim();
+  const phone=document.getElementById('comp-phone').value.trim();
+  const ref=document.getElementById('comp-ref').value.trim();
+  const type=document.getElementById('comp-type').value;
+  const msg=document.getElementById('comp-msg').value.trim();
+  if(!name||!phone||!type||!msg) return alert('Fill all required fields');
+  db.ref('complaints').push({name,phone,orderRef:ref||'N/A',type,message:msg,timestamp:firebase.database.ServerValue.TIMESTAMP,status:'Pending'}).then(()=>{
+    alert('Complaint submitted! We will contact you within 2hrs 🙏');
+    closeModal('complaint-modal');
+    document.getElementById('comp-name').value='';document.getElementById('comp-phone').value='';document.getElementById('comp-ref').value='';document.getElementById('comp-type').value='';document.getElementById('comp-msg').value='';
+  });
+}
+function renderAdvertBanner(list){
+  const track=document.getElementById('advert-track');
+  if(!track) return;
+  const inStock=list.filter(p=>Number(p.qty)>0);
+  if(inStock.length===0){track.innerHTML='<div class="advert-item">⚠️ No products in stock now - Check back soon!</div>';return;}
+  let html='';
+  inStock.forEach(p=>{
+    const img=p.image||'IMG-20260726-WA8808.jpg';
+    html+=`<div class="advert-item"><img src="${img}" alt=""><span>${p.name}</span><span style="background:#ffeb3b;color:#000;padding:2px 8px;border-radius:10px">₦${Number(p.price).toLocaleString()}</span><span style="background:#fff;color:#2e7d32;padding:2px 8px;border-radius:10px">${p.qty} left</span></div>`;
+  });
+  // Duplicate for seamless loop
+  track.innerHTML=html+html;
+}
+// Separate listener for advert so we don't change old listenToProducts()
+db.ref('inventory').on('value',snap=>{
+  let list=[];
+  if(snap.exists()){snap.forEach(ch=>{const it=ch.val();list.push(it);});}
+  renderAdvertBanner(list);
+});
 </script>
 </body>
 </html>
