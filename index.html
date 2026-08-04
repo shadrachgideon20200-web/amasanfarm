@@ -38,7 +38,7 @@ body.light-mode navbar{background:rgba(255, 255, 255, 0.85);}
 .cat-pill{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:20px;font-size:.85rem;font-weight:600;cursor:pointer;white-space:nowrap}
 .cat-pill.active{background:var(--primary-light);color:#fff}
 .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
-.product-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;transition:transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;width:100%}
+.product-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;transition:transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;width:100%;position:relative}
 .product-card:hover{transform:translateY(-6px)!important;box-shadow:0 12px 24px rgba(76,175,80,.25)!important;border-color:var(--primary-light)!important}
 .product-title{font-weight:600;margin-bottom:8px}
 .product-price{font-size:clamp(1.1rem, 2vw, 1.35rem);font-weight:700;color:var(--primary-light);margin-bottom:12px}
@@ -48,8 +48,10 @@ body.light-mode navbar{background:rgba(255, 255, 255, 0.85);}
 .low-stock{background:rgba(255,152,0,.15);color:var(--accent)}
 .btn{width:100%;padding:10px;border:none;border-radius:8px;background:linear-gradient(135deg, var(--primary-light), var(--primary));color:#fff;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:filter 0.2s ease}
 .btn:hover{filter:brightness(1.1)}
-.product-img-wrap{width:100%;height:150px;overflow:hidden;border-radius:10px;margin-bottom:12px;background:var(--bg-hover);display:flex;align-items:center;justify-content:center}
+.product-img-wrap{width:100%;height:150px;overflow:hidden;border-radius:10px;margin-bottom:12px;background:var(--bg-hover);display:flex;align-items:center;justify-content:center;position:relative}
 .product-img-wrap img{width:100%;height:100%;object-fit:cover}
+.wishlist-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;z-index:2;transition:background 0.2s}
+.wishlist-btn.active{color:var(--danger);background:rgba(255,255,255,0.9)}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.6s ease, transform 0.6s ease}
 .reveal.active{opacity:1;transform:translateY(0)}
 .btn-sec{background:var(--bg-hover);border:1px solid var(--border);color:var(--text)}
@@ -62,6 +64,9 @@ body.light-mode navbar{background:rgba(255, 255, 255, 0.85);}
 .form-group label{font-size:.8rem;color:var(--text-muted);text-transform:uppercase}
 .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)}
 .form-row{display:flex;gap:10px}
+/* FLOATING WIDGETS */
+.floating-whatsapp-btn{position:fixed;bottom:24px;left:24px;width:56px;height:56px;border-radius:50%;background:var(--whatsapp);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,0.3);text-decoration:none;transition:transform 0.2s}
+.floating-whatsapp-btn:hover{transform:scale(1.08)}
 .chat-widget-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--primary-light);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
 .chatbot-widget-btn{position:fixed;bottom:90px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
 .chat-box-popup{position:fixed;bottom:90px;right:24px;width:380px;max-width:92vw;height:500px;background:rgba(30,30,30,0.95);backdrop-filter: blur(14px);-webkit-backdrop-filter: blur(14px);border:1px solid var(--border);border-radius:16px;display:none;flex-direction:column;z-index:100;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.4)}
@@ -73,6 +78,20 @@ body.light-mode navbar{background:rgba(255, 255, 255, 0.85);}
 .chat-box-footer{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--bg-card)}
 .chat-box-footer input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)}
 .bank-details-box{background:#fff8e1;border:1.5px solid #ffb300;border-radius:10px;padding:14px;margin:12px 0;color:#222}
+/* TIMELINE TRACKING */
+.tracking-timeline{display:flex;flex-direction:column;gap:16px;margin:16px 0;position:relative;padding-left:12px}
+.tracking-step{display:flex;align-items:flex-start;gap:12px;position:relative}
+.tracking-step::before{content:'';position:absolute;left:11px;top:24px;width:2px;height:calc(100% + 12px);background:var(--border)}
+.tracking-step:last-child::before{display:none}
+.step-dot{width:24px;height:24px;border-radius:50%;background:var(--bg-hover);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;z-index:2;flex-shrink:0}
+.tracking-step.completed .step-dot{background:var(--primary-light);border-color:var(--primary-light);color:#fff}
+.step-info h4{font-size:.9rem;font-weight:700}
+.step-info p{font-size:.75rem;color:var(--text-muted)}
+/* REVIEWS & STAR STYLES */
+.star-rating{color:#ffb300;font-size:.85rem;cursor:pointer;margin-bottom:6px}
+.star-rating i{margin-right:2px}
+.review-card{background:var(--bg-dark);border:1px solid var(--border);padding:10px;border-radius:8px;margin-bottom:8px;font-size:.85rem}
+.verified-badge{background:rgba(76,175,80,.2);color:var(--primary-light);font-size:.7rem;padding:2px 6px;border-radius:4px;font-weight:700;display:inline-block;margin-left:6px}
 footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px;text-align:center;font-size:.85rem;color:var(--text-muted);margin-top:40px}
 .premium-receipt-wrap{background:#fffdf5;color:#222;width:100%;max-width:780px;margin:auto;border:3px double #c9a86a;box-shadow:0 0 0 6px #fffdf5, 0 0 0 9px #c9a86a;font-family:'Merriweather',serif;position:relative}
 .premium-inner{border:1px solid #c9a86a;margin:8px;padding:20px 25px}
@@ -97,7 +116,7 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 .advert-item{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:7px 16px;border-radius:24px;font-weight:700;font-size:.85rem;white-space:nowrap;backdrop-filter:blur(4px)}
 .advert-item img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #fff;background:#fff}
 @keyframes scrollAdvert{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.advert-banner:hover.advert-track{animation-play-state:paused}
+.advert-banner:hover .advert-track{animation-play-state:paused}
 </style>
 </head>
 <body>
@@ -107,6 +126,8 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <a class="nav-btn" href="tel:08088375509"><i class="fas fa-phone"></i> Call</a>
 <button class="nav-btn" onclick="openAboutModal()"><i class="fas fa-seedling"></i> About</button>
 <button class="nav-btn" onclick="openTrackModal()"><i class="fas fa-truck"></i> Track</button>
+<button class="nav-btn" onclick="openWishlistModal()"><i class="fas fa-heart" style="color:var(--danger)"></i> Wishlist <span class="cart-badge" id="wishlist-count">0</span></button>
+<button class="nav-btn" onclick="openFaqModal()"><i class="fas fa-question-circle"></i> FAQ</button>
 <button class="nav-btn" onclick="openFeedbackModal()"><i class="fas fa-comment-dots"></i> Feedback</button>
 <button class="nav-btn" style="background:#d32f2f;color:#fff;border-color:#d32f2f" onclick="openComplaintModal()"><i class="fas fa-exclamation-triangle"></i> Complaint</button>
 <a class="nav-btn" href="https://wa.me/2348088375509" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
@@ -114,17 +135,30 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <button class="nav-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
 <button class="nav-btn" onclick="openCartModal()"><i class="fas fa-shopping-basket"></i> Cart <span class="cart-badge" id="cart-count">0</span></button>
 </div></navbar>
-<div class="hero"><div class="greeting-text" id="time-greeting">Welcome</div><h1>Quality Agricultural Supplies</h1></div>
+<div class="hero"><div class="greeting-text" id="time-greeting">Welcome</div><h1 id="hero-title">Quality Agricultural Supplies</h1></div>
 <div class="advert-banner" id="advert-banner"><div class="advert-track" id="advert-track"><div class="advert-item">🌾 Loading Available Products at Amasan Farm...</div></div></div>
-<div class="container"><div class="stock-banner"><div><strong>Live Stock:</strong> <span id="live-stock-count">0 items</span></div></div>
+<div class="container"><div class="stock-banner"><div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+<div><strong>Live Stock:</strong> <span id="live-stock-count">0 items</span></div>
+<div>
+<label for="lang-select" style="font-size:0.8rem; margin-right:6px; font-weight:bold;" id="lang-label">Language:</label>
+<select id="lang-select" onchange="changeLanguage(this.value)" style="padding:4px 8px; border-radius:6px; border:1px solid var(--border); background:var(--bg-dark); color:var(--text); font-size:0.85rem;">
+<option value="en">English</option>
+<option value="ha">Hausa</option>
+</select>
+</div>
+</div></div>
 <div class="filter-bar"><div class="search-box"><i class="fas fa-search"></i><input id="search-input" placeholder="Search products..." oninput="renderFilteredProducts()"></div>
 <div class="categories-wrapper"><button class="cat-pill active" onclick="filterCategory('All',this)">All</button><button class="cat-pill" onclick="filterCategory('Feeds',this)">Feeds</button><button class="cat-pill" onclick="filterCategory('Fertilizer',this)">Fertilizer</button><button class="cat-pill" onclick="filterCategory('Produce',this)">Produce</button><button class="cat-pill" onclick="filterCategory('Equipment',this)">Equipment</button></div></div>
 <div class="products-grid" id="products-grid"></div></div>
+<!-- MODALS -->
 <div class="modal-overlay" id="about-modal"><div class="modal-card" style="text-align:center"><h3 style="display:flex;justify-content:space-between"><span>About Amasan Farm</span><button onclick="closeModal('about-modal')" class="qty-btn">✕</button></h3><p style="text-align:left;line-height:1.6;margin-top:10px">Located in Wukari, Taraba State, led by CEO <b>Gideon Shadrach</b>.</p><button class="btn btn-sec" style="margin-top:15px" onclick="closeModal('about-modal')">Close</button></div></div>
+<div class="modal-overlay" id="wishlist-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between"><span><i class="fas fa-heart" style="color:var(--danger)"></i> My Wishlist</span><button onclick="closeModal('wishlist-modal')" class="qty-btn">✕</button></h3><div id="wishlist-items-container" style="margin-top:14px;display:flex;flex-direction:column;gap:10px"></div><button class="btn btn-sec" style="margin-top:15px" onclick="closeModal('wishlist-modal')">Close</button></div></div>
+<div class="modal-overlay" id="faq-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between"><span><i class="fas fa-question-circle"></i> FAQ & Knowledge Base</span><button onclick="closeModal('faq-modal')" class="qty-btn">✕</button></h3><div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;font-size:0.9rem;line-height:1.5;"><div style="background:var(--bg-dark);padding:10px;border-radius:8px;border:1px solid var(--border)"><b>Q: How do I pick up or get delivery?</b><p style="color:var(--text-muted);font-size:0.82rem;margin-top:4px">We offer direct delivery within Wukari and environs. You can also pick up directly from our farm location.</p></div><div style="background:var(--bg-dark);padding:10px;border-radius:8px;border:1px solid var(--border)"><b>Q: What are the payment options?</b><p style="color:var(--text-muted);font-size:0.82rem;margin-top:4px">We accept direct bank transfers via OPay or Zenith Bank as detailed during checkout.</p></div><div style="background:var(--bg-dark);padding:10px;border-radius:8px;border:1px solid var(--border)"><b>Q: How do I handle livestock/produce?</b><p style="color:var(--text-muted);font-size:0.82rem;margin-top:4px">Keep feeds in a cool, dry place. For livestock and fresh produce, contact us directly for specific handling instructions.</p></div></div><button class="btn btn-sec" style="margin-top:15px" onclick="closeModal('faq-modal')">Close</button></div></div>
+<div class="modal-overlay" id="reviews-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between"><span id="review-modal-title">Product Reviews</span><button onclick="closeModal('reviews-modal')" class="qty-btn">✕</button></h3><div id="reviews-list" style="margin:14px 0;max-height:220px;overflow-y:auto"></div><hr style="border-color:var(--border);margin:12px 0"><h4 style="font-size:.9rem;margin-bottom:8px">Leave a Review</h4><form onsubmit="event.preventDefault();submitProductReview();"><input type="hidden" id="review-prod-id"><div class="form-group"><label>Your Name</label><input id="rev-name" required></div><div class="form-group"><label>Rating (1 to 5 Stars)</label><select id="rev-stars" required><option value="5">⭐⭐⭐⭐⭐ (5/5)</option><option value="4">⭐⭐⭐⭐ (4/5)</option><option value="3">⭐⭐⭐ (3/5)</option><option value="2">⭐⭐ (2/5)</option><option value="1">⭐ (1/5)</option></select></div><div class="form-group"><label>Review Comment</label><textarea id="rev-msg" rows="3" required></textarea></div><button class="btn">Submit Review</button></form></div></div>
 <div class="modal-overlay" id="cart-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between">Checkout <button onclick="closeModal('cart-modal')" class="qty-btn">✕</button></h3><div id="cart-items-container" style="margin-top:12px"></div><div id="cart-subtotal" style="margin-top:10px"></div><div id="cart-total-price" style="font-weight:700;color:var(--primary-light);margin:10px 0"></div>
 <div class="bank-details-box"><div style="font-weight:800;color:#0a3d1a;margin-bottom:8px"><i class="fas fa-university"></i> PAY VIA BANK TRANSFER</div><div style="font-size:.9rem;line-height:1.7"><div style="display:flex;justify-content:space-between;border-bottom:1px dashed #ddd;padding:6px 0"><span><b>OPay</b> - Gideon Shadrach</span><span style="font-weight:800;color:#2e7d32;font-size:1.1rem">8104817797</span></div><div style="display:flex;justify-content:space-between;padding:6px 0"><span><b>Zenith Bank</b> - Gideon Shadrach</span><span style="font-weight:800;color:#2e7d32;font-size:1.1rem">2260717656</span></div></div><div style="font-size:.75rem;color:#8c6a2f;margin-top:8px;background:#fff;padding:6px;border-radius:6px">⚠️ After payment, keep receipt & click Place Order.</div></div>
-<form onsubmit="event.preventDefault();submitOrder();"><div class="form-group"><label>Full Name</label><input id="cust-name" required></div><div class="form-row"><div class="form-group" style="flex:1"><label>State</label><select id="cust-state" required><option value="">Loading States...</option></select></div><div class="form-group" style="flex:1"><label>LGA</label><select id="cust-lga" required><option value="">Select State First</option></select></div></div><div class="form-group"><label>Address</label><input id="cust-address" required><button type="button" class="btn btn-sec" style="margin-top:6px;font-size:.8rem" onclick="detectLocation()">Get GPS</button><input type="hidden" id="cust-gps"></div><button class="btn" style="margin-top:12px">Place Order</button></form></div></div>
-<div class="modal-overlay" id="receipt-modal" style="overflow-y:auto;padding:20px"><div class="modal-card" style="max-width:820px;width:100%;padding:0;background:transparent;border:none;max-height:95vh;overflow-y:auto"><div class="premium-receipt-wrap" id="premiumReceipt"><div class="premium-inner"><div style="text-align:center"><div class="p-logo-wrap"><img src="IMG-20260726-WA8808.jpg"></div></div><div class="p-title">AMASAN FARM WUKARI</div><div class="p-contact">Wukari, Taraba • 08088375509 • Amasanfarm@gmail.com</div><div class="p-banner">OFFICIAL RECEIPT</div><div class="p-fields"><div>Date: <span id="pDate"></span></div><div>Receipt No: <span id="pNo"></span></div></div><div class="p-fields" style="flex-direction:column"><div>Customer Name: <span id="pCustName"></span></div><div>Customer Address: <span id="pCustAddr"></span></div></div><div style="margin-top:12px"><div class="p-table-header">ITEMIZED DETAILS</div><table class="p-table"><thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody id="pItems"></tbody></table><div class="p-total-box"><div><span>Subtotal:</span><span id="pSub"></span></div><div><span>Delivery:</span><span>1,500</span></div><div class="gold"><span>Total:</span><span id="pTotal"></span></div></div></div><div class="p-pay-row">Payment Method: Bank Transfer - <b style="color:green">PAID & CONFIRMED</b> ✓ by Gideon Shadrach<br>OPay 8104817797 | Zenith 2260717656</div><div style="display:flex;justify-content:space-between;margin-top:25px;flex-wrap:wrap;gap:15px"><div style="position:relative;width:240px"><div style="font-weight:700">Official Stamp:</div><div style="border:1.5px dashed #8c6a2f;width:220px;height:90px;margin-top:5px"></div><div style="position:absolute;top:15px;left:15px;width:115px;height:115px;border:3px solid #b89b4a;border-radius:50%;background:rgba(255,253,245,0.95);display:flex;align-items:center;justify-content:center;transform:rotate(-14deg)"><div style="width:96px;height:96px;border:1px solid #b89b4a;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center"><div style="font-size:22px;font-weight:900;color:#9c7a2a">PAID</div><div style="font-size:7px;font-weight:800;color:#7a5a1f">AMASAN FARM<br>WUKARI</div><div style="width:60px;height:1px;background:#b89b4a;margin:3px 0"></div><div style="font-size:7px" id="stampDate"></div></div></div></div><div style="text-align:center;width:220px"><div style="font-weight:700">Authorized Signature:</div><div style="font-family:cursive;font-size:22px;margin-top:20px">G. Shadrach</div><div style="border-top:1px solid #000;margin-top:5px;font-size:10px">Gideon Shadrach - CEO<br>Date: <span id="sigDate"></span></div></div></div><div class="p-footer">— Thank you for your business —</div></div></div>
+<form onsubmit="event.preventDefault();submitOrder();"><div class="form-group"><label>Full Name</label><input id="cust-name" required></div><div class="form-row"><div class="form-group" style="flex:1"><label>State</label><select id="cust-state" required><option value="">Loading States...</option></select></div><div class="form-group" style="flex:1"><label>LGA</label><select id="cust-lga" required><option value="">Select State First</option></select></div></div><div class="form-group"><label>Address</label><input id="cust-address" required><button type="button" class="btn btn-sec" style="margin-top:6px;font-size:.8rem" onclick="detectLocation()">Get GPS</button><input type="hidden" id="cust-gps"></div><div class="form-row"><div class="form-group" style="flex:1"><label>Delivery Date</label><input type="date" id="cust-delivery-date" required></div><div class="form-group" style="flex:1"><label>Time Slot</label><select id="cust-delivery-slot" required><option value="Morning">Morning (8am - 12pm)</option><option value="Afternoon">Afternoon (12pm - 4pm)</option><option value="Evening">Evening (4pm - 7pm)</option></select></div></div><button class="btn" style="margin-top:12px">Place Order</button></form></div></div>
+<div class="modal-overlay" id="receipt-modal" style="overflow-y:auto;padding:20px"><div class="modal-card" style="max-width:820px;width:100%;padding:0;background:transparent;border:none;max-height:95vh;overflow-y:auto"><div class="premium-receipt-wrap" id="premiumReceipt"><div class="premium-inner"><div style="text-align:center"><div class="p-logo-wrap"><img src="IMG-20260726-WA8808.jpg"></div></div><div class="p-title">AMASAN FARM WUKARI</div><div class="p-contact">Wukari, Taraba • 08088375509 • Amasanfarm@gmail.com</div><div class="p-banner">OFFICIAL RECEIPT</div><div class="p-fields"><div>Date: <span id="pDate"></span></div><div>Receipt No: <span id="pNo"></span></div></div><div class="p-fields" style="flex-direction:column"><div>Customer Name: <span id="pCustName"></span></div><div>Customer Address: <span id="pCustAddr"></span></div><div>Scheduled Delivery: <span id="pDeliverySlot"></span></div></div><div style="margin-top:12px"><div class="p-table-header">ITEMIZED DETAILS</div><table class="p-table"><thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody id="pItems"></tbody></table><div class="p-total-box"><div><span>Subtotal:</span><span id="pSub"></span></div><div><span>Delivery:</span><span>1,500</span></div><div class="gold"><span>Total:</span><span id="pTotal"></span></div></div></div><div class="p-pay-row">Payment Method: Bank Transfer - <b style="color:green">PAID & CONFIRMED</b> ✓ by Gideon Shadrach<br>OPay 8104817797 | Zenith 2260717656</div><div style="display:flex;justify-content:space-between;margin-top:25px;flex-wrap:wrap;gap:15px"><div style="position:relative;width:240px"><div style="font-weight:700">Official Stamp:</div><div style="border:1.5px dashed #8c6a2f;width:220px;height:90px;margin-top:5px"></div><div style="position:absolute;top:15px;left:15px;width:115px;height:115px;border:3px solid #b89b4a;border-radius:50%;background:rgba(255,253,245,0.95);display:flex;align-items:center;justify-content:center;transform:rotate(-14deg)"><div style="width:96px;height:96px;border:1px solid #b89b4a;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center"><div style="font-size:22px;font-weight:900;color:#9c7a2a">PAID</div><div style="font-size:7px;font-weight:800;color:#7a5a1f">AMASAN FARM<br>WUKARI</div><div style="width:60px;height:1px;background:#b89b4a;margin:3px 0"></div><div style="font-size:7px" id="stampDate"></div></div></div></div><div style="text-align:center;width:220px"><div style="font-weight:700">Authorized Signature:</div><div style="font-family:cursive;font-size:22px;margin-top:20px">G. Shadrach</div><div style="border-top:1px solid #000;margin-top:5px;font-size:10px">Gideon Shadrach - CEO<br>Date: <span id="sigDate"></span></div></div></div><div class="p-footer">— Thank you for your business —</div></div></div>
 <div style="background:white;padding:12px;display:flex;gap:8px;justify-content:center;margin-top:10px;border-radius:8px">
     <button class="btn btn-wa" style="width:auto" onclick="sendReceiptPDFToWhatsApp()">Download PDF & WhatsApp</button>
     <button class="btn btn-sec" style="width:auto; color: #222;" onclick="closeModal('receipt-modal')">Close</button>
@@ -133,6 +167,8 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <div class="modal-overlay" id="track-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between">Track Order <button onclick="closeModal('track-modal')" class="qty-btn">✕</button></h3><input id="track-ref-input" placeholder="Enter 6-digit ref" style="width:100%;padding:10px;margin:10px 0;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)"><button class="btn" onclick="checkOrderStatus()">Track</button><div id="track-result" style="display:none;margin-top:16px"><div id="track-info-body"></div></div></div></div>
 <div class="modal-overlay" id="feedback-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between">Feedback <button onclick="closeModal('feedback-modal')" class="qty-btn">✕</button></h3><form onsubmit="event.preventDefault();submitFeedback();"><input id="fb-name" placeholder="Name" required style="width:100%;padding:10px;margin-bottom:8px;background:var(--bg-dark);color:var(--text);border:1px solid var(--border);border-radius:6px;"><input id="fb-contact" placeholder="Contact" required style="width:100%;padding:10px;margin-bottom:8px;background:var(--bg-dark);color:var(--text);border:1px solid var(--border);border-radius:6px;"><textarea id="fb-msg" rows="4" placeholder="Your message..." required style="width:100%;padding:10px;background:var(--bg-dark);color:var(--text);border:1px solid var(--border);border-radius:6px;"></textarea><button class="btn" style="margin-top:8px">Submit</button></form></div></div>
 <div class="modal-overlay" id="complaint-modal"><div class="modal-card"><h3 style="display:flex;justify-content:space-between"><span><i class="fas fa-exclamation-triangle" style="color:#f44336"></i> Complaint Box</span><button onclick="closeModal('complaint-modal')" class="qty-btn">✕</button></h3><p style="font-size:.85rem;color:var(--text-muted);margin:10px 0">Not satisfied? Tell us, we will fix it fast.</p><form onsubmit="event.preventDefault();submitComplaint();"><div class="form-group"><label>Your Name</label><input id="comp-name" placeholder="Full Name" required></div><div class="form-group"><label>Phone / WhatsApp</label><input id="comp-phone" placeholder="080..." required></div><div class="form-group"><label>Order Ref (Optional)</label><input id="comp-ref" placeholder="e.g 123456"></div><div class="form-group"><label>Complaint Type</label><select id="comp-type" required><option value="">Select Type</option><option>Wrong Product</option><option>Damaged Product</option><option>Late Delivery</option><option>Payment Issue</option><option>Bad Quality</option><option>Other</option></select></div><div class="form-group"><label>Describe Your Complaint</label><textarea id="comp-msg" rows="4" placeholder="Write your complaint in detail..." required></textarea></div><button class="btn" style="background:#d32f2f"><i class="fas fa-paper-plane"></i> Submit Complaint</button></form><div style="font-size:.75rem;color:var(--text-muted);margin-top:10px;text-align:center">We reply within 2hrs via WhatsApp/Call: 08088375509</div></div></div>
+<!-- FLOATING WIDGETS -->
+<a href="https://wa.me/2348088375509?text=Hello%20Amasan%20Farm,%20I%20have%20an%20inquiry." target="_blank" class="floating-whatsapp-btn" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
 <div class="chatbot-widget-btn" onclick="toggleBotBox()"><i class="fas fa-robot"></i></div>
 <div class="chat-box-popup" id="bot-box-popup"><div class="chat-box-header"><span>AI Assistant</span><button onclick="toggleBotBox()" class="qty-btn">✕</button></div><div class="chat-box-body" id="bot-chat-body"><div class="chat-msg bot">Hello 👋 Welcome to Amasan Farm! How can I help you today?</div></div><div class="chat-box-footer"><input id="bot-msg-input" placeholder="Ask..." onkeypress="if(event.key==='Enter')sendBotMessage()"><button class="btn" style="width:auto" onclick="sendBotMessage()">Send</button></div></div>
 <div class="chat-widget-btn" onclick="toggleChatBox()"><i class="fas fa-headset"></i></div>
@@ -217,6 +253,120 @@ function loadCartFromStorage(){
     if(saved){ cart = JSON.parse(saved) || []; }
   }catch(e){ cart = []; }
 }
+// === WISHLIST SYSTEM STORAGE & FUNCTIONS ===
+let wishlist = [];
+function loadWishlistFromStorage(){
+  try{
+    const saved = localStorage.getItem('amasan_wishlist');
+    if(saved){ wishlist = JSON.parse(saved) || []; }
+  }catch(e){ wishlist = []; }
+}
+function saveWishlistToStorage(){
+  localStorage.setItem('amasan_wishlist', JSON.stringify(wishlist));
+  const badge = document.getElementById('wishlist-count');
+  if(badge) badge.innerText = wishlist.length;
+}
+function toggleWishlist(id, name, price, image){
+  const idx = wishlist.findIndex(i => i.id === id);
+  if(idx > -1){
+    wishlist.splice(idx, 1);
+  } else {
+    wishlist.push({id, name, price, image});
+  }
+  saveWishlistToStorage();
+  renderFilteredProducts();
+}
+function openWishlistModal(){
+  const container = document.getElementById('wishlist-items-container');
+  container.innerHTML = '';
+  if(wishlist.length === 0){
+    container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px">Your wishlist is empty.</div>';
+  } else {
+    wishlist.forEach(item => {
+      container.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg-dark);padding:10px;border-radius:8px;border:1px solid var(--border)">
+        <div><b>${item.name}</b><br><span style="color:var(--primary-light)">₦${Number(item.price).toLocaleString()}</span></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn" style="padding:6px 10px;font-size:.8rem" onclick="addToCart('${item.id}','${item.name}',${item.price});closeModal('wishlist-modal');openCartModal()">Buy</button>
+          <button class="qty-btn" onclick="toggleWishlist('${item.id}');openWishlistModal()">✕</button>
+        </div>
+      </div>`;
+    });
+  }
+  document.getElementById('wishlist-modal').style.display = 'flex';
+  saveIndexState('wishlist-modal');
+}
+// === MULTILINGUAL SUPPORT DICTIONARY ===
+let currentLang = localStorage.getItem('amasan_lang') || 'en';
+const translations = {
+  en: {
+    heroTitle: "Quality Agricultural Supplies",
+    searchPlaceholder: "Search products...",
+    liveStockLabel: "Live Stock:",
+    langLabel: "Language:",
+    addToCart: "Add to Cart",
+    outOfStock: "Out of Stock"
+  },
+  ha: {
+    heroTitle: "Kayan Aikin Noma Masu Inganci",
+    searchPlaceholder: "Nemi kayayyaki...",
+    liveStockLabel: "Kayan da ke akwai:",
+    langLabel: "Harshe:",
+    addToCart: "Saka a Kwando",
+    outOfStock: "Babu a Store"
+  }
+};
+function changeLanguage(lang){
+  currentLang = lang;
+  localStorage.setItem('amasan_lang', lang);
+  document.getElementById('search-input').placeholder = translations[lang].searchPlaceholder;
+  document.getElementById('hero-title').innerText = translations[lang].heroTitle;
+  document.getElementById('lang-label').innerText = translations[lang].langLabel;
+  renderFilteredProducts();
+}
+// === PRODUCT REVIEWS SYSTEM ===
+let allReviews = {};
+function listenToReviews(){
+  db.ref('reviews').on('value', snap => {
+    allReviews = snap.exists() ? snap.val() : {};
+    renderFilteredProducts();
+  });
+}
+function openReviewsModal(productId, productName){
+  document.getElementById('review-prod-id').value = productId;
+  document.getElementById('review-modal-title').innerText = `Reviews: ${productName}`;
+  const listContainer = document.getElementById('reviews-list');
+  listContainer.innerHTML = '';
+  const prodReviews = allReviews[productId] || {};
+  const keys = Object.keys(prodReviews);
+  if(keys.length === 0){
+    listContainer.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:10px">No reviews yet. Be the first to review!</div>';
+  } else {
+    keys.forEach(k => {
+      const r = prodReviews[k];
+      const stars = '⭐'.repeat(Number(r.rating || 5));
+      listContainer.innerHTML += `<div class="review-card">
+        <div style="display:flex;justify-content:space-between"><b>${r.name}</b> <span class="verified-badge">Verified Buyer</span></div>
+        <div class="star-rating">${stars}</div>
+        <p style="color:var(--text);margin-top:4px">${r.msg}</p>
+      </div>`;
+    });
+  }
+  document.getElementById('reviews-modal').style.display = 'flex';
+  saveIndexState('reviews-modal');
+}
+function submitProductReview(){
+  const prodId = document.getElementById('review-prod-id').value;
+  const name = document.getElementById('rev-name').value.trim();
+  const rating = document.getElementById('rev-stars').value;
+  const msg = document.getElementById('rev-msg').value.trim();
+  if(!name || !msg) return alert('Please fill all fields');
+  db.ref(`reviews/${prodId}`).push({name, rating, msg, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
+    alert('Review submitted successfully! ⭐');
+    document.getElementById('rev-name').value='';
+    document.getElementById('rev-msg').value='';
+    closeModal('reviews-modal');
+  });
+}
 function restoreIndexState(){
   const saved=localStorage.getItem('amasan_index_modal');
   if(saved&&document.getElementById(saved)){
@@ -227,6 +377,7 @@ function restoreIndexState(){
 }
 window.addEventListener('scroll',()=>{localStorage.setItem('amasan_index_scroll',window.scrollY);});
 function openAboutModal(){document.getElementById('about-modal').style.display='flex';saveIndexState('about-modal');}
+function openFaqModal(){document.getElementById('faq-modal').style.display='flex';saveIndexState('faq-modal');}
 function openFeedbackModal(){document.getElementById('feedback-modal').style.display='flex';saveIndexState('feedback-modal');}
 function openTrackModal(){document.getElementById('track-modal').style.display='flex';saveIndexState('track-modal');}
 function openCartModal(){document.getElementById('cart-modal').style.display='flex';saveIndexState('cart-modal');}
@@ -253,10 +404,15 @@ let allProducts=[],cart=[],activeCategory='All';
 let lastOrderData=null;
 window.addEventListener('DOMContentLoaded',()=>{
     loadCartFromStorage();
+    loadWishlistFromStorage();
+    saveWishlistToStorage();
     populateStates();
     document.getElementById('cust-state').addEventListener('change',()=>loadLGAOptions(false));
+    document.getElementById('lang-select').value = currentLang;
+    changeLanguage(currentLang);
     setGreeting();
     listenToProducts();
+    listenToReviews();
     listenToCustomerChat();
     initScrollObserver();
     if(localStorage.getItem('amasan_theme')==='light')document.body.classList.add('light-mode');
@@ -300,9 +456,34 @@ function renderFilteredProducts(){
         header.innerHTML=`<h3 style="text-transform:uppercase;letter-spacing:1.5px;color:var(--primary-light);font-size:1.15rem;border-left:4px solid var(--primary-light);padding-left:10px">${catName}</h3><div style="flex:1;height:1px;background:var(--border)"></div><span style="background:var(--bg-hover);border:1px solid var(--border);padding:2px 10px;border-radius:12px;font-size:.75rem">${groups[catName].length} items</span>`;
         cont.appendChild(header);
         groups[catName].forEach(item=>{
-            const qtyNum=Number(item.qty);const isOut=qtyNum<=0;const isLow=!isOut&&qtyNum<=5;let tagClass='in-stock',tagText='In Stock '+qtyNum;if(isOut){tagClass='out-stock';tagText='Out of Stock';}else if(isLow){tagClass='low-stock';tagText='🔥 Selling Fast ('+qtyNum+' left);'}
+            const qtyNum=Number(item.qty);const isOut=qtyNum<=0;const isLow=!isOut&&qtyNum<=5;let tagClass='in-stock',tagText='In Stock '+qtyNum;if(isOut){tagClass='out-stock';tagText=translations[currentLang].outOfStock;}else if(isLow){tagClass='low-stock';tagText='🔥 Selling Fast ('+qtyNum+' left);'}
             const card=document.createElement('div');card.className='product-card reveal';const imgSrc=item.image||'IMG-20260726-WA8808.jpg';
-            card.innerHTML=`<div><div class="product-img-wrap"><img src="${imgSrc}" alt="${item.name}" loading="lazy"></div><div style="font-size:.70rem;color:var(--accent);font-weight:800;text-transform:uppercase">${item.category||catName}</div><div class="product-title">${item.name}</div><div class="product-price">₦ ${Number(item.price).toLocaleString()}</div><span class="stock-tag ${tagClass}">${tagText}</span></div><button class="btn" ${isOut?'disabled':''} onclick="addToCart('${item.key}','${item.name}',${item.price})">Add to Cart</button>`;
+            const isWishlisted = wishlist.some(w => w.id === item.key);
+            
+            // Calculate Average Rating
+            const prodReviews = allReviews[item.key] || {};
+            const revKeys = Object.keys(prodReviews);
+            let avgRating = 5;
+            if(revKeys.length > 0){
+              let sum = revKeys.reduce((acc, k) => acc + Number(prodReviews[k].rating || 5), 0);
+              avgRating = (sum / revKeys.length).toFixed(1);
+            }
+            
+            // Live Product Availability Counter Badge String
+            const stockCounterHtml = qtyNum > 0 && qtyNum <= 3 ? `<div style="font-size:0.72rem;color:var(--danger);font-weight:bold;margin-bottom:4px;">⚠️ Only ${qtyNum} left in stock!</div>` : '';
+
+            card.innerHTML=`<div>
+              <div class="product-img-wrap">
+                <button class="wishlist-btn ${isWishlisted?'active':''}" onclick="toggleWishlist('${item.key}','${item.name}',${item.price},'${imgSrc}')"><i class="fas fa-heart"></i></button>
+                <img src="${imgSrc}" alt="${item.name}" loading="lazy">
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:.70rem;color:var(--accent);font-weight:800;text-transform:uppercase">${item.category||catName}</div><div style="font-size:.75rem;cursor:pointer;color:#ffb300" onclick="openReviewsModal('${item.key}','${item.name}')">⭐ ${avgRating} (${revKeys.length})</div></div>
+              <div class="product-title">${item.name}</div>
+              <div class="product-price">₦ ${Number(item.price).toLocaleString()}</div>
+              ${stockCounterHtml}
+              <span class="stock-tag ${tagClass}">${tagText}</span>
+            </div>
+            <button class="btn" ${isOut?'disabled':''} onclick="addToCart('${item.key}','${item.name}',${item.price})">${translations[currentLang].addToCart}</button>`;
             cont.appendChild(card);
         });
     });
@@ -338,12 +519,14 @@ function updateCartUI(){
 function submitOrder(){
     if(cart.length===0)return alert('Empty');
     const name=document.getElementById('cust-name').value,state=document.getElementById('cust-state').value,lga=document.getElementById('cust-lga').value,addr=document.getElementById('cust-address').value,gps=document.getElementById('cust-gps').value||'';
+    const deliveryDate = document.getElementById('cust-delivery-date').value;
+    const deliverySlot = document.getElementById('cust-delivery-slot').value;
     if(!state||!lga) return alert('Please select State and LGA');
+    if(!deliveryDate) return alert('Please select a scheduled delivery date');
     const ref=Math.floor(100000+Math.random()*900000);currentOrderRef=ref.toString();
     const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0),total=subtotal+1500,itemsText=cart.map(i=>`${i.name} x${i.qty}`).join(', ');
-    lastOrderData = { ref, name, state, lga, address: addr, total, itemsText };
-
-    // Deduct stock quantities from inventory upon order placement
+    const deliveryInfo = `${deliveryDate} (${deliverySlot})`;
+    lastOrderData = { ref, name, state, lga, address: addr, total, itemsText, deliveryInfo };
     cart.forEach(cartItem => {
         const productRef = db.ref(`inventory/${cartItem.id}`);
         productRef.once('value', snap => {
@@ -354,10 +537,10 @@ function submitOrder(){
             }
         });
     });
-
-    db.ref(`orders/${ref}`).set({ref,customer:name,state,lga,address:addr,gps,fullAddress:`${addr}, ${lga}, ${state}`,items:itemsText,total,status:'Pending',timestamp:firebase.database.ServerValue.TIMESTAMP}).then(()=>{
+    db.ref(`orders/${ref}`).set({ref,customer:name,state,lga,address:addr,gps,fullAddress:`${addr}, ${lga}, ${state}`,items:itemsText,total,deliveryInfo,status:'Pending',timestamp:firebase.database.ServerValue.TIMESTAMP}).then(()=>{
         const now=new Date(),dateStr=now.toLocaleDateString('en-GB');
         document.getElementById('receipt-ref').innerText='#'+ref;document.getElementById('pNo').innerText='AFW-'+ref;document.getElementById('pDate').innerText=dateStr;document.getElementById('stampDate').innerText=dateStr;document.getElementById('sigDate').innerText=dateStr;document.getElementById('pCustName').innerText=name;document.getElementById('pCustAddr').innerText=addr+', '+lga+', '+state;
+        document.getElementById('pDeliverySlot').innerText=deliveryInfo;
         const tbody=document.getElementById('pItems');tbody.innerHTML='';cart.forEach(i=>{tbody.innerHTML+=`<tr><td>${i.name}</td><td style="text-align:center">${i.qty}</td><td style="text-align:center">${Number(i.price).toLocaleString()}</td><td style="text-align:center">${(i.price*i.qty).toLocaleString()}</td></tr>`;});
         document.getElementById('pSub').innerText=subtotal.toLocaleString();document.getElementById('pTotal').innerText=total.toLocaleString();
         cart=[];saveCartToStorage();updateCartUI();closeModal('cart-modal');document.getElementById('receipt-modal').style.display='flex';saveIndexState('receipt-modal');
@@ -370,11 +553,48 @@ function sendReceiptPDFToWhatsApp() {
 }
 function triggerWhatsAppShare() {
     if(lastOrderData) {
-        const waText = encodeURIComponent(`Hello Amasan Farm! Order #${lastOrderData.ref}\nName: ${lastOrderData.name}\nAddress: ${lastOrderData.address}, ${lastOrderData.lga}, ${lastOrderData.state}\nTotal: ₦${lastOrderData.total.toLocaleString()}\nItems: ${lastOrderData.itemsText}\n\nI have paid to OPay 8104817797 / Zenith 2260717656.`);
+        const waText = encodeURIComponent(`Hello Amasan Farm! Order #${lastOrderData.ref}\nName: ${lastOrderData.name}\nAddress: ${lastOrderData.address}, ${lastOrderData.lga}, ${lastOrderData.state}\nScheduled Delivery: ${lastOrderData.deliveryInfo}\nTotal: ₦${lastOrderData.total.toLocaleString()}\nItems: ${lastOrderData.itemsText}\n\nI have paid to OPay 8104817797 / Zenith 2260717656.`);
         window.open(`https://wa.me/2348088375509?text=${waText}`, '_blank');
     }
 }
-function checkOrderStatus(){const ref=document.getElementById('track-ref-input').value.trim();db.ref(`orders/${ref}`).once('value',snap=>{const res=document.getElementById('track-result');res.style.display='block';if(snap.exists()){const d=snap.val();document.getElementById('track-info-body').innerHTML=`Customer: ${d.customer}<br>Status: ${d.status}<br>Total: ₦ ${d.total.toLocaleString()}`;}else document.getElementById('track-info-body').innerText='Not found';});}
+// === INTERACTIVE TIMELINE ORDER TRACKING ===
+function checkOrderStatus(){
+  const ref=document.getElementById('track-ref-input').value.trim();
+  db.ref(`orders/${ref}`).once('value',snap=>{
+    const res=document.getElementById('track-result');
+    res.style.display='block';
+    if(snap.exists()){
+      const d=snap.val();
+      const status = d.status || 'Pending';
+      const stages = ['Pending', 'Confirmed', 'Dispatched', 'Delivered'];
+      let currentIdx = stages.indexOf(status);
+      if(currentIdx === -1) currentIdx = 0;
+      let timelineHtml = '<div class="tracking-timeline">';
+      stages.forEach((st, idx) => {
+        const isCompleted = idx <= currentIdx;
+        timelineHtml += `<div class="tracking-step ${isCompleted?'completed':''}">
+          <div class="step-dot"><i class="fas fa-${isCompleted?'check':'circle'}"></i></div>
+          <div class="step-info">
+            <h4>${st}</h4>
+            <p>${idx === 0 ? 'Order received successfully' : idx === 1 ? 'Payment verified by Admin' : idx === 2 ? 'Out for delivery in Wukari' : 'Delivered to destination'}</p>
+          </div>
+        </div>`;
+      });
+      timelineHtml += '</div>';
+      document.getElementById('track-info-body').innerHTML = `
+        <div style="background:var(--bg-dark);padding:12px;border-radius:8px;border:1px solid var(--border)">
+          <b>Customer:</b> ${d.customer}<br>
+          <b>Items:</b> ${d.items}<br>
+          <b>Scheduled:</b> ${d.deliveryInfo || 'Standard'}<br>
+          <b>Total:</b> ₦ ${Number(d.total).toLocaleString()}
+        </div>
+        ${timelineHtml}
+      `;
+    } else {
+      document.getElementById('track-info-body').innerText='Order reference not found.';
+    }
+  });
+}
 function sendCustomerMessage(){const input=document.getElementById('customer-msg-input'),text=input.value.trim();if(!text)return;db.ref(`chats/${customerSessionId}/messages`).push({text,sender:'customer',timestamp:firebase.database.ServerValue.TIMESTAMP});db.ref(`chats/${customerSessionId}`).update({lastMessage:text});input.value='';}
 function listenToCustomerChat(){db.ref(`chats/${customerSessionId}/messages`).on('value',snap=>{const body=document.getElementById('customer-chat-body');body.innerHTML='';if(!snap.exists()){body.innerHTML='<div class="chat-msg bot">Hello! How can I help? Call 08088375509</div>';return;}snap.forEach(ch=>{const m=ch.val();const div=document.createElement('div');div.className=`chat-msg ${m.sender==='customer'?'customer':'bot'}`;div.innerText=m.text;body.appendChild(div);});});}
 async function sendBotMessage(){
@@ -396,7 +616,6 @@ function initScrollObserver(){
     if(!scrollObserver){scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('active'); scrollObserver.unobserve(e.target); } });},{threshold:0.15});}
     document.querySelectorAll('.reveal').forEach(el=>scrollObserver.observe(el));
 }
-// === NEW ADDED JS - COMPLAINT + ADVERT - NO REMOVAL OF OLD CODE ===
 function openComplaintModal(){document.getElementById('complaint-modal').style.display='flex';saveIndexState('complaint-modal');}
 function submitComplaint(){
   const name=document.getElementById('comp-name').value.trim();
@@ -411,20 +630,6 @@ function submitComplaint(){
     document.getElementById('comp-name').value='';document.getElementById('comp-phone').value='';document.getElementById('comp-ref').value='';document.getElementById('comp-type').value='';document.getElementById('comp-msg').value='';
   });
 }
-// === OLD BANNER CODE - STILL DEY ===
-function renderAdvertBanner(list){
-  const track=document.getElementById('advert-track');
-  if(!track) return;
-  const inStock=list.filter(p=>Number(p.qty)>0);
-  if(inStock.length===0){track.innerHTML='<div class="advert-item">⚠️ No products in stock now - Check back soon!</div>';return;}
-  let html='';
-  inStock.forEach(p=>{
-    const img=p.image||'IMG-20260726-WA8808.jpg';
-    html+=`<div class="advert-item"><img src="${img}" alt=""><span>${p.name}</span><span style="background:#ffeb3b;color:#000;padding:2px 8px;border-radius:10px">₦${Number(p.price).toLocaleString()}</span><span style="background:#fff;color:#2e7d32;padding:2px 8px;border-radius:10px">${p.qty} left</span></div>`;
-  });
-  track.innerHTML=html+html;
-}
-// === NEW ADDED - MAKE BANNER RESPECT ADMIN SETTINGS ===
 let advertSettingsShop = {enabled:true, customText:"", speed:60, products:[]};
 function listenToAdvertSettingsShop(){
   db.ref('settings/advert').on('value', snap=>{
@@ -473,16 +678,6 @@ function renderAdvertBannerWithSettings(list){
   track.innerHTML = html + html;
   track.style.animationDuration = (advertSettingsShop.speed || 60) + 's';
 }
-db.ref('inventory').on('value',snap=>{
-  let list=[];
-  if(snap.exists()){snap.forEach(ch=>{list.push(ch.val());});}
-  allProducts = list;
-  if(advertSettingsShop && advertSettingsShop.products){
-    renderAdvertBannerWithSettings(list);
-  } else {
-    renderAdvertBanner(list);
-  }
-});
 listenToAdvertSettingsShop();
 </script>
 </body>
