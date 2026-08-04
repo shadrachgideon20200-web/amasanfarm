@@ -118,6 +118,7 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     <div class="error-msg" id="reset-error">Enter email</div>
   </div>
 </div>
+
 <div class="modal-overlay" id="add-item-modal">
   <div class="modal-card">
     <h3>Add Product</h3>
@@ -140,6 +141,77 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     </form>
   </div>
 </div>
+
+<div class="modal-overlay" id="add-expense-modal">
+  <div class="modal-card">
+    <h3>Log Farm Expense</h3>
+    <form onsubmit="event.preventDefault();saveNewExpense();">
+      <div class="form-group"><label>Expense Title / Description</label><input id="new-exp-title" placeholder="e.g. Labour, Transport, Maintenance" required></div>
+      <div class="form-group"><label>Amount (₦)</label><input type="number" id="new-exp-amount" required></div>
+      <div class="form-group"><label>Category</label>
+        <select id="new-exp-cat" required>
+          <option value="Labour">Labour</option>
+          <option value="Transport">Transport</option>
+          <option value="Maintenance">Maintenance</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px"><button class="btn" style="flex:1">Save Expense</button><button type="button" class="btn btn-secondary" onclick="document.getElementById('add-expense-modal').style.display='none'">Cancel</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="add-debt-modal">
+  <div class="modal-card">
+    <h3>Record Customer Credit / Debt</h3>
+    <form onsubmit="event.preventDefault();saveNewDebt();">
+      <div class="form-group"><label>Customer Name</label><input id="new-debt-name" required></div>
+      <div class="form-group"><label>Phone Number</label><input id="new-debt-phone" required></div>
+      <div class="form-group"><label>Items / Details</label><input id="new-debt-items" required></div>
+      <div class="form-group"><label>Total Credit Amount (₦)</label><input type="number" id="new-debt-amount" required></div>
+      <div class="form-group"><label>Amount Paid (₦)</label><input type="number" id="new-debt-paid" value="0" required></div>
+      <div style="display:flex;gap:10px"><button class="btn" style="flex:1">Save Record</button><button type="button" class="btn btn-secondary" onclick="document.getElementById('add-debt-modal').style.display='none'">Cancel</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Add Farm Activity / Livestock Log -->
+<div class="modal-overlay" id="add-activity-modal">
+  <div class="modal-card">
+    <h3>Log Daily Farm Activity / Livestock</h3>
+    <form onsubmit="event.preventDefault();saveNewActivity();">
+      <div class="form-group"><label>Activity Type</label>
+        <select id="new-act-type" required>
+          <option value="Poultry / Feeding">Poultry / Feeding</option>
+          <option value="Egg Collection">Egg Collection</option>
+          <option value="Livestock Mortality">Livestock Mortality</option>
+          <option value="Vaccination / Medication">Vaccination / Medication</option>
+          <option value="General Farm Note">General Farm Note</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Details / Metrics</label><input id="new-act-details" placeholder="e.g. 5 bags starter feed consumed, 30 crates eggs" required></div>
+      <div class="form-group"><label>Mortality Count (If any)</label><input type="number" id="new-act-mortality" value="0"></div>
+      <div class="form-group"><label>Notes / Remarks</label><input id="new-act-remarks" placeholder="Optional remarks..."></div>
+      <div style="display:flex;gap:10px"><button class="btn" style="flex:1">Save Log</button><button type="button" class="btn btn-secondary" onclick="document.getElementById('add-activity-modal').style.display='none'">Cancel</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Add Supplier/Vendor -->
+<div class="modal-overlay" id="add-vendor-modal">
+  <div class="modal-card">
+    <h3>Add Supplier / Vendor</h3>
+    <form onsubmit="event.preventDefault();saveNewVendor();">
+      <div class="form-group"><label>Supplier Name / Company</label><input id="new-vendor-name" required></div>
+      <div class="form-group"><label>Phone Number / WhatsApp</label><input id="new-vendor-phone" required></div>
+      <div class="form-group"><label>Items Supplied</label><input id="new-vendor-items" placeholder="e.g. Poultry Feed, Fertilizers, Vaccine" required></div>
+      <div class="form-group"><label>Address / Location</label><input id="new-vendor-address" placeholder="e.g. Wukari Main Market"></div>
+      <div style="display:flex;gap:10px"><button class="btn" style="flex:1">Save Supplier</button><button type="button" class="btn btn-secondary" onclick="document.getElementById('add-vendor-modal').style.display='none'">Cancel</button></div>
+    </form>
+  </div>
+</div>
+
 <aside class="sidebar">
   <div class="brand"><img src="IMG-20260726-WA8808.jpg" class="brand-logo"><span>Amasan Admin</span></div>
   <div class="sidebar-menu">
@@ -147,25 +219,33 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     <button class="nav-btn" onclick="switchView('chat-view',this)"><div><i class="fas fa-comments"></i> Support</div><span class="badge" id="unread-count">0</span></button>
     <button class="nav-btn" onclick="switchView('inventory-view',this)"><div><i class="fas fa-boxes"></i> Inventory</div><span class="badge badge-danger" id="low-stock-count" style="display:none">0</span></button>
     <button class="nav-btn" onclick="switchView('orders-view',this)"><div><i class="fas fa-truck"></i> Orders</div></button>
+    <button class="nav-btn" onclick="switchView('expenses-view',this)"><div><i class="fas fa-wallet"></i> Expenses</div></button>
+    <button class="nav-btn" onclick="switchView('debtors-view',this)"><div><i class="fas fa-book"></i> Credit Ledger</div></button>
+    <button class="nav-btn" onclick="switchView('activities-view',this)"><div><i class="fas fa-clipboard-list"></i> Farm Logs</div></button>
+    <button class="nav-btn" onclick="switchView('vendors-view',this)"><div><i class="fas fa-address-book"></i> Suppliers</div></button>
     <button class="nav-btn" onclick="switchView('feedback-view',this)"><div><i class="fas fa-comment-dots"></i> Feedback</div><span class="badge" id="feedback-count">0</span></button>
     <button class="nav-btn" onclick="switchView('complaints-view',this)"><div><i class="fas fa-exclamation-triangle"></i> Complaints</div><span class="badge badge-danger" id="complaints-count">0</span></button>
-    <button class="nav-btn" onclick="switchView('analytics-view',this)"><div><i class="fas fa-chart-line"></i> Analytics</div></button>
+    <button class="nav-btn" onclick="switchView('analytics-view',this)"><div><i class="fas fa-chart-line"></i> Analytics & P&L</div></button>
     <button class="nav-btn" onclick="switchView('info-view',this)"><div><i class="fas fa-info-circle"></i> Info</div></button>
   </div>
   <div class="sidebar-footer"><button class="nav-btn" onclick="logoutAdmin()"><div><i class="fas fa-sign-out-alt"></i> Logout</div></button></div>
 </aside>
+
 <div class="main-container">
   <header>
     <h3 id="page-title">Dashboard</h3>
     <div style="display:flex;gap:12px;align-items:center">
+      <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px" onclick="sendWhatsAppSummary()"><i class="fab fa-whatsapp"></i> Sales Summary</button>
       <button onclick="toggleTheme()" id="themeBtn" style="background:var(--bg-hover);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:20px;cursor:pointer;font-size:12px">🌙 Dark</button>
       <span id="connection-status" style="color:var(--primary-light);font-weight:bold">● Connecting...</span>
     </div>
   </header>
+
   <section id="dashboard-view" class="view-section active">
     <div class="dashboard-padding">
       <div class="grid-container">
         <div class="card"><h4>Revenue</h4><div class="value" id="dash-revenue">₦ 0</div></div>
+        <div class="card"><h4>Net Profit</h4><div class="value" id="dash-profit" style="color:var(--primary-light)">₦ 0</div></div>
         <div class="card"><h4>Orders</h4><div class="value" id="dash-orders">0</div></div>
         <div class="card"><h4>Alerts</h4><div class="value" id="dash-alerts" style="color:var(--danger)">0</div></div>
         <div class="card" style="border-left:4px solid var(--primary-light)"><h4>App Installs</h4><div class="value" id="dash-installs">0</div></div>
@@ -173,6 +253,7 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <div class="card" style="margin-top:20px"><h4>Revenue Chart (Last 7 Days)</h4><canvas id="revChart" height="100"></canvas></div>
     </div>
   </section>
+
   <section id="chat-view" class="view-section">
     <div class="chat-layout">
       <div class="chat-sidebar">
@@ -197,12 +278,20 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       </form>
     </div>
   </section>
+
   <section id="inventory-view" class="view-section">
     <div class="dashboard-padding">
-      <div class="table-controls"><h3>Inventory</h3><button class="btn" onclick="openAddItemModal()">Add Product</button></div>
+      <div class="table-controls">
+        <h3>Inventory</h3>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary" onclick="sendStockWhatsAppAlert()"><i class="fab fa-whatsapp"></i> WhatsApp Supplier Alert</button>
+          <button class="btn" onclick="openAddItemModal()">Add Product</button>
+        </div>
+      </div>
       <table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Threshold</th><th>Status</th><th>Actions</th></tr></thead><tbody id="inventory-table-body"></tbody></table>
     </div>
   </section>
+
   <section id="orders-view" class="view-section">
     <div class="dashboard-padding">
       <div id="gps-map" class="gps-map-container"></div>
@@ -214,15 +303,80 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <table class="data-table"><thead><tr><th>Ref</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>GPS</th><th>Action</th></tr></thead><tbody id="orders-table-body"></tbody></table>
     </div>
   </section>
+
+  <section id="expenses-view" class="view-section">
+    <div class="dashboard-padding">
+      <div class="table-controls">
+        <h3><i class="fas fa-wallet"></i> Farm Expenses & Operational Cost Tracker</h3>
+        <button class="btn" onclick="document.getElementById('add-expense-modal').style.display='flex'">Log Expense</button>
+      </div>
+      <div class="grid-container" style="margin-bottom:20px">
+        <div class="card" style="border-left:4px solid var(--danger)"><h4>Total Expenses</h4><div class="value" id="total-expenses-val">₦ 0</div></div>
+      </div>
+      <table class="data-table"><thead><tr><th>Title</th><th>Category</th><th>Amount</th><th>Date</th><th>Action</th></tr></thead><tbody id="expenses-table-body"></tbody></table>
+    </div>
+  </section>
+
+  <section id="debtors-view" class="view-section">
+    <div class="dashboard-padding">
+      <div class="table-controls">
+        <h3><i class="fas fa-book"></i> Customer Credit Ledger (Debtors)</h3>
+        <button class="btn" onclick="document.getElementById('add-debt-modal').style.display='flex'">Add Record</button>
+      </div>
+      <table class="data-table"><thead><tr><th>Customer</th><th>Phone</th><th>Items</th><th>Total</th><th>Paid</th><th>Balance</th><th>Action</th></tr></thead><tbody id="debtors-table-body"></tbody></table>
+    </div>
+  </section>
+
+  <!-- Farm Activities / Livestock Log View -->
+  <section id="activities-view" class="view-section">
+    <div class="dashboard-padding">
+      <div class="table-controls">
+        <h3><i class="fas fa-clipboard-list"></i> Daily Farm Activities & Livestock Mortality Log</h3>
+        <button class="btn" onclick="document.getElementById('add-activity-modal').style.display='flex'">Log Activity</button>
+      </div>
+      <table class="data-table"><thead><tr><th>Type</th><th>Details</th><th>Mortality</th><th>Remarks</th><th>Date</th><th>Action</th></tr></thead><tbody id="activities-table-body"></tbody></table>
+    </div>
+  </section>
+
+  <!-- Suppliers / Vendors Directory View -->
+  <section id="vendors-view" class="view-section">
+    <div class="dashboard-padding">
+      <div class="table-controls">
+        <h3><i class="fas fa-address-book"></i> Supplier & Vendor Directory</h3>
+        <button class="btn" onclick="document.getElementById('add-vendor-modal').style.display='flex'">Add Supplier</button>
+      </div>
+      <table class="data-table"><thead><tr><th>Name</th><th>Phone / WhatsApp</th><th>Items Supplied</th><th>Address</th><th>Action</th></tr></thead><tbody id="vendors-table-body"></tbody></table>
+    </div>
+  </section>
+
   <section id="feedback-view" class="view-section">
     <div class="dashboard-padding"><div class="table-controls"><h3><i class="fas fa-comment-dots"></i> Customer Feedback</h3><div style="display:flex;gap:8px"><button class="btn btn-secondary" onclick="exportFeedbackCSV()">Export CSV</button><button class="btn btn-danger" onclick="clearAllFeedback()">Clear All</button></div></div><div id="feedback-list" style="display:grid;gap:12px"></div></div>
   </section>
+
   <section id="complaints-view" class="view-section">
     <div class="dashboard-padding"><div class="table-controls"><h3><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i> Customer Complaints</h3><div style="display:flex;gap:8px"><button class="btn btn-secondary" onclick="exportComplaintsCSV()">Export CSV</button><button class="btn btn-danger" onclick="clearAllComplaints()">Clear All</button></div></div><div id="complaints-list" style="display:grid;gap:12px"></div></div>
   </section>
+
+  <!-- Analytics & P&L with Date-Range Filter View -->
   <section id="analytics-view" class="view-section">
     <div class="dashboard-padding">
-      <h3><i class="fas fa-chart-line"></i> App Analytics & Install Counter</h3>
+      <h3><i class="fas fa-chart-line"></i> App Analytics & Profit & Loss (P&L) Report</h3>
+      
+      <!-- Date Range Filter Box for P&L -->
+      <div class="card" style="margin-top:20px;padding:16px">
+        <h4 style="margin-bottom:12px"><i class="fas fa-filter"></i> P&L Date Range Filter</h4>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <div><label style="font-size:0.75rem;color:var(--text-muted);display:block">START DATE</label><input type="date" id="pnl-start-date" style="padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)"></div>
+          <div><label style="font-size:0.75rem;color:var(--text-muted);display:block">END DATE</label><input type="date" id="pnl-end-date" style="padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text)"></div>
+          <div style="align-self:flex-end"><button class="btn" style="padding:8px 16px" onclick="calculateFilteredPNL()">Calculate P&L</button> <button class="btn btn-secondary" style="padding:8px 16px" onclick="resetFilteredPNL()">Reset Filter</button></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px;border-top:1px solid var(--border);padding-top:16px">
+          <div><small style="color:var(--text-muted)">Filtered Revenue</small><div id="pnl-filter-rev" style="font-size:1.2rem;font-weight:bold">₦ 0</div></div>
+          <div><small style="color:var(--text-muted)">Filtered Expenses</small><div id="pnl-filter-exp" style="font-size:1.2rem;font-weight:bold;color:var(--danger)">₦ 0</div></div>
+          <div><small style="color:var(--text-muted)">Filtered Net Profit</small><div id="pnl-filter-net" style="font-size:1.2rem;font-weight:bold;color:var(--primary-light)">₦ 0</div></div>
+        </div>
+      </div>
+
       <div class="grid-container" style="margin-top:20px">
         <div class="card" style="border-left:4px solid var(--primary-light)"><h4><i class="fas fa-download"></i> Total App Installs</h4><div class="value" id="analytics-installs" style="font-size:2rem;font-weight:800">0</div><small style="color:var(--text-muted)">Customers wey install app for phone</small></div>
         <div class="card" style="border-left:4px solid #2196f3"><h4><i class="fas fa-eye"></i> Total Visits</h4><div class="value" id="analytics-visits" style="font-size:2rem;font-weight:800">0</div><small style="color:var(--text-muted)">Total times site open</small></div>
@@ -232,10 +386,12 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <div class="card" style="margin-top:20px"><h4>📱 Recent Installs</h4><div id="installs-list" style="margin-top:12px;max-height:400px;overflow-y:auto"></div><div style="display:flex;gap:8px;margin-top:15px"><button class="btn btn-secondary" onclick="exportInstallsCSV()">Export CSV</button><button class="btn btn-danger" onclick="clearAnalytics()">Clear Analytics</button></div></div>
     </div>
   </section>
+
   <section id="info-view" class="view-section">
     <div class="dashboard-padding"><h3>🏦 Farm Info</h3><div class="card" style="margin-top:15px"><p><b>Farm:</b> Amasan Farm Wukari</p><p><b>Location:</b> Wukari, Taraba State</p><p><b>Phone:</b> 08088375509</p><p><b>Email:</b> Amasanfarm@gmail.com</p><hr style="margin:12px 0;border:none;border-top:1px solid var(--border)"><h4>💳 Accounts</h4><p>OPay: 8104817797 - Gideon Shadrach</p><p>Zenith: 2260717656 - Gideon Shadrach</p></div></div>
   </section>
 </div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -245,18 +401,18 @@ const CORRECT_PASS="Amasan001";
 window.addEventListener('DOMContentLoaded',()=>{
   if(localStorage.getItem('amasan_admin_session')==='true'){document.getElementById('login-overlay').style.display='none';}
   if(localStorage.getItem('amasan_theme')==='light'){document.body.classList.add('light-mode');}
-  listenToInventory();listenToOrders();listenFeedback();initGPSMap();listenToChatList();listenComplaints();listenToAnalytics();
+  listenToInventory();listenToOrders();listenFeedback();initGPSMap();listenToChatList();listenComplaints();listenToAnalytics();listenExpenses();listenDebts();listenActivities();listenVendors();
   
   const lastView = localStorage.getItem('amasan_admin_view');
   const lastTitle = localStorage.getItem('amasan_admin_title');
   if(lastView){
     document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
-    document.querySelectorAll('.sidebar-menu .nav-btn').forEach(b=>b.classList.remove('active')); // Fixed query selector
+    document.querySelectorAll('.sidebar-menu .nav-btn').forEach(b=>b.classList.remove('active'));
     const targetSection = document.getElementById(lastView);
     if(targetSection){
       targetSection.classList.add('active');
       document.getElementById('page-title').innerText = lastTitle || lastView.replace('-view','').replace(/^\w/,c=>c.toUpperCase());
-      document.querySelectorAll('.sidebar-menu .nav-btn').forEach(btn=>{ // Fixed query selector
+      document.querySelectorAll('.sidebar-menu .nav-btn').forEach(btn=>{
         if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(lastView)){
           btn.classList.add('active');
         }
@@ -300,15 +456,12 @@ function renderInventoryTable(low){
   const tb=document.getElementById('inventory-table-body');tb.innerHTML='';
   inventoryItems.forEach(it=>{
     const currentCat=it.category||'General';
-    
-    // Updated logic to show "Out of Stock" when qty is <= 0
     let stockStatus = 'OK';
     if(it.qty <= 0) {
       stockStatus = '<span style="color:var(--danger); font-weight:bold;">Out of Stock</span>';
     } else if(it.qty <= it.threshold) {
       stockStatus = '<span style="color:#f44336">Low</span>';
     }
-
     tb.innerHTML+=`<tr><td>${it.id}</td><td>${it.name}</td><td>₦${it.price}</td><td>${it.qty}</td><td><select class="cat-select" id="cat-${it.key}"><option value="Feeds" ${currentCat==='Feeds'?'selected':''}>Feeds</option><option value="Fertilizer" ${currentCat==='Fertilizer'?'selected':''}>Fertilizer</option><option value="Produce" ${currentCat==='Produce'?'selected':''}>Produce</option><option value="Equipment" ${currentCat==='Equipment'?'selected':''}>Equipment</option><option value="General" ${currentCat==='General'?'selected':''}>General</option></select></td><td>${it.threshold}</td><td>${stockStatus}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap"><button onclick="updateProductCategory('${it.key}')" style="background:var(--gold);color:#000;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-weight:600">Update</button><button onclick="updateStock('${it.key}',${it.qty})" style="background:#2e7d32;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Stock</button><button onclick="deleteInventoryItem('${it.key}')" style="background:var(--danger);color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Del</button></div></td></tr>`;
   });
   document.getElementById('dash-alerts').innerText=low;const b=document.getElementById('low-stock-count');if(low>0){b.innerText=low;b.style.display='inline-block'}else b.style.display='none';
@@ -319,20 +472,251 @@ function deleteInventoryItem(k){if(confirm('Delete?'))db.ref(`inventory/${k}`).r
 function openAddItemModal(){document.getElementById('add-item-modal').style.display='flex'}
 function closeAddItemModal(){document.getElementById('add-item-modal').style.display='none'}
 function saveNewProduct(){const n=document.getElementById('new-item-name').value,p=Number(document.getElementById('new-item-price').value),q=Number(document.getElementById('new-item-qty').value),t=Number(document.getElementById('new-item-threshold').value),cat=document.getElementById('new-item-category').value||'General',id=`INV-${Math.floor(100+Math.random()*900)}`;db.ref(`inventory/${id}`).set({id,name:n,price:p,qty:q,threshold:t,category:cat}).then(()=>{closeAddItemModal();document.getElementById('new-item-name').value='';});}
-let realTimeOrders=[],activeFilter='All',revChart;
-function listenToOrders(){db.ref('orders').on('value',s=>{realTimeOrders=[];let sum=0;let daily=[0,0,0];s.forEach(ch=>{const o=ch.val();o.firebaseKey=ch.key;realTimeOrders.unshift(o);sum+=Number(o.total||0);let d=new Date(o.timestamp||Date.now());let day=d.getDay();let idx=day===0?6:day-1;if(idx>=0&&idx<7)daily[idx]+=Number(o.total||0);});document.getElementById('dash-revenue').innerText='₦ '+sum.toLocaleString();renderOrders();if(!revChart){const ctx=document.getElementById('revChart');if(ctx){revChart=new Chart(ctx,{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Revenue',data:daily,backgroundColor:'#2e7d32'}]},options:{responsive:true,plugins:{legend:{display:false}}}});} }else{revChart.data.datasets[0].data=daily;revChart.update();}});}
-function renderOrders(){const tb=document.getElementById('orders-table-body');tb.innerHTML='';const f=activeFilter==='All'?realTimeOrders:realTimeOrders.filter(o=>(o.status||'Pending').toLowerCase()===activeFilter.toLowerCase());document.getElementById('dash-orders').innerText=realTimeOrders.length;f.forEach(o=>{const esc=s=>String(s||'').replace(/'/g,"\\'");tb.innerHTML+=`<tr><td>#${o.ref}</td><td>${o.customer}</td><td>${o.items}</td><td>₦${Number(o.total).toLocaleString()}</td><td><span class="status-tag status-${(o.status||'pending').toLowerCase()}">${o.status}</span></td><td>${o.gps?`<button class="btn btn-secondary" style="padding:3px 6px" onclick="focusOnDriver(${o.gps.split(',')[0]},${o.gps.split(',')[1]})">Track</button>`:'N/A'}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn-status btn-confirm" onclick="updateOrderStatus('${o.firebaseKey}','${o.ref}','${esc(o.customer)}','Confirmed')">Confirm</button><button class="btn-status btn-dispatch" onclick="updateOrderStatus('${o.firebaseKey}','${o.ref}','${esc(o.customer)}','Dispatched')">Dispatch</button><button class="btn-status btn-deliver" onclick="updateOrderStatus('${o.firebaseKey}','${o.ref}','${esc(o.customer)}','Delivered')">Deliver</button></div><div style="display:flex;gap:4px;margin-top:4px"><button class="btn btn-secondary" style="padding:3px 6px;font-size:.7rem" onclick="downloadPDFReceipt('${o.ref}','${esc(o.customer)}','${esc(o.fullAddress||o.address)}','${esc(o.items)}','${o.total}')">PDF</button><button class="btn btn-danger" style="padding:3px 6px" onclick="deleteOrder('${o.firebaseKey}','${o.ref}')">Del</button></div></td></tr>`;});}
+
+function sendStockWhatsAppAlert(){
+  let lowItems = inventoryItems.filter(it => it.qty <= it.threshold);
+  if(lowItems.length === 0){
+    alert('All items have healthy stock levels! No low stock alerts to send.');
+    return;
+  }
+  let msg = `Hello Supplier,\n\nWe need to restock the following items urgently at Amasan Farm Wukari:\n\n`;
+  lowItems.forEach(it => {
+    msg += `• *${it.name}* (ID: ${it.id}) - Current Qty: *${it.qty}* (Threshold: ${it.threshold})\n`;
+  });
+  msg += `\nPlease let us know availability and delivery terms. Thanks!\n- Gideon Shadrach, Amasan Farm`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+let realTimeOrders=[],activeFilter='All',revChart, totalRevenueGlobal=0, totalExpensesGlobal=0;
+function listenToOrders(){
+  db.ref('orders').on('value',s=>{
+    realTimeOrders=[];let sum=0;let daily=[0,0,0,0,0,0,0];
+    s.forEach(ch=>{
+      const o=ch.val();o.firebaseKey=ch.key;realTimeOrders.unshift(o);sum+=Number(o.total||0);
+      let d=new Date(o.timestamp||Date.now());let day=d.getDay();let idx=day===0?6:day-1;
+      if(idx>=0&&idx<7)daily[idx]+=Number(o.total||0);
+    });
+    totalRevenueGlobal=sum;
+    document.getElementById('dash-revenue').innerText='₦ '+sum.toLocaleString();
+    updateNetProfitDisplay();
+    renderOrders();
+    if(!revChart){
+      const ctx=document.getElementById('revChart');
+      if(ctx){revChart=new Chart(ctx,{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Revenue',data:daily,backgroundColor:'#2e7d32'}]},options:{responsive:true,plugins:{legend:{display:false}}}});} 
+    }else{revChart.data.datasets[0].data=daily;revChart.update();}
+  });
+}
+
+function listenExpenses(){
+  db.ref('expenses').on('value', snap=>{
+    let totalExp=0; const tb=document.getElementById('expenses-table-body'); tb.innerHTML='';
+    if(!snap.exists()){ document.getElementById('total-expenses-val').innerText='₦ 0'; totalExpensesGlobal=0; updateNetProfitDisplay(); return; }
+    let list=[];
+    snap.forEach(c=>{ let ex=c.val(); ex.key=c.key; list.push(ex); totalExp+=Number(ex.amount||0); });
+    list.reverse();
+    totalExpensesGlobal=totalExp;
+    document.getElementById('total-expenses-val').innerText='₦ '+totalExp.toLocaleString();
+    updateNetProfitDisplay();
+    list.forEach(ex=>{
+      const date = ex.timestamp? new Date(ex.timestamp).toLocaleDateString():'';
+      tb.innerHTML+=`<tr><td>${ex.title}</td><td>${ex.category}</td><td>₦${Number(ex.amount).toLocaleString()}</td><td>${date}</td><td><button class="btn btn-danger" style="padding:3px 6px;font-size:.7rem" onclick="deleteExpense('${ex.key}')">Del</button></td></tr>`;
+    });
+  });
+}
+function saveNewExpense(){
+  const title=document.getElementById('new-exp-title').value;
+  const amount=Number(document.getElementById('new-exp-amount').value);
+  const cat=document.getElementById('new-exp-cat').value;
+  db.ref('expenses').push({title, amount, category: cat, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
+    document.getElementById('add-expense-modal').style.display='none';
+    document.getElementById('new-exp-title').value='';
+    document.getElementById('new-exp-amount').value='';
+    alert('Expense saved successfully ✅');
+  });
+}
+function deleteExpense(k){if(confirm('Delete expense?'))db.ref(`expenses/${k}`).remove()}
+function updateNetProfitDisplay(){
+  let net = totalRevenueGlobal - totalExpensesGlobal;
+  const el = document.getElementById('dash-profit');
+  if(el) el.innerText = '₦ '+net.toLocaleString();
+}
+
+function listenDebts(){
+  db.ref('debtors').on('value', snap=>{
+    const tb=document.getElementById('debtors-table-body'); tb.innerHTML='';
+    if(!snap.exists()){ tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text-muted)">No credit ledger records found</td></tr>'; return; }
+    snap.forEach(c=>{
+      let d=c.val(); d.key=c.key;
+      let bal = Number(d.amount||0) - Number(d.paid||0);
+      tb.innerHTML+=`<tr><td>${d.name}</td><td>${d.phone}</td><td>${d.items}</td><td>₦${Number(d.amount).toLocaleString()}</td><td>₦${Number(d.paid).toLocaleString()}</td><td style="color:${bal>0?'var(--danger)':'var(--primary-light)'};font-weight:bold">₦${bal.toLocaleString()}</td><td><button class="btn btn-secondary" style="padding:3px 6px;font-size:.7rem" onclick="updateDebtPaid('${d.key}',${d.paid},${d.amount})">Update Paid</button> <button class="btn btn-danger" style="padding:3px 6px;font-size:.7rem" onclick="deleteDebt('${d.key}')">Del</button></td></tr>`;
+    });
+  });
+}
+function saveNewDebt(){
+  const name=document.getElementById('new-debt-name').value;
+  const phone=document.getElementById('new-debt-phone').value;
+  const items=document.getElementById('new-debt-items').value;
+  const amount=Number(document.getElementById('new-debt-amount').value);
+  const paid=Number(document.getElementById('new-debt-paid').value);
+  db.ref('debtors').push({name, phone, items, amount, paid, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
+    document.getElementById('add-debt-modal').style.display='none';
+    document.getElementById('new-debt-name').value='';
+    document.getElementById('new-debt-phone').value='';
+    document.getElementById('new-debt-items').value='';
+    document.getElementById('new-debt-amount').value='';
+    document.getElementById('new-debt-paid').value='0';
+    alert('Credit ledger record saved ✅');
+  });
+}
+function updateDebtPaid(k, currentPaid, totalAmount){
+  const p = prompt(`Enter new total amount paid so far (Total: ₦${totalAmount}):`, currentPaid);
+  if(p!==null){
+    db.ref(`debtors/${k}`).update({paid: Number(p)}).then(()=>alert('Updated successfully ✅'));
+  }
+}
+function deleteDebt(k){if(confirm('Delete record?'))db.ref(`debtors/${k}`).remove()}
+
+// Farm Activities / Livestock Log Logic
+function listenActivities(){
+  db.ref('farm_activities').on('value', snap=>{
+    const tb=document.getElementById('activities-table-body'); if(!tb) return; tb.innerHTML='';
+    if(!snap.exists()){ tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No farm logs recorded yet</td></tr>'; return; }
+    let list=[]; snap.forEach(c=>{ let act=c.val(); act.key=c.key; list.push(act); }); list.reverse();
+    list.forEach(act=>{
+      const date = act.timestamp? new Date(act.timestamp).toLocaleString():'';
+      tb.innerHTML+=`<tr><td><b>${act.type}</b></td><td>${act.details}</td><td style="color:${act.mortality>0?'var(--danger)':'inherit'};font-weight:bold">${act.mortality||0}</td><td>${act.remarks||'N/A'}</td><td>${date}</td><td><button class="btn btn-danger" style="padding:3px 6px;font-size:.7rem" onclick="deleteActivity('${act.key}')">Del</button></td></tr>`;
+    });
+  });
+}
+function saveNewActivity(){
+  const type=document.getElementById('new-act-type').value;
+  const details=document.getElementById('new-act-details').value;
+  const mortality=Number(document.getElementById('new-act-mortality').value||0);
+  const remarks=document.getElementById('new-act-remarks').value;
+  db.ref('farm_activities').push({type, details, mortality, remarks, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
+    document.getElementById('add-activity-modal').style.display='none';
+    document.getElementById('new-act-details').value='';
+    document.getElementById('new-act-mortality').value='0';
+    document.getElementById('new-act-remarks').value='';
+    alert('Farm activity logged successfully ✅');
+  });
+}
+function deleteActivity(k){if(confirm('Delete activity log?')) db.ref(`farm_activities/${k}`).remove();}
+
+// Suppliers / Vendors Directory Logic
+function listenVendors(){
+  db.ref('vendors').on('value', snap=>{
+    const tb=document.getElementById('vendors-table-body'); if(!tb) return; tb.innerHTML='';
+    if(!snap.exists()){ tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">No suppliers added yet</td></tr>'; return; }
+    snap.forEach(c=>{
+      let v=c.val(); v.key=c.key;
+      const cleanPhone = String(v.phone).replace(/[^0-9]/g,'').replace(/^0/,'234');
+      tb.innerHTML+=`<tr><td><b>${v.name}</b></td><td>${v.phone}</td><td>${v.items}</td><td>${v.address||'N/A'}</td><td><a href="https://wa.me/${cleanPhone}?text=${encodeURIComponent('Hello '+v.name+', we are contacting you from Amasan Farm Wukari regarding supply inquiry.')}" target="_blank" class="btn" style="padding:3px 6px;font-size:.7rem;background:#25D366"><i class="fab fa-whatsapp"></i> Chat</a> <button class="btn btn-danger" style="padding:3px 6px;font-size:.7rem" onclick="deleteVendor('${v.key}')">Del</button></td></tr>`;
+    });
+  });
+}
+function saveNewVendor(){
+  const name=document.getElementById('new-vendor-name').value;
+  const phone=document.getElementById('new-vendor-phone').value;
+  const items=document.getElementById('new-vendor-items').value;
+  const address=document.getElementById('new-vendor-address').value;
+  db.ref('vendors').push({name, phone, items, address, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
+    document.getElementById('add-vendor-modal').style.display='none';
+    document.getElementById('new-vendor-name').value='';
+    document.getElementById('new-vendor-phone').value='';
+    document.getElementById('new-vendor-items').value='';
+    document.getElementById('new-vendor-address').value='';
+    alert('Supplier added successfully ✅');
+  });
+}
+function deleteVendor(k){if(confirm('Delete supplier?')) db.ref(`vendors/${k}`).remove();}
+
+// Feature: Automated Customer WhatsApp Order Status Updates
+function sendWhatsAppStatusUpdate(phone, orderRef, status){
+  const cleanPhone = String(phone||'').replace(/[^0-9]/g,'').replace(/^0/,'234');
+  if(!cleanPhone){ alert('Customer phone number not available'); return; }
+  let statusMsg = `Hello! Update regarding your order #${orderRef} at Amasan Farm Wukari:\n\nStatus Update: *${status}*\n\nThanks for your patronage! - Gideon Shadrach, Amasan Farm`;
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(statusMsg)}`, '_blank');
+}
+
+// Feature: P&L Date-Range Filter Logic
+function calculateFilteredPNL(){
+  const startDateStr = document.getElementById('pnl-start-date').value;
+  const endDateStr = document.getElementById('pnl-end-date').value;
+  if(!startDateStr || !endDateStr){ alert('Please select both start and end dates'); return; }
+  const startTime = new Date(startDateStr).getTime();
+  const endTime = new Date(endDateStr).getTime() + 86400000; // end of day
+
+  db.ref('orders').once('value', oSnap=>{
+    let rev = 0;
+    oSnap.forEach(ch=>{
+      let o = ch.val();
+      let t = o.timestamp || 0;
+      if(t >= startTime && t <= endTime){ rev += Number(o.total||0); }
+    });
+
+    db.ref('expenses').once('value', eSnap=>{
+      let exp = 0;
+      eSnap.forEach(ch=>{
+        let e = ch.val();
+        let t = e.timestamp || 0;
+        if(t >= startTime && t <= endTime){ exp += Number(e.amount||0); }
+      });
+
+      let net = rev - exp;
+      document.getElementById('pnl-filter-rev').innerText = '₦ '+rev.toLocaleString();
+      document.getElementById('pnl-filter-exp').innerText = '₦ '+exp.toLocaleString();
+      document.getElementById('pnl-filter-net').innerText = '₦ '+net.toLocaleString();
+    });
+  });
+}
+function resetFilteredPNL(){
+  document.getElementById('pnl-start-date').value='';
+  document.getElementById('pnl-end-date').value='';
+  document.getElementById('pnl-filter-rev').innerText='₦ 0';
+  document.getElementById('pnl-filter-exp').innerText='₦ 0';
+  document.getElementById('pnl-filter-net').innerText='₦ 0';
+}
+
+function sendWhatsAppSummary(){
+  let summaryText = `📊 *AMASAN FARM WUKARI - SALES SUMMARY* 📊\n\n`;
+  summaryText += `• *Total Revenue:* ₦${totalRevenueGlobal.toLocaleString()}\n`;
+  summaryText += `• *Total Expenses:* ₦${totalExpensesGlobal.toLocaleString()}\n`;
+  summaryText += `• *Net Profit:* ₦${(totalRevenueGlobal - totalExpensesGlobal).toLocaleString()}\n`;
+  summaryText += `• *Total Orders Placed:* ${realTimeOrders.length}\n`;
+  summaryText += `• *Date:* ${new Date().toLocaleDateString()}\n\n`;
+  summaryText += `- Generated via Amasan Farm Admin Hub`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(summaryText)}`, '_blank');
+}
+
+function renderOrders(){
+  const tb=document.getElementById('orders-table-body');tb.innerHTML='';
+  const f=activeFilter==='All'?realTimeOrders:realTimeOrders.filter(o=>(o.status||'Pending').toLowerCase()===activeFilter.toLowerCase());
+  document.getElementById('dash-orders').innerText=realTimeOrders.length;
+  f.forEach(o=>{
+    const esc=s=>String(s||'').replace(/'/g,"\\'");
+    tb.innerHTML+=`<tr><td>#${o.ref}</td><td>${o.customer}</td><td>${o.items}</td><td>₦${Number(o.total).toLocaleString()}</td><td><span class="status-tag status-${(o.status||'pending').toLowerCase()}">${o.status}</span></td><td>${o.gps?`<button class="btn btn-secondary" style="padding:3px 6px" onclick="focusOnDriver(${o.gps.split(',')[0]},${o.gps.split(',')[1]})">Track</button>`:'N/A'}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn-status btn-confirm" onclick="updateOrderStatus('${o.firebaseKey}','${o.ref}','${esc(o.customer)}','Confirmed','${o.phone||''}')">Confirm</button><button class="btn-status btn-dispatch" onclick="updateOrderStatus('${o.firebaseKey}','${o.ref}','${esc(o.customer)}','Dispatched','${o.phone||''}')">Dispatch</button><button class="btn-status btn-deliver" onclick="updateOrderStatus('${o.firebaseKey}','${o.ref}','${esc(o.customer)}','Delivered','${o.phone||''}')">Deliver</button></div><div style="display:flex;gap:4px;margin-top:4px"><button class="btn btn-secondary" style="padding:3px 6px;font-size:.7rem" onclick="downloadPDFReceipt('${o.ref}','${esc(o.customer)}','${esc(o.fullAddress||o.address)}','${esc(o.items)}','${o.total}')">PDF</button> <button class="btn" style="padding:3px 6px;font-size:.7rem;background:#25D366" onclick="sendWhatsAppStatusUpdate('${o.phone||''}','${o.ref}','${o.status||'Pending'}')"><i class="fab fa-whatsapp"></i> WA</button><button class="btn btn-danger" style="padding:3px 6px" onclick="deleteOrder('${o.firebaseKey}','${o.ref}')">Del</button></div></td></tr>`;
+  });
+}
 function searchOrders(){let q=document.getElementById('order-search').value.toLowerCase();if(!q){renderOrders();return;}let filtered=realTimeOrders.filter(o=>JSON.stringify(o).toLowerCase().includes(q));const tb=document.getElementById('orders-table-body');tb.innerHTML='';filtered.forEach(o=>{const esc=s=>String(s||'').replace(/'/g,"\\'");tb.innerHTML+=`<tr><td>#${o.ref}</td><td>${o.customer}</td><td>${o.items}</td><td>₦${Number(o.total).toLocaleString()}</td><td><span class="status-tag status-${(o.status||'pending').toLowerCase()}">${o.status}</span></td><td>${o.gps?`<button class="btn btn-secondary" style="padding:3px 6px" onclick="focusOnDriver(${o.gps.split(',')[0]},${o.gps.split(',')[1]})">Track</button>`:'N/A'}</td><td><button class="btn btn-secondary" style="padding:3px 6px;font-size:.7rem" onclick="downloadPDFReceipt('${o.ref}','${esc(o.customer)}','${esc(o.fullAddress||o.address)}','${esc(o.items)}','${o.total}')">PDF</button></td></tr>`;});}
-function updateOrderStatus(k,ref,name,st){if(confirm(`Set ${ref} to ${st}?`))db.ref(`orders/${k}`).update({status:st})}
+function updateOrderStatus(k,ref,name,st,phone){
+  if(confirm(`Set ${ref} to ${st}?`)){
+    db.ref(`orders/${k}`).update({status:st}).then(()=>{
+      if(phone && confirm('Would you like to send this status update via WhatsApp to the customer?')){
+        sendWhatsAppStatusUpdate(phone, ref, st);
+      }
+    });
+  }
+}
 function deleteOrder(k,ref){if(confirm(`Delete ${ref}?`))db.ref(`orders/${k}`).remove()}
 function clearAllOrders(){if(confirm('Delete ALL?')){db.ref('orders').remove();db.ref('dispatches').remove()}}
 function filterOrders(s,b){activeFilter=s;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderOrders()}
 function exportOrdersCSV(){let csv="data:text/csv,Ref,Customer,Items,Total,Status\n";realTimeOrders.forEach(o=>{csv+=`"${o.ref}","${o.customer}","${o.items}","${o.total}","${o.status}"\n`});const a=document.createElement('a');a.href=encodeURI(csv);a.download='orders.csv';a.click();}
 function assignDispatch(){const ref=document.getElementById('dispatch-order-ref').value,drv=document.getElementById('driver-select').value,veh=document.getElementById('vehicle-input').value;if(!ref||ref==='None')return alert('Select order');db.ref(`dispatches/${ref}`).set({driver:drv,vehicle:veh}).then(()=>alert('Assigned'));}
 function switchView(id,el){
-  const titles = {'dashboard-view':'Dashboard','chat-view':'Support Chat','inventory-view':'Inventory','orders-view':'Orders','feedback-view':'Feedback','complaints-view':'Complaints','analytics-view':'Analytics','info-view':'Farm Info'};
+  const titles = {'dashboard-view':'Dashboard','chat-view':'Support Chat','inventory-view':'Inventory','orders-view':'Orders','expenses-view':'Expenses Tracker','debtors-view':'Credit Ledger','activities-view':'Farm Activities & Logs','vendors-view':'Suppliers Directory','feedback-view':'Feedback','complaints-view':'Complaints','analytics-view':'Analytics & P&L','info-view':'Farm Info'};
   document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.sidebar-menu .nav-btn').forEach(b=>b.classList.remove('active')); // Fixed query selector
+  document.querySelectorAll('.sidebar-menu .nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if(el) el.classList.add('active');
   const title = titles[id] || id;
@@ -343,6 +727,7 @@ function switchView(id,el){
 }
 function filterCustomers(){const q=document.getElementById('customer-search').value.toLowerCase();document.querySelectorAll('.customer-item').forEach(i=>{i.style.display=i.innerText.toLowerCase().includes(q)?'flex':'none';});}
 function toggleDispatchDrawer(){document.getElementById('dispatch-drawer').classList.toggle('open')}
+
 let feedbackData=[];
 function listenFeedback(){
   db.ref('feedback').on('value', snap=>{
@@ -366,6 +751,7 @@ function listenFeedback(){
 function deleteFeedback(key){ if(confirm('Delete this feedback?')){ db.ref('feedback/'+key).remove(); } }
 function clearAllFeedback(){ if(confirm('Delete ALL feedback?')){ db.ref('feedback').remove(); } }
 function exportFeedbackCSV(){let csv = "data:text/csv;charset=utf-8,Name,Contact,Message,Date,Admin Reply\n";feedbackData.forEach(f=>{const date = f.timestamp? new Date(f.timestamp).toLocaleString() : '';csv += `"${(f.name||'').replace(/"/g,'""')}","${(f.contact||'').replace(/"/g,'""')}","${(f.msg||'').replace(/"/g,'""')}","${date}","${(f.adminReply||'').replace(/"/g,'""')}"\n`;});const a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'feedback.csv'; a.click();}
+
 let complaintsData=[];
 function listenComplaints(){
   db.ref('complaints').on('value', snap=>{
@@ -393,6 +779,7 @@ function markComplaintResolved(key){ if(confirm('Mark as resolved?')) db.ref('co
 function deleteComplaint(key){ if(confirm('Delete this complaint?')) db.ref('complaints/'+key).remove(); }
 function clearAllComplaints(){ if(confirm('Delete ALL complaints?')) db.ref('complaints').remove(); }
 function exportComplaintsCSV(){let csv = "data:text/csv;charset=utf-8,Name,Phone,OrderRef,Type,Message,Status,Date,Admin Reply\n";complaintsData.forEach(c=>{const date = c.timestamp? new Date(c.timestamp).toLocaleString() : '';csv += `"${(c.name||'').replace(/"/g,'""')}","${(c.phone||'').replace(/"/g,'""')}","${(c.orderRef||'').replace(/"/g,'""')}","${(c.type||'').replace(/"/g,'""')}","${(c.message||'').replace(/"/g,'""')}","${(c.status||'').replace(/"/g,'""')}","${date}","${(c.adminReply||'').replace(/"/g,'""')}"\n`;});const a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'complaints.csv'; a.click();}
+
 function listenToAnalytics(){
   db.ref('analytics/installs').on('value', snap=>{
     let total=0; let today=0; let todayStr = new Date().toDateString();
