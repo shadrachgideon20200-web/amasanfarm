@@ -300,7 +300,16 @@ function renderInventoryTable(low){
   const tb=document.getElementById('inventory-table-body');tb.innerHTML='';
   inventoryItems.forEach(it=>{
     const currentCat=it.category||'General';
-    tb.innerHTML+=`<tr><td>${it.id}</td><td>${it.name}</td><td>₦${it.price}</td><td>${it.qty}</td><td><select class="cat-select" id="cat-${it.key}"><option value="Feeds" ${currentCat==='Feeds'?'selected':''}>Feeds</option><option value="Fertilizer" ${currentCat==='Fertilizer'?'selected':''}>Fertilizer</option><option value="Produce" ${currentCat==='Produce'?'selected':''}>Produce</option><option value="Equipment" ${currentCat==='Equipment'?'selected':''}>Equipment</option><option value="General" ${currentCat==='General'?'selected':''}>General</option></select></td><td>${it.threshold}</td><td>${it.qty<=it.threshold?'<span style="color:#f44336">Low</span>':'OK'}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap"><button onclick="updateProductCategory('${it.key}')" style="background:var(--gold);color:#000;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-weight:600">Update</button><button onclick="updateStock('${it.key}',${it.qty})" style="background:#2e7d32;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Stock</button><button onclick="deleteInventoryItem('${it.key}')" style="background:var(--danger);color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Del</button></div></td></tr>`;
+    
+    // Updated logic to show "Out of Stock" when qty is <= 0
+    let stockStatus = 'OK';
+    if(it.qty <= 0) {
+      stockStatus = '<span style="color:var(--danger); font-weight:bold;">Out of Stock</span>';
+    } else if(it.qty <= it.threshold) {
+      stockStatus = '<span style="color:#f44336">Low</span>';
+    }
+
+    tb.innerHTML+=`<tr><td>${it.id}</td><td>${it.name}</td><td>₦${it.price}</td><td>${it.qty}</td><td><select class="cat-select" id="cat-${it.key}"><option value="Feeds" ${currentCat==='Feeds'?'selected':''}>Feeds</option><option value="Fertilizer" ${currentCat==='Fertilizer'?'selected':''}>Fertilizer</option><option value="Produce" ${currentCat==='Produce'?'selected':''}>Produce</option><option value="Equipment" ${currentCat==='Equipment'?'selected':''}>Equipment</option><option value="General" ${currentCat==='General'?'selected':''}>General</option></select></td><td>${it.threshold}</td><td>${stockStatus}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap"><button onclick="updateProductCategory('${it.key}')" style="background:var(--gold);color:#000;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-weight:600">Update</button><button onclick="updateStock('${it.key}',${it.qty})" style="background:#2e7d32;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Stock</button><button onclick="deleteInventoryItem('${it.key}')" style="background:var(--danger);color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Del</button></div></td></tr>`;
   });
   document.getElementById('dash-alerts').innerText=low;const b=document.getElementById('low-stock-count');if(low>0){b.innerText=low;b.style.display='inline-block'}else b.style.display='none';
 }
@@ -416,7 +425,7 @@ function exportInstallsCSV(){
   db.ref('analytics/installs').once('value', snap=>{
     let csv="data:text/csv,Device,Browser,Date\n";
     snap.forEach(c=>{ const d=c.val(); csv+=`"${d.device||''}","${d.browser||''}","${new Date(d.timestamp).toLocaleString()}"\n`; });
-    const a=document.createElement('a'); a.href=encodeURI(csv); a.download='installs.csv'; a.click();
+    const a=document.createElement('a'); a.href = encodeURI(csv); a.download = 'installs.csv'; a.click();
   });
 }
 function clearAnalytics(){ if(confirm('Clear all analytics?')){ db.ref('analytics').remove(); } }
