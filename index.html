@@ -342,6 +342,19 @@ function submitOrder(){
     const ref=Math.floor(100000+Math.random()*900000);currentOrderRef=ref.toString();
     const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0),total=subtotal+1500,itemsText=cart.map(i=>`${i.name} x${i.qty}`).join(', ');
     lastOrderData = { ref, name, state, lga, address: addr, total, itemsText };
+
+    // Deduct stock quantities from inventory upon order placement
+    cart.forEach(cartItem => {
+        const productRef = db.ref(`inventory/${cartItem.id}`);
+        productRef.once('value', snap => {
+            if(snap.exists()){
+                const currentQty = Number(snap.val().qty || 0);
+                const newQty = Math.max(0, currentQty - cartItem.qty);
+                productRef.update({ qty: newQty });
+            }
+        });
+    });
+
     db.ref(`orders/${ref}`).set({ref,customer:name,state,lga,address:addr,gps,fullAddress:`${addr}, ${lga}, ${state}`,items:itemsText,total,status:'Pending',timestamp:firebase.database.ServerValue.TIMESTAMP}).then(()=>{
         const now=new Date(),dateStr=now.toLocaleDateString('en-GB');
         document.getElementById('receipt-ref').innerText='#'+ref;document.getElementById('pNo').innerText='AFW-'+ref;document.getElementById('pDate').innerText=dateStr;document.getElementById('stampDate').innerText=dateStr;document.getElementById('sigDate').innerText=dateStr;document.getElementById('pCustName').innerText=name;document.getElementById('pCustAddr').innerText=addr+', '+lga+', '+state;
@@ -383,7 +396,6 @@ function initScrollObserver(){
     if(!scrollObserver){scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('active'); scrollObserver.unobserve(e.target); } });},{threshold:0.15});}
     document.querySelectorAll('.reveal').forEach(el=>scrollObserver.observe(el));
 }
-
 // === NEW ADDED JS - COMPLAINT + ADVERT - NO REMOVAL OF OLD CODE ===
 function openComplaintModal(){document.getElementById('complaint-modal').style.display='flex';saveIndexState('complaint-modal');}
 function submitComplaint(){
@@ -399,7 +411,6 @@ function submitComplaint(){
     document.getElementById('comp-name').value='';document.getElementById('comp-phone').value='';document.getElementById('comp-ref').value='';document.getElementById('comp-type').value='';document.getElementById('comp-msg').value='';
   });
 }
-
 // === OLD BANNER CODE - STILL DEY ===
 function renderAdvertBanner(list){
   const track=document.getElementById('advert-track');
@@ -413,10 +424,8 @@ function renderAdvertBanner(list){
   });
   track.innerHTML=html+html;
 }
-
 // === NEW ADDED - MAKE BANNER RESPECT ADMIN SETTINGS ===
 let advertSettingsShop = {enabled:true, customText:"", speed:60, products:[]};
-
 function listenToAdvertSettingsShop(){
   db.ref('settings/advert').on('value', snap=>{
     const bannerEl = document.getElementById('advert-banner');
@@ -435,7 +444,6 @@ function listenToAdvertSettingsShop(){
     renderAdvertBannerWithSettings(allProducts);
   });
 }
-
 function renderAdvertBannerWithSettings(list){
   const track=document.getElementById('advert-track');
   const banner=document.getElementById('advert-banner');
@@ -465,7 +473,6 @@ function renderAdvertBannerWithSettings(list){
   track.innerHTML = html + html;
   track.style.animationDuration = (advertSettingsShop.speed || 60) + 's';
 }
-
 db.ref('inventory').on('value',snap=>{
   let list=[];
   if(snap.exists()){snap.forEach(ch=>{list.push(ch.val());});}
