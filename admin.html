@@ -371,7 +371,69 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     </div>
   </section>
   <section id="info-view" class="view-section">
-    <div class="dashboard-padding"><h3>🏦 Farm Info</h3><div class="card" style="margin-top:15px"><p><b>Farm:</b> Amasan Farm Wukari</p><p><b>Location:</b> Wukari, Taraba State</p><p><b>Phone:</b> 08088375509</p><p><b>Email:</b> Amasanfarm@gmail.com</p><hr style="margin:12px 0;border:none;border-top:1px solid var(--border)"><h4>💳 Accounts</h4><p>OPay: 8104817797 - Gideon Shadrach</p><p>Zenith: 2260717656 - Gideon Shadrach</p></div></div>
+    <div class="dashboard-padding">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-landmark text-primary"></i> Farm Information & Accounts</h3>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        <!-- General Info Card -->
+        <div class="card" style="padding: 24px;">
+          <div class="flex items-center space-x-3 pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
+            <div style="padding: 10px; background: rgba(46,125,50,0.1); border-radius: 8px; color: var(--primary-light);">
+              <i class="fas fa-info-circle text-lg"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 1rem; font-weight: 600;">Entity Details</h4>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Core operational metadata</p>
+            </div>
+          </div>
+          <dl style="display: grid; grid-template-columns: 1fr; gap: 12px; font-size: 0.9rem;">
+            <div>
+              <dt style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Farm Name</dt>
+              <dd style="margin-top: 2px; font-weight: 600;">Amasan Farm Wukari</dd>
+            </div>
+            <div>
+              <dt style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Location</dt>
+              <dd style="margin-top: 2px; font-weight: 600;">Wukari, Taraba State</dd>
+            </div>
+            <div>
+              <dt style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Official Phone</dt>
+              <dd style="margin-top: 2px; font-weight: 600;"><a href="tel:08088375509" style="color: var(--primary-light); text-decoration: none;">08088375509</a></dd>
+            </div>
+            <div>
+              <dt style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Support Email</dt>
+              <dd style="margin-top: 2px; font-weight: 600;"><a href="mailto:Amasanfarm@gmail.com" style="color: var(--primary-light); text-decoration: none;">Amasanfarm@gmail.com</a></dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Corporate Bank Accounts Card -->
+        <div class="card" style="padding: 24px;">
+          <div class="flex items-center space-x-3 pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
+            <div style="padding: 10px; background: rgba(184,155,74,0.1); border-radius: 8px; color: var(--gold);">
+              <i class="fas fa-credit-card text-lg"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 1rem; font-weight: 600;">Bank Accounts</h4>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Verified payment settlement channels</p>
+            </div>
+          </div>
+          <dl style="display: grid; grid-template-columns: 1fr; gap: 16px; font-size: 0.9rem;">
+            <div style="background: var(--bg-dark); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+              <dt style="font-size: 0.75rem; font-weight: 600; color: var(--gold); text-transform: uppercase;">OPay</dt>
+              <dd style="margin-top: 4px; font-weight: 700; font-size: 1rem;">8104817797</dd>
+              <dd style="font-size: 0.8rem; color: var(--text-muted);">Account Name: Gideon Shadrach</dd>
+            </div>
+            <div style="background: var(--bg-dark); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+              <dt style="font-size: 0.75rem; font-weight: 600; color: var(--gold); text-transform: uppercase;">Zenith Bank</dt>
+              <dd style="margin-top: 4px; font-weight: 700; font-size: 1rem;">2260717656</dd>
+              <dd style="font-size: 0.8rem; color: var(--text-muted);">Account Name: Gideon Shadrach</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -569,7 +631,6 @@ function saveNewProduct(){
       Toast.fire({icon:'success',title:'New product added successfully'});
     });
   };
-
   if(imageInput.files && imageInput.files[0]){
     const reader = new FileReader();
     reader.onload = function(e){
