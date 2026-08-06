@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#2e7d32">
 <link rel="apple-touch-icon" href="IMG-20260726-WA8808.jpg">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Merriweather:wght@400;700&display=swap');
 :root{--bg-dark:#121212;--bg-card:#1e1e1e;--bg-hover:#282828;--primary:#2e7d32;--primary-light:#4caf50;--accent:#ff9800;--text:#f0f0f0;--text-muted:#8e8e8e;--border:#2a2a2a;--danger:#f44336;--whatsapp:#25D366}
@@ -138,7 +138,6 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <div class="hero"><div class="greeting-text" id="time-greeting">Welcome</div><h1 id="hero-title">Quality Agricultural Supplies</h1></div>
 <div class="advert-banner" id="advert-banner"><div class="advert-track" id="advert-track"><div class="advert-item">🌾 Loading Available Products at Amasan Farm...</div></div></div>
 <div class="container"><div class="stock-banner"><div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-<div><strong>Live Stock:</strong> <span id="live-stock-count">0 items</span></div>
 <div>
 <label for="lang-select" style="font-size:0.8rem; margin-right:6px; font-weight:bold;" id="lang-label">Language:</label>
 <select id="lang-select" onchange="changeLanguage(this.value)" style="padding:4px 8px; border-radius:6px; border:1px solid var(--border); background:var(--bg-dark); color:var(--text); font-size:0.85rem;">
@@ -160,7 +159,7 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <form onsubmit="event.preventDefault();submitOrder();"><div class="form-group"><label>Full Name</label><input id="cust-name" required></div><div class="form-row"><div class="form-group" style="flex:1"><label>State</label><select id="cust-state" required><option value="">Loading States...</option></select></div><div class="form-group" style="flex:1"><label>LGA</label><select id="cust-lga" required><option value="">Select State First</option></select></div></div><div class="form-group"><label>Address</label><input id="cust-address" required><button type="button" class="btn btn-sec" style="margin-top:6px;font-size:.8rem" onclick="detectLocation()">Get GPS</button><input type="hidden" id="cust-gps"></div><div class="form-row"><div class="form-group" style="flex:1"><label>Delivery Date</label><input type="date" id="cust-delivery-date" required></div><div class="form-group" style="flex:1"><label>Time Slot</label><select id="cust-delivery-slot" required><option value="Morning">Morning (8am - 12pm)</option><option value="Afternoon">Afternoon (12pm - 4pm)</option><option value="Evening">Evening (4pm - 7pm)</option></select></div></div><button class="btn" style="margin-top:12px">Place Order</button></form></div></div>
 <div class="modal-overlay" id="receipt-modal" style="overflow-y:auto;padding:20px"><div class="modal-card" style="max-width:820px;width:100%;padding:0;background:transparent;border:none;max-height:95vh;overflow-y:auto"><div class="premium-receipt-wrap" id="premiumReceipt"><div class="premium-inner"><div style="text-align:center"><div class="p-logo-wrap"><img src="IMG-20260726-WA8808.jpg"></div></div><div class="p-title">AMASAN FARM WUKARI</div><div class="p-contact">Wukari, Taraba • 08088375509 • Amasanfarm@gmail.com</div><div class="p-banner">OFFICIAL RECEIPT</div><div class="p-fields"><div>Date: <span id="pDate"></span></div><div>Receipt No: <span id="pNo"></span></div></div><div class="p-fields" style="flex-direction:column"><div>Customer Name: <span id="pCustName"></span></div><div>Customer Address: <span id="pCustAddr"></span></div><div>Scheduled Delivery: <span id="pDeliverySlot"></span></div></div><div style="margin-top:12px"><div class="p-table-header">ITEMIZED DETAILS</div><table class="p-table"><thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody id="pItems"></tbody></table><div class="p-total-box"><div><span>Subtotal:</span><span id="pSub"></span></div><div><span>Delivery:</span><span>1,500</span></div><div class="gold"><span>Total:</span><span id="pTotal"></span></div></div></div><div class="p-pay-row">Payment Method: Bank Transfer - <b style="color:green">PAID & CONFIRMED</b> ✓ by Gideon Shadrach<br>OPay 8104817797 | Zenith 2260717656</div><div style="display:flex;justify-content:space-between;margin-top:25px;flex-wrap:wrap;gap:15px"><div style="position:relative;width:240px"><div style="font-weight:700">Official Stamp:</div><div style="border:1.5px dashed #8c6a2f;width:220px;height:90px;margin-top:5px"></div><div style="position:absolute;top:15px;left:15px;width:115px;height:115px;border:3px solid #b89b4a;border-radius:50%;background:rgba(255,253,245,0.95);display:flex;align-items:center;justify-content:center;transform:rotate(-14deg)"><div style="width:96px;height:96px;border:1px solid #b89b4a;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center"><div style="font-size:22px;font-weight:900;color:#9c7a2a">PAID</div><div style="font-size:7px;font-weight:800;color:#7a5a1f">AMASAN FARM<br>WUKARI</div><div style="width:60px;height:1px;background:#b89b4a;margin:3px 0"></div><div style="font-size:7px" id="stampDate"></div></div></div></div><div style="text-align:center;width:220px"><div style="font-weight:700">Authorized Signature:</div><div style="font-family:cursive;font-size:22px;margin-top:20px">G. Shadrach</div><div style="border-top:1px solid #000;margin-top:5px;font-size:10px">Gideon Shadrach - CEO<br>Date: <span id="sigDate"></span></div></div></div><div class="p-footer">— Thank you for your business —</div></div></div>
 <div style="background:white;padding:12px;display:flex;gap:8px;justify-content:center;margin-top:10px;border-radius:8px">
-    <button class="btn btn-wa" style="width:auto" onclick="sendReceiptPDFToWhatsApp()">Download PDF & WhatsApp</button>
+    <button class="btn btn-wa" style="width:auto" onclick="sendReceiptPDFToWhatsApp()">Download & Send Receipt Image</button>
     <button class="btn btn-sec" style="width:auto; color: #222;" onclick="closeModal('receipt-modal')">Close</button>
 </div>
 <div style="text-align:center;margin-top:8px"><button class="btn btn-sec" style="width:auto; color: #222;" onclick="copyRef()">Copy Ref: <span id="receipt-ref"></span></button></div></div></div>
@@ -170,7 +169,7 @@ footer{background:var(--bg-card);border-top:1px solid var(--border);padding:24px
 <!-- FLOATING WIDGETS -->
 <a href="https://wa.me/2348088375509?text=Hello%20Amasan%20Farm,%20I%20have%20an%20inquiry." target="_blank" class="floating-whatsapp-btn" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
 <div class="chatbot-widget-btn" onclick="toggleBotBox()"><i class="fas fa-robot"></i></div>
-<div class="chat-box-popup" id="bot-box-popup"><div class="chat-box-header"><span>AI Assistant</span><button onclick="toggleBotBox()" class="qty-btn">✕</button></div><div class="chat-box-body" id="bot-chat-body"><div class="chat-msg bot">Hello 👋 Welcome to Amasan Farm! How can I help you today?</div></div><div class="chat-box-footer"><input id="bot-msg-input" placeholder="Ask..." onkeypress="if(event.key==='Enter')sendBotMessage()"><button class="btn" style="width:auto" onclick="sendBotMessage()">Send</button></div></div>
+<div class="chat-box-popup" id="bot-box-popup"><div class="chat-box-header"><span>AI Assistant</span><button onclick="toggleBotBox()" class="qty-btn">✕</button></div><div class="chat-box-body" id="bot-chat-body"></div><div class="chat-box-footer"><input id="bot-msg-input" placeholder="Ask..." onkeypress="if(event.key==='Enter')sendBotMessage()"><button class="btn" style="width:auto" onclick="sendBotMessage()">Send</button></div></div>
 <div class="chat-widget-btn" onclick="toggleChatBox()"><i class="fas fa-headset"></i></div>
 <div class="chat-box-popup" id="chat-box-popup"><div class="chat-box-header"><span>Support</span><button onclick="toggleChatBox()" class="qty-btn">✕</button></div><div class="chat-box-body" id="customer-chat-body"></div><div class="chat-box-footer"><input id="customer-msg-input" placeholder="Message..." onkeypress="if(event.key==='Enter')sendCustomerMessage()"><button class="btn" style="width:auto" onclick="sendCustomerMessage()">Send</button></div></div>
 <footer><p><strong>Amasan Farm</strong> © 2026 | CEO Gideon Shadrach</p></footer>
@@ -253,7 +252,6 @@ function loadCartFromStorage(){
     if(saved){ cart = JSON.parse(saved) || []; }
   }catch(e){ cart = []; }
 }
-// === WISHLIST SYSTEM STORAGE & FUNCTIONS ===
 let wishlist = [];
 function loadWishlistFromStorage(){
   try{
@@ -295,7 +293,6 @@ function openWishlistModal(){
   document.getElementById('wishlist-modal').style.display = 'flex';
   saveIndexState('wishlist-modal');
 }
-// === MULTILINGUAL SUPPORT DICTIONARY ===
 let currentLang = localStorage.getItem('amasan_lang') || 'en';
 const translations = {
   en: {
@@ -323,7 +320,6 @@ function changeLanguage(lang){
   document.getElementById('lang-label').innerText = translations[lang].langLabel;
   renderFilteredProducts();
 }
-// === PRODUCT REVIEWS SYSTEM ===
 let allReviews = {};
 function listenToReviews(){
   db.ref('reviews').on('value', snap => {
@@ -418,19 +414,19 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(localStorage.getItem('amasan_theme')==='light')document.body.classList.add('light-mode');
     restoreIndexState();
     updateCartUI();
+    initBotGreeting();
 });
 function setGreeting(){const h=new Date().getHours();let g=h<12?"Good Morning":h<18?"Good Afternoon":"Good Evening";document.getElementById('time-greeting').innerText=`👋 ${g}, Welcome!`;}
 function toggleDarkMode(){document.body.classList.toggle('light-mode');localStorage.setItem('amasan_theme',document.body.classList.contains('light-mode')?'light':'dark');}
 function submitFeedback(){const name=document.getElementById('fb-name').value,contact=document.getElementById('fb-contact').value,msg=document.getElementById('fb-msg').value;db.ref('feedback').push({name,contact,msg,timestamp:firebase.database.ServerValue.TIMESTAMP}).then(()=>{alert('Thanks!');closeModal('feedback-modal');});}
 function listenToProducts(){
     db.ref('inventory').on('value',snap=>{
-        allProducts=[];let total=0;
+        allProducts=[];
         if(snap.exists()){
             snap.forEach(ch=>{
-                const it=ch.val();it.key=ch.key;total+=Number(it.qty||0);allProducts.push(it);
+                const it=ch.val();it.key=ch.key;allProducts.push(it);
             });
         }
-        document.getElementById('live-stock-count').innerText=`${total} units`;
         renderFilteredProducts();
     });
 }
@@ -460,7 +456,6 @@ function renderFilteredProducts(){
             const card=document.createElement('div');card.className='product-card reveal';const imgSrc=item.image||'IMG-20260726-WA8808.jpg';
             const isWishlisted = wishlist.some(w => w.id === item.key);
             
-            // Calculate Average Rating
             const prodReviews = allReviews[item.key] || {};
             const revKeys = Object.keys(prodReviews);
             let avgRating = 5;
@@ -469,9 +464,6 @@ function renderFilteredProducts(){
               avgRating = (sum / revKeys.length).toFixed(1);
             }
             
-            // Live Product Availability Counter Badge String
-            const stockCounterHtml = qtyNum > 0 && qtyNum <= 3 ? `<div style="font-size:0.72rem;color:var(--danger);font-weight:bold;margin-bottom:4px;">⚠️ Only ${qtyNum} left in stock!</div>` : '';
-
             card.innerHTML=`<div>
               <div class="product-img-wrap">
                 <button class="wishlist-btn ${isWishlisted?'active':''}" onclick="toggleWishlist('${item.key}','${item.name}',${item.price},'${imgSrc}')"><i class="fas fa-heart"></i></button>
@@ -480,7 +472,6 @@ function renderFilteredProducts(){
               <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:.70rem;color:var(--accent);font-weight:800;text-transform:uppercase">${item.category||catName}</div><div style="font-size:.75rem;cursor:pointer;color:#ffb300" onclick="openReviewsModal('${item.key}','${item.name}')">⭐ ${avgRating} (${revKeys.length})</div></div>
               <div class="product-title">${item.name}</div>
               <div class="product-price">₦ ${Number(item.price).toLocaleString()}</div>
-              ${stockCounterHtml}
               <span class="stock-tag ${tagClass}">${tagText}</span>
             </div>
             <button class="btn" ${isOut?'disabled':''} onclick="addToCart('${item.key}','${item.name}',${item.price})">${translations[currentLang].addToCart}</button>`;
@@ -548,16 +539,40 @@ function submitOrder(){
 }
 function sendReceiptPDFToWhatsApp() {
     const element = document.getElementById('premiumReceipt');
-    const opt = { margin: 10, filename: `AmasanFarm-Receipt-${document.getElementById('pNo').innerText}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-    html2pdf().from(element).set(opt).save().then(() => { triggerWhatsAppShare(); }).catch(()=>{ triggerWhatsAppShare(); });
+    
+    html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+        canvas.toBlob(blob => {
+            const fileName = `AmasanFarm-Receipt-${document.getElementById('pNo').innerText}.png`;
+            const file = new File([blob], fileName, { type: 'image/png' });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    files: [file],
+                    title: 'Amasan Farm Receipt',
+                    text: `Hello Amasan Farm! Here is my payment receipt #${lastOrderData ? lastOrderData.ref : ''}.`
+                }).catch(() => {
+                    fallbackDownloadAndWhatsApp(blob, fileName);
+                });
+            } else {
+                fallbackDownloadAndWhatsApp(blob, fileName);
+            }
+        }, 'image/png');
+    }).catch(() => {
+        alert('Could not generate receipt image. Please try again.');
+    });
 }
-function triggerWhatsAppShare() {
+
+function fallbackDownloadAndWhatsApp(blob, fileName) {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+    
     if(lastOrderData) {
-        const waText = encodeURIComponent(`Hello Amasan Farm! Order #${lastOrderData.ref}\nName: ${lastOrderData.name}\nAddress: ${lastOrderData.address}, ${lastOrderData.lga}, ${lastOrderData.state}\nScheduled Delivery: ${lastOrderData.deliveryInfo}\nTotal: ₦${lastOrderData.total.toLocaleString()}\nItems: ${lastOrderData.itemsText}\n\nI have paid to OPay 8104817797 / Zenith 2260717656.`);
+        const waText = encodeURIComponent(`Hello Amasan Farm! I have just downloaded and sent my receipt image for Order #${lastOrderData.ref}.\n\nName: ${lastOrderData.name}\nTotal: ₦${lastOrderData.total.toLocaleString()}`);
         window.open(`https://wa.me/2348088375509?text=${waText}`, '_blank');
     }
 }
-// === INTERACTIVE TIMELINE ORDER TRACKING ===
 function checkOrderStatus(){
   const ref=document.getElementById('track-ref-input').value.trim();
   db.ref(`orders/${ref}`).once('value',snap=>{
@@ -597,18 +612,64 @@ function checkOrderStatus(){
 }
 function sendCustomerMessage(){const input=document.getElementById('customer-msg-input'),text=input.value.trim();if(!text)return;db.ref(`chats/${customerSessionId}/messages`).push({text,sender:'customer',timestamp:firebase.database.ServerValue.TIMESTAMP});db.ref(`chats/${customerSessionId}`).update({lastMessage:text});input.value='';}
 function listenToCustomerChat(){db.ref(`chats/${customerSessionId}/messages`).on('value',snap=>{const body=document.getElementById('customer-chat-body');body.innerHTML='';if(!snap.exists()){body.innerHTML='<div class="chat-msg bot">Hello! How can I help? Call 08088375509</div>';return;}snap.forEach(ch=>{const m=ch.val();const div=document.createElement('div');div.className=`chat-msg ${m.sender==='customer'?'customer':'bot'}`;div.innerText=m.text;body.appendChild(div);});});}
+function initBotGreeting() {
+    const body = document.getElementById('bot-chat-body');
+    if(body && body.children.length === 0) {
+        body.innerHTML = `<div class="chat-msg bot">Hello! Welcome to Amasan Farm. How can I assist you today? Feel free to ask about our available products, prices, or delivery.</div>`;
+    }
+}
 async function sendBotMessage(){
-    const input = document.getElementById('bot-msg-input');const text = input.value.trim();if(!text) return;
-    const body = document.getElementById('bot-chat-body');body.innerHTML += `<div class="chat-msg customer">${text}</div>`;input.value = '';body.scrollTop = body.scrollHeight;
-    const typingId = 'typing-' + Date.now();body.innerHTML += `<div class="chat-msg bot" id="${typingId}">Thinking...</div>`;body.scrollTop = body.scrollHeight;
-    const cleanText = text.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();let dynamicReply = "";
-    if(['hi','hello','hey','hiya','good morning','good afternoon','good evening'].some(g => cleanText.includes(g))){dynamicReply = "Hello 👋 Welcome to Amasan Farm!";} else if(['price','how much','cost'].some(g => cleanText.includes(g))){dynamicReply = allProducts.length? "Prices: " + allProducts.slice(0,5).map(p=>`${p.name} ₦${p.price}`).join(', ') : "We have Feeds, Fertilizer and Produce.";} else if(['pay','account','bank','opay','zenith'].some(g => cleanText.includes(g))){dynamicReply = "Pay to:\nOPay 8104817797\nZenith 2260717656";}
-    if(dynamicReply){document.getElementById(typingId).remove();body.innerHTML += `<div class="chat-msg bot">${dynamicReply}</div>`;body.scrollTop = body.scrollHeight;return;}
+    const input = document.getElementById('bot-msg-input');
+    const text = input.value.trim();
+    if(!text) return;
+    
+    const body = document.getElementById('bot-chat-body');
+    body.innerHTML += `<div class="chat-msg customer">${text}</div>`;
+    input.value = '';
+    body.scrollTop = body.scrollHeight;
+    
+    const typingId = 'typing-' + Date.now();
+    body.innerHTML += `<div class="chat-msg bot" id="${typingId}">Thinking...</div>`;
+    body.scrollTop = body.scrollHeight;
+    
+    const cleanText = text.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();
+    let dynamicReply = "";
+
+    // Enhanced local fallback matching
+    if(['hi','hello','hey','hiya','good morning','good afternoon','good evening'].some(g => cleanText.includes(g))){
+        dynamicReply = "Hello 👋 Welcome to Amasan Farm! How can I help you with our agricultural supplies today?";
+    } else if(['price','how much','cost','catalogue','products','feeds','fertilizer'].some(g => cleanText.includes(g))){
+        dynamicReply = allProducts.length ? "Here are some of our current products and prices:\n" + allProducts.slice(0,6).map(p=>`- ${p.name}: ₦${Number(p.price).toLocaleString()} (${p.qty} left)`).join('\n') : "We have Feeds, Fertilizer, Produce, and Equipment available.";
+    } else if(['pay','account','bank','opay','zenith','transfer'].some(g => cleanText.includes(g))){
+        dynamicReply = "You can pay via bank transfer to:\n• OPay: 8104817797 (Gideon Shadrach)\n• Zenith Bank: 2260717656 (Gideon Shadrach)\n\nKeep your receipt and place your order!";
+    } else if(['location','address','where','wukari','taraba'].some(g => cleanText.includes(g))){
+        dynamicReply = "Amasan Farm is located in Wukari, Taraba State[cite: 2]. We offer direct delivery within Wukari and environs[cite: 2]!";
+    } else if(['contact','phone','call','whatsapp','ceo','gideon'].some(g => cleanText.includes(g))){
+        dynamicReply = "You can reach us directly via phone or WhatsApp at 08088375509[cite: 2], or talk to our CEO, Gideon Shadrach[cite: 2].";
+    }
+
+    if(dynamicReply){
+        document.getElementById(typingId).remove();
+        body.innerHTML += `<div class="chat-msg bot">${dynamicReply}</div>`;
+        body.scrollTop = body.scrollHeight;
+        return;
+    }
+
+    // Try cloud function fallback if local match isn't triggered
     try {
         let inventorySummary = allProducts.map(p => `${p.name}: ₦${p.price} (${p.qty} left)`).join(', ');
-        const response = await fetch("https://us-central1-amasan-farm-a5637.cloudfunctions.net/amasanAI", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text, inventory: inventorySummary }) });
-        const data = await response.json();document.getElementById(typingId).remove();body.innerHTML += `<div class="chat-msg bot">${data.reply || "I'm here to help!"}</div>`;
-    } catch (e) {document.getElementById(typingId).remove();body.innerHTML += `<div class="chat-msg bot">Network hiccup! Call 08088375509</div>`;}
+        const response = await fetch("https://us-central1-amasan-farm-a5637.cloudfunctions.net/amasanAI", { 
+            method: "POST", 
+            headers: { "Content-Type": "application/json" }, 
+            body: JSON.stringify({ message: text, inventory: inventorySummary }) 
+        });
+        const data = await response.json();
+        document.getElementById(typingId).remove();
+        body.innerHTML += `<div class="chat-msg bot">${data.reply || "I'm here to help!"}</div>`;
+    } catch (e) {
+        document.getElementById(typingId).remove();
+        body.innerHTML += `<div class="chat-msg bot">I can help you check product prices, payment details, or store info! For immediate assistance, please call or WhatsApp us at 08088375509[cite: 2].</div>`;
+    }
     body.scrollTop = body.scrollHeight;
 }
 let scrollObserver;
