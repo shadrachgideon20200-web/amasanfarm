@@ -138,6 +138,7 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       </div>
       <div class="form-group"><label>Qty</label><input type="number" id="new-item-qty" required></div>
       <div class="form-group"><label>Threshold</label><input type="number" id="new-item-threshold" value="5" required></div>
+      <div class="form-group"><label>Product Picture</label><input type="file" id="new-item-image" accept="image/*"></div>
       <div style="display:flex;gap:10px"><button class="btn" style="flex:1">Save</button><button type="button" class="btn btn-secondary" onclick="closeAddItemModal()">Cancel</button></div>
     </form>
   </div>
@@ -256,7 +257,7 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <div class="chat-main">
         <div class="chat-header"><div><strong id="active-customer-name">Select</strong><div style="font-size:.8rem;color:var(--text-muted)" id="active-order-id">Order Ref: None</div></div><button class="btn btn-secondary" onclick="toggleDispatchDrawer()">Dispatch</button></div>
         <div class="messages-container" id="messages-container"><div class="message incoming">Select customer</div></div>
-        <div class="quick-replies"><button class="chip-btn" onclick="insertCannedReply('Hello! How can I help? Call 08088375509')">Greeting</button><button class="chip-btn" onclick="insertCannedReply('Payment verified!')">Payment</button></div>
+        <div class="quick-replies"><button class="chip-btn" onclick="insertCannedReply('Hello! How can I help you today?')">Greeting</button><button class="chip-btn" onclick="insertCannedReply('Payment verified!')">Payment</button></div>
         <div class="chat-input-area"><input id="message-input" placeholder="Type..." onkeypress="if(event.key==='Enter')sendFirebaseMessage()"><button class="btn" onclick="sendFirebaseMessage()">Send</button></div>
       </div>
     </div>
@@ -265,7 +266,7 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <form onsubmit="event.preventDefault();assignDispatch();">
         <label>Order Ref</label><input id="dispatch-order-ref" readonly>
         <label>Driver</label><select id="driver-select"><option>Musa Ibrahim</option><option>Emmanuel Okonkwo</option></select>
-        <label>Vehicle</label><input id="vehicle-input" required>
+        <label>Vehicle (Manual Input)</label><input id="vehicle-input" placeholder="e.g. Hilux Van - Taraba ABC 123XA" required>
         <label>ETA</label><input type="time" id="eta-time">
         <button class="btn" style="width:100%;margin-top:20px">Confirm</button>
       </form>
@@ -280,7 +281,7 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
           <button class="btn" onclick="openAddItemModal()">Add Product</button>
         </div>
       </div>
-      <table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Threshold</th><th>Status</th><th>Actions</th></tr></thead><tbody id="inventory-table-body"></tbody></table>
+      <table class="data-table"><thead><tr><th>Image</th><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Threshold</th><th>Status</th><th>Actions</th></tr></thead><tbody id="inventory-table-body"></tbody></table>
     </div>
   </section>
   <section id="orders-view" class="view-section">
@@ -379,7 +380,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const CORRECT_PASS="Amasan001";
-
 // Toast Notification Helper using SweetAlert2
 const Toast = Swal.mixin({
   toast: true,
@@ -392,7 +392,6 @@ const Toast = Swal.mixin({
     toast.addEventListener('mouseleave', Swal.resumeTimer);
   }
 });
-
 // Idle Session Timeout (Auto-logout after 15 minutes of inactivity)
 let idleTimer;
 function resetIdleTimer() {
@@ -406,7 +405,6 @@ function resetIdleTimer() {
 window.onload = resetIdleTimer;
 window.onmousemove = resetIdleTimer;
 window.onkeypress = resetIdleTimer;
-
 window.addEventListener('DOMContentLoaded',()=>{
   if(localStorage.getItem('amasan_admin_session')==='true'){document.getElementById('login-overlay').style.display='none';}
   if(localStorage.getItem('amasan_theme')==='light'){document.body.classList.add('light-mode');}
@@ -462,7 +460,25 @@ function deleteChatEntry(id){
 }
 function selectCustomer(id,name,order){activeChatId=id;document.getElementById('active-customer-name').innerText=name;document.getElementById('active-order-id').innerText='Order #'+order;document.getElementById('dispatch-order-ref').value=order;listenToMessages(id);}
 function listenToMessages(id){db.ref(`chats/${id}/messages`).on('value',s=>{const c=document.getElementById('messages-container');c.innerHTML='';s.forEach(ch=>{const m=ch.val();c.innerHTML+=`<div class="message ${m.sender==='admin'?'outgoing':'incoming'}">${m.text}</div>`});c.scrollTop=c.scrollHeight;});}
-function sendFirebaseMessage(){const i=document.getElementById('message-input'),t=i.value.trim();if(!t||!activeChatId)return;db.ref(`chats/${activeChatId}/messages`).push({text:t,sender:'admin',timestamp:firebase.database.ServerValue.TIMESTAMP});db.ref(`chats/${activeChatId}`).update({lastMessage:t});i.value='';}
+function sendFirebaseMessage(){
+  const i=document.getElementById('message-input'),t=i.value.trim();
+  if(!t||!activeChatId)return;
+  db.ref(`chats/${activeChatId}/messages`).push({text:t,sender:'admin',timestamp:firebase.database.ServerValue.TIMESTAMP});
+  
+  // Dynamic AI Dialogue Flow response implementation handler
+  let dynamicReply = "Thanks for reaching out to Amasan Farm Wukari! How may we assist you today?";
+  const lower = t.toLowerCase();
+  if(lower.includes('hi') || lower.includes('hello')) {
+    dynamicReply = "Hello! Welcome to Amasan Farm Wukari. How can we help you with our produce or feeds today?";
+  } else if(lower.includes('price') || lower.includes('cost')) {
+    dynamicReply = "You can view all our current product prices and stock directly inside the app inventory catalog!";
+  } else if(lower.includes('feed') || lower.includes('poultry') || lower.includes('egg')) {
+    dynamicReply = "Yes, our poultry feeds and fresh eggs are currently available in stock. Would you like to place an order?";
+  }
+  db.ref(`chats/${activeChatId}/messages`).push({text:dynamicReply,sender:'bot',timestamp:firebase.database.ServerValue.TIMESTAMP});
+  db.ref(`chats/${activeChatId}`).update({lastMessage:t});
+  i.value='';
+}
 function downloadPDFReceipt(orderRef, customerName, fullAddr, items, totalAmount){
   const {jsPDF}=window.jspdf;const doc=new jsPDF();const pageW=doc.internal.pageSize.getWidth();const greenDark=[10,61,26],gold=[184,155,74],goldDark=[120,80,20],goldLight=[232,199,102];
   doc.setDrawColor(gold[0],gold[1],gold[2]);doc.setLineWidth(0.8);doc.rect(4,4,pageW-8,289);doc.setLineWidth(0.3);doc.rect(7,7,pageW-14,283);let y=14;
@@ -488,7 +504,8 @@ function renderInventoryTable(low){
     } else if(it.qty <= it.threshold) {
       stockStatus = '<span style="color:#f44336">Low</span>';
     }
-    tb.innerHTML+=`<tr><td>${it.id}</td><td>${it.name}</td><td>₦${it.price}</td><td>${it.qty}</td><td><select class="cat-select" id="cat-${it.key}"><option value="Feeds" ${currentCat==='Feeds'?'selected':''}>Feeds</option><option value="Fertilizer" ${currentCat==='Fertilizer'?'selected':''}>Fertilizer</option><option value="Produce" ${currentCat==='Produce'?'selected':''}>Produce</option><option value="Equipment" ${currentCat==='Equipment'?'selected':''}>Equipment</option><option value="General" ${currentCat==='General'?'selected':''}>General</option></select></td><td>${it.threshold}</td><td>${stockStatus}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap"><button onclick="updateProductCategory('${it.key}')" style="background:var(--gold);color:#000;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-weight:600">Update</button><button onclick="updateStock('${it.key}',${it.qty})" style="background:#2e7d32;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Stock</button><button onclick="deleteInventoryItem('${it.key}')" style="background:var(--danger);color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Del</button></div></td></tr>`;
+    const imgTag = it.image ? `<img src="${it.image}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : '<span style="color:var(--text-muted);font-size:0.75rem">No Image</span>';
+    tb.innerHTML+=`<tr><td>${imgTag}</td><td>${it.id}</td><td>${it.name}</td><td>₦${it.price}</td><td>${it.qty}</td><td><select class="cat-select" id="cat-${it.key}"><option value="Feeds" ${currentCat==='Feeds'?'selected':''}>Feeds</option><option value="Fertilizer" ${currentCat==='Fertilizer'?'selected':''}>Fertilizer</option><option value="Produce" ${currentCat==='Produce'?'selected':''}>Produce</option><option value="Equipment" ${currentCat==='Equipment'?'selected':''}>Equipment</option><option value="General" ${currentCat==='General'?'selected':''}>General</option></select></td><td>${it.threshold}</td><td>${stockStatus}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap"><button onclick="updateProductCategory('${it.key}')" style="background:var(--gold);color:#000;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-weight:600">Update</button><button onclick="updateStock('${it.key}',${it.qty})" style="background:#2e7d32;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Stock</button><button onclick="deleteInventoryItem('${it.key}')" style="background:var(--danger);color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer">Del</button></div></td></tr>`;
   });
   document.getElementById('dash-alerts').innerText=low;const b=document.getElementById('low-stock-count');if(low>0){b.innerText=low;b.style.display='inline-block'}else b.style.display='none';
 }
@@ -533,6 +550,7 @@ function saveNewProduct(){
   const q=Number(document.getElementById('new-item-qty').value);
   const t=Number(document.getElementById('new-item-threshold').value);
   const cat=document.getElementById('new-item-category').value||'General';
+  const imageInput=document.getElementById('new-item-image');
   
   if(!n || isNaN(p) || isNaN(q)){
     Swal.fire('Error', 'Please fill in all required fields correctly.', 'error');
@@ -540,13 +558,27 @@ function saveNewProduct(){
   }
   
   const id=`INV-${Math.floor(100+Math.random()*900)}`;
-  db.ref(`inventory/${id}`).set({id,name:n,price:p,qty:q,threshold:t,category:cat}).then(()=>{
-    closeAddItemModal();
-    document.getElementById('new-item-name').value='';
-    document.getElementById('new-item-price').value='';
-    document.getElementById('new-item-qty').value='';
-    Toast.fire({icon:'success',title:'New product added successfully'});
-  });
+  
+  const processSave = (imageUrl) => {
+    db.ref(`inventory/${id}`).set({id,name:n,price:p,qty:q,threshold:t,category:cat,image:imageUrl||''}).then(()=>{
+      closeAddItemModal();
+      document.getElementById('new-item-name').value='';
+      document.getElementById('new-item-price').value='';
+      document.getElementById('new-item-qty').value='';
+      document.getElementById('new-item-image').value='';
+      Toast.fire({icon:'success',title:'New product added successfully'});
+    });
+  };
+
+  if(imageInput.files && imageInput.files[0]){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      processSave(e.target.result);
+    };
+    reader.readAsDataURL(imageInput.files[0]);
+  } else {
+    processSave('');
+  }
 }
 function sendStockWhatsAppAlert(){
   let lowItems = inventoryItems.filter(it => it.qty <= it.threshold);
@@ -910,7 +942,14 @@ function clearAllOrders(){
 }
 function filterOrders(s,b){activeFilter=s;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderOrders()}
 function exportOrdersCSV(){let csv="data:text/csv,Ref,Customer,Items,Total,Status\n";realTimeOrders.forEach(o=>{csv+=`"${o.ref}","${o.customer}","${o.items}","${o.total}","${o.status}"\n`});const a=document.createElement('a');a.href=encodeURI(csv);a.download='orders.csv';a.click();Toast.fire({icon:'success',title:'Orders exported to CSV'});}
-function assignDispatch(){const ref=document.getElementById('dispatch-order-ref').value,drv=document.getElementById('driver-select').value,veh=document.getElementById('vehicle-input').value;if(!ref||ref==='None')return Swal.fire('Error','Select order first','error');db.ref(`dispatches/${ref}`).set({driver:drv,vehicle:veh}).then(()=>Toast.fire({icon:'success',title:'Driver assigned successfully'}));}
+function assignDispatch(){
+  const ref=document.getElementById('dispatch-order-ref').value,
+        drv=document.getElementById('driver-select').value,
+        veh=document.getElementById('vehicle-input').value;
+  if(!ref||ref==='None')return Swal.fire('Error','Select order first','error');
+  if(!veh)return Swal.fire('Error','Please enter a vehicle description','error');
+  db.ref(`dispatches/${ref}`).set({driver:drv,vehicle:veh}).then(()=>Toast.fire({icon:'success',title:'Driver assigned successfully'}));
+}
 function switchView(id,el){
   const titles = {'dashboard-view':'Dashboard','chat-view':'Support Chat','inventory-view':'Inventory','orders-view':'Orders','expenses-view':'Expenses Tracker','debtors-view':'Credit Ledger','activities-view':'Farm Activities & Logs','vendors-view':'Suppliers Directory','feedback-view':'Feedback','complaints-view':'Complaints','analytics-view':'Analytics & P&L','info-view':'Farm Info'};
   document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
