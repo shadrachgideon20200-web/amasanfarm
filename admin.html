@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- SweetAlert2 for professional notifications and modals -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 :root{--bg-dark:#121212;--bg-card:#1e1e1e;--bg-hover:#282828;--primary:#2e7d32;--primary-light:#4caf50;--accent:#ff9800;--text:#f0f0f0;--text-muted:#8e8e8e;--border:#2a2a2a;--danger:#f44336;--gold:#b89b4a}
 body.light-mode{--bg-dark:#f4f6f8;--bg-card:#fff;--bg-hover:#eef2f5;--text:#1a1a1a;--text-muted:#666;--border:#e0e0e0}
@@ -118,7 +120,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     <div class="error-msg" id="reset-error">Enter email</div>
   </div>
 </div>
-
 <div class="modal-overlay" id="add-item-modal">
   <div class="modal-card">
     <h3>Add Product</h3>
@@ -141,7 +142,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     </form>
   </div>
 </div>
-
 <div class="modal-overlay" id="add-expense-modal">
   <div class="modal-card">
     <h3>Log Farm Expense</h3>
@@ -161,7 +161,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     </form>
   </div>
 </div>
-
 <div class="modal-overlay" id="add-debt-modal">
   <div class="modal-card">
     <h3>Record Customer Credit / Debt</h3>
@@ -175,7 +174,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     </form>
   </div>
 </div>
-
 <!-- Modal: Add Farm Activity / Livestock Log -->
 <div class="modal-overlay" id="add-activity-modal">
   <div class="modal-card">
@@ -197,7 +195,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     </form>
   </div>
 </div>
-
 <!-- Modal: Add Supplier/Vendor -->
 <div class="modal-overlay" id="add-vendor-modal">
   <div class="modal-card">
@@ -211,7 +208,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
     </form>
   </div>
 </div>
-
 <aside class="sidebar">
   <div class="brand"><img src="IMG-20260726-WA8808.jpg" class="brand-logo"><span>Amasan Admin</span></div>
   <div class="sidebar-menu">
@@ -230,7 +226,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
   </div>
   <div class="sidebar-footer"><button class="nav-btn" onclick="logoutAdmin()"><div><i class="fas fa-sign-out-alt"></i> Logout</div></button></div>
 </aside>
-
 <div class="main-container">
   <header>
     <h3 id="page-title">Dashboard</h3>
@@ -240,7 +235,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <span id="connection-status" style="color:var(--primary-light);font-weight:bold">● Connecting...</span>
     </div>
   </header>
-
   <section id="dashboard-view" class="view-section active">
     <div class="dashboard-padding">
       <div class="grid-container">
@@ -253,7 +247,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <div class="card" style="margin-top:20px"><h4>Revenue Chart (Last 7 Days)</h4><canvas id="revChart" height="100"></canvas></div>
     </div>
   </section>
-
   <section id="chat-view" class="view-section">
     <div class="chat-layout">
       <div class="chat-sidebar">
@@ -278,7 +271,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       </form>
     </div>
   </section>
-
   <section id="inventory-view" class="view-section">
     <div class="dashboard-padding">
       <div class="table-controls">
@@ -291,7 +283,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <table class="data-table"><thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Threshold</th><th>Status</th><th>Actions</th></tr></thead><tbody id="inventory-table-body"></tbody></table>
     </div>
   </section>
-
   <section id="orders-view" class="view-section">
     <div class="dashboard-padding">
       <div id="gps-map" class="gps-map-container"></div>
@@ -303,7 +294,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <table class="data-table"><thead><tr><th>Ref</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>GPS</th><th>Action</th></tr></thead><tbody id="orders-table-body"></tbody></table>
     </div>
   </section>
-
   <section id="expenses-view" class="view-section">
     <div class="dashboard-padding">
       <div class="table-controls">
@@ -316,7 +306,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <table class="data-table"><thead><tr><th>Title</th><th>Category</th><th>Amount</th><th>Date</th><th>Action</th></tr></thead><tbody id="expenses-table-body"></tbody></table>
     </div>
   </section>
-
   <section id="debtors-view" class="view-section">
     <div class="dashboard-padding">
       <div class="table-controls">
@@ -326,7 +315,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <table class="data-table"><thead><tr><th>Customer</th><th>Phone</th><th>Items</th><th>Total</th><th>Paid</th><th>Balance</th><th>Action</th></tr></thead><tbody id="debtors-table-body"></tbody></table>
     </div>
   </section>
-
   <!-- Farm Activities / Livestock Log View -->
   <section id="activities-view" class="view-section">
     <div class="dashboard-padding">
@@ -337,7 +325,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <table class="data-table"><thead><tr><th>Type</th><th>Details</th><th>Mortality</th><th>Remarks</th><th>Date</th><th>Action</th></tr></thead><tbody id="activities-table-body"></tbody></table>
     </div>
   </section>
-
   <!-- Suppliers / Vendors Directory View -->
   <section id="vendors-view" class="view-section">
     <div class="dashboard-padding">
@@ -348,15 +335,12 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <table class="data-table"><thead><tr><th>Name</th><th>Phone / WhatsApp</th><th>Items Supplied</th><th>Address</th><th>Action</th></tr></thead><tbody id="vendors-table-body"></tbody></table>
     </div>
   </section>
-
   <section id="feedback-view" class="view-section">
     <div class="dashboard-padding"><div class="table-controls"><h3><i class="fas fa-comment-dots"></i> Customer Feedback</h3><div style="display:flex;gap:8px"><button class="btn btn-secondary" onclick="exportFeedbackCSV()">Export CSV</button><button class="btn btn-danger" onclick="clearAllFeedback()">Clear All</button></div></div><div id="feedback-list" style="display:grid;gap:12px"></div></div>
   </section>
-
   <section id="complaints-view" class="view-section">
     <div class="dashboard-padding"><div class="table-controls"><h3><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i> Customer Complaints</h3><div style="display:flex;gap:8px"><button class="btn btn-secondary" onclick="exportComplaintsCSV()">Export CSV</button><button class="btn btn-danger" onclick="clearAllComplaints()">Clear All</button></div></div><div id="complaints-list" style="display:grid;gap:12px"></div></div>
   </section>
-
   <!-- Analytics & P&L with Date-Range Filter View -->
   <section id="analytics-view" class="view-section">
     <div class="dashboard-padding">
@@ -376,7 +360,6 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
           <div><small style="color:var(--text-muted)">Filtered Net Profit</small><div id="pnl-filter-net" style="font-size:1.2rem;font-weight:bold;color:var(--primary-light)">₦ 0</div></div>
         </div>
       </div>
-
       <div class="grid-container" style="margin-top:20px">
         <div class="card" style="border-left:4px solid var(--primary-light)"><h4><i class="fas fa-download"></i> Total App Installs</h4><div class="value" id="analytics-installs" style="font-size:2rem;font-weight:800">0</div><small style="color:var(--text-muted)">Customers wey install app for phone</small></div>
         <div class="card" style="border-left:4px solid #2196f3"><h4><i class="fas fa-eye"></i> Total Visits</h4><div class="value" id="analytics-visits" style="font-size:2rem;font-weight:800">0</div><small style="color:var(--text-muted)">Total times site open</small></div>
@@ -386,18 +369,44 @@ body.light-mode header{background:rgba(255,255,255,0.85)}
       <div class="card" style="margin-top:20px"><h4>📱 Recent Installs</h4><div id="installs-list" style="margin-top:12px;max-height:400px;overflow-y:auto"></div><div style="display:flex;gap:8px;margin-top:15px"><button class="btn btn-secondary" onclick="exportInstallsCSV()">Export CSV</button><button class="btn btn-danger" onclick="clearAnalytics()">Clear Analytics</button></div></div>
     </div>
   </section>
-
   <section id="info-view" class="view-section">
     <div class="dashboard-padding"><h3>🏦 Farm Info</h3><div class="card" style="margin-top:15px"><p><b>Farm:</b> Amasan Farm Wukari</p><p><b>Location:</b> Wukari, Taraba State</p><p><b>Phone:</b> 08088375509</p><p><b>Email:</b> Amasanfarm@gmail.com</p><hr style="margin:12px 0;border:none;border-top:1px solid var(--border)"><h4>💳 Accounts</h4><p>OPay: 8104817797 - Gideon Shadrach</p><p>Zenith: 2260717656 - Gideon Shadrach</p></div></div>
   </section>
 </div>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const CORRECT_PASS="Amasan001";
+
+// Toast Notification Helper using SweetAlert2
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  }
+});
+
+// Idle Session Timeout (Auto-logout after 15 minutes of inactivity)
+let idleTimer;
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+  if(localStorage.getItem('amasan_admin_session') === 'true') {
+    idleTimer = setTimeout(() => {
+      logoutAdmin();
+    }, 15 * 60 * 1000);
+  }
+}
+window.onload = resetIdleTimer;
+window.onmousemove = resetIdleTimer;
+window.onkeypress = resetIdleTimer;
+
 window.addEventListener('DOMContentLoaded',()=>{
   if(localStorage.getItem('amasan_admin_session')==='true'){document.getElementById('login-overlay').style.display='none';}
   if(localStorage.getItem('amasan_theme')==='light'){document.body.classList.add('light-mode');}
@@ -423,7 +432,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 function toggleTheme(){document.body.classList.toggle('light-mode');localStorage.setItem('amasan_theme',document.body.classList.contains('light-mode')?'light':'dark');}
 function togglePasswordVisibility(a,b){const i=document.getElementById(a),ic=document.getElementById(b);if(i.type==="password"){i.type="text";ic.classList.replace("fa-eye","fa-eye-slash")}else{i.type="password";ic.classList.replace("fa-eye-slash","fa-eye")}}
 function switchAuthView(v){document.getElementById('login-view-card').style.display=v==='forgot'?'none':'block';document.getElementById('forgot-view-card').style.display=v==='forgot'?'block':'none';}
-function checkPassword(){const e=document.getElementById('admin-pass-input').value;if(e===CORRECT_PASS){localStorage.setItem('amasan_admin_session','true');document.getElementById('login-overlay').style.display='none';document.getElementById('login-error').style.display='none';}else{document.getElementById('login-error').style.display='block';}}
+function checkPassword(){const e=document.getElementById('admin-pass-input').value;if(e===CORRECT_PASS){localStorage.setItem('amasan_admin_session','true');document.getElementById('login-overlay').style.display='none';document.getElementById('login-error').style.display='none';resetIdleTimer();Toast.fire({icon:'success',title:'Welcome back, Administrator!'});}else{document.getElementById('login-error').style.display='block';}}
 function handlePasswordReset(){document.getElementById('reset-success').style.display='block'}
 function logoutAdmin(){localStorage.removeItem('amasan_admin_session');localStorage.removeItem('amasan_admin_view');localStorage.removeItem('amasan_admin_title');location.reload()}
 var firebaseConfig={apiKey:"AIzaSyCnjkdRRgt4q7hgNLp204HgiV9UZ1Olmjs",authDomain:"amasan-farm-a5637.firebaseapp.com",databaseURL:"https://amasan-farm-a5637-default-rtdb.firebaseio.com",projectId:"amasan-farm-a5637",storageBucket:"amasan-farm-a5637.firebasestorage.app",messagingSenderId:"30400827803",appId:"1:30400827803:web:76b0beb1431ef847e6913e"};
@@ -434,7 +443,23 @@ db.ref('.info/connected').on('value',s=>{document.getElementById('connection-sta
 function initGPSMap(){map=L.map('gps-map').setView([7.877,9.779],12);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)}
 function focusOnDriver(lat,lng){map.setView([lat,lng],15)}
 function insertCannedReply(t){document.getElementById('message-input').value=t}
-function listenToChatList(){db.ref('chats').on('value',s=>{const el=document.getElementById('customer-list');el.innerHTML='';let c=0;s.forEach(ch=>{c++;const id=ch.key,d=ch.val();el.innerHTML+=`<div class="customer-item" style="display:flex;justify-content:space-between"><div onclick="selectCustomer('${id}','${d.customerName||'Customer'}','${d.orderId||''}')"><b>${d.customerName||id}</b><div style="font-size:.8rem;color:gray">${d.lastMessage||''}</div></div><button class="btn btn-danger" style="padding:2px 6px" onclick="db.ref('chats/${id}').remove()">X</button></div>`});document.getElementById('unread-count').innerText=c;});}
+function listenToChatList(){db.ref('chats').on('value',s=>{const el=document.getElementById('customer-list');el.innerHTML='';let c=0;s.forEach(ch=>{c++;const id=ch.key,d=ch.val();el.innerHTML+=`<div class="customer-item" style="display:flex;justify-content:space-between"><div onclick="selectCustomer('${id}','${d.customerName||'Customer'}','${d.orderId||''}')"><b>${d.customerName||id}</b><div style="font-size:.8rem;color:gray">${d.lastMessage||''}</div></div><button class="btn btn-danger" style="padding:2px 6px" onclick="deleteChatEntry('${id}')">X</button></div>`});document.getElementById('unread-count').innerText=c;});}
+function deleteChatEntry(id){
+  Swal.fire({
+    title: 'Delete chat thread?',
+    text: "This action cannot be undone.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref('chats/'+id).remove();
+      Toast.fire({icon:'success',title:'Chat deleted successfully'});
+    }
+  });
+}
 function selectCustomer(id,name,order){activeChatId=id;document.getElementById('active-customer-name').innerText=name;document.getElementById('active-order-id').innerText='Order #'+order;document.getElementById('dispatch-order-ref').value=order;listenToMessages(id);}
 function listenToMessages(id){db.ref(`chats/${id}/messages`).on('value',s=>{const c=document.getElementById('messages-container');c.innerHTML='';s.forEach(ch=>{const m=ch.val();c.innerHTML+=`<div class="message ${m.sender==='admin'?'outgoing':'incoming'}">${m.text}</div>`});c.scrollTop=c.scrollHeight;});}
 function sendFirebaseMessage(){const i=document.getElementById('message-input'),t=i.value.trim();if(!t||!activeChatId)return;db.ref(`chats/${activeChatId}/messages`).push({text:t,sender:'admin',timestamp:firebase.database.ServerValue.TIMESTAMP});db.ref(`chats/${activeChatId}`).update({lastMessage:t});i.value='';}
@@ -449,6 +474,7 @@ function downloadPDFReceipt(orderRef, customerName, fullAddr, items, totalAmount
   doc.setFont('helvetica','bold');doc.text(`Customer Name:`,14,y);doc.setFont('helvetica','normal');doc.text(`${customerName}`,42,y);y+=6;doc.setFont('helvetica','bold');doc.text(`Customer Address:`,14,y);doc.setFont('helvetica','normal');
   const addrLines=doc.splitTextToSize(fullAddr||'N/A',125);doc.text(addrLines,46,y);y+=(addrLines.length*4)+6;doc.setFillColor(240,240,240);doc.rect(14, y, pageW - 28, 7, 'FD');doc.setFont('helvetica','bold');doc.setFontSize(8);doc.text('Item Description', 18, y + 5);doc.text('Total (NGN)', pageW - 18, y + 5, { align: 'right' });y += 11;doc.setFont('helvetica','normal');
   const parsedItems = typeof items === 'string'? items.split(',') : [items];parsedItems.forEach(item => {const itemLines = doc.splitTextToSize(item.trim(), pageW - 45);doc.text(itemLines, 18, y);y += (itemLines.length * 5) + 2;});y += 4;doc.setDrawColor(200, 200, 200);doc.line(14, y, pageW - 14, y);y += 8;doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(greenDark[0],greenDark[1],greenDark[2]);doc.text('TOTAL AMOUNT:', 14, y);doc.text(`NGN ${Number(totalAmount).toLocaleString()}`, pageW - 14, y, { align: 'right' });doc.save(`Receipt_AFW-${orderRef}.pdf`);
+  Toast.fire({icon:'success',title:'PDF receipt generated successfully'});
 }
 let inventoryItems=[];
 function listenToInventory(){db.ref('inventory').on('value',s=>{inventoryItems=[];let low=0;s.forEach(ch=>{const it=ch.val();it.key=ch.key;if(!it.category)it.category='General';inventoryItems.push(it);if(it.qty<=it.threshold)low++;});renderInventoryTable(low);});}
@@ -466,17 +492,66 @@ function renderInventoryTable(low){
   });
   document.getElementById('dash-alerts').innerText=low;const b=document.getElementById('low-stock-count');if(low>0){b.innerText=low;b.style.display='inline-block'}else b.style.display='none';
 }
-function updateProductCategory(key){const newCat=document.getElementById('cat-'+key).value;db.ref(`inventory/${key}`).update({category:newCat}).then(()=>{alert('Category changed to '+newCat+' ✅')});}
-function updateStock(k,q){const n=prompt('New qty',q);if(n)db.ref(`inventory/${k}`).update({qty:Number(n)})}
-function deleteInventoryItem(k){if(confirm('Delete?'))db.ref(`inventory/${k}`).remove()}
+function updateProductCategory(key){const newCat=document.getElementById('cat-'+key).value;db.ref(`inventory/${key}`).update({category:newCat}).then(()=>{Toast.fire({icon:'success',title:'Category updated to '+newCat});});}
+function updateStock(k,q){
+  Swal.fire({
+    title: 'Update Stock Qty',
+    input: 'number',
+    inputValue: q,
+    showCancelButton: true,
+    confirmButtonText: 'Save',
+    confirmButtonColor: '#2e7d32'
+  }).then((result)=>{
+    if(result.isConfirmed && result.value !== ''){
+      db.ref(`inventory/${k}`).update({qty: Number(result.value)}).then(()=>{
+        Toast.fire({icon:'success',title:'Stock updated successfully'});
+      });
+    }
+  });
+}
+function deleteInventoryItem(k){
+  Swal.fire({
+    title: 'Delete product?',
+    text: "This item will be removed from inventory.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref(`inventory/${k}`).remove();
+      Toast.fire({icon:'success',title:'Product deleted successfully'});
+    }
+  });
+}
 function openAddItemModal(){document.getElementById('add-item-modal').style.display='flex'}
 function closeAddItemModal(){document.getElementById('add-item-modal').style.display='none'}
-function saveNewProduct(){const n=document.getElementById('new-item-name').value,p=Number(document.getElementById('new-item-price').value),q=Number(document.getElementById('new-item-qty').value),t=Number(document.getElementById('new-item-threshold').value),cat=document.getElementById('new-item-category').value||'General',id=`INV-${Math.floor(100+Math.random()*900)}`;db.ref(`inventory/${id}`).set({id,name:n,price:p,qty:q,threshold:t,category:cat}).then(()=>{closeAddItemModal();document.getElementById('new-item-name').value='';});}
-
+function saveNewProduct(){
+  const n=document.getElementById('new-item-name').value;
+  const p=Number(document.getElementById('new-item-price').value);
+  const q=Number(document.getElementById('new-item-qty').value);
+  const t=Number(document.getElementById('new-item-threshold').value);
+  const cat=document.getElementById('new-item-category').value||'General';
+  
+  if(!n || isNaN(p) || isNaN(q)){
+    Swal.fire('Error', 'Please fill in all required fields correctly.', 'error');
+    return;
+  }
+  
+  const id=`INV-${Math.floor(100+Math.random()*900)}`;
+  db.ref(`inventory/${id}`).set({id,name:n,price:p,qty:q,threshold:t,category:cat}).then(()=>{
+    closeAddItemModal();
+    document.getElementById('new-item-name').value='';
+    document.getElementById('new-item-price').value='';
+    document.getElementById('new-item-qty').value='';
+    Toast.fire({icon:'success',title:'New product added successfully'});
+  });
+}
 function sendStockWhatsAppAlert(){
   let lowItems = inventoryItems.filter(it => it.qty <= it.threshold);
   if(lowItems.length === 0){
-    alert('All items have healthy stock levels! No low stock alerts to send.');
+    Swal.fire('All Good!', 'All items have healthy stock levels! No low stock alerts to send.', 'info');
     return;
   }
   let msg = `Hello Supplier,\n\nWe need to restock the following items urgently at Amasan Farm Wukari:\n\n`;
@@ -486,7 +561,6 @@ function sendStockWhatsAppAlert(){
   msg += `\nPlease let us know availability and delivery terms. Thanks!\n- Gideon Shadrach, Amasan Farm`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
-
 let realTimeOrders=[],activeFilter='All',revChart, totalRevenueGlobal=0, totalExpensesGlobal=0;
 function listenToOrders(){
   db.ref('orders').on('value',s=>{
@@ -506,7 +580,6 @@ function listenToOrders(){
     }else{revChart.data.datasets[0].data=daily;revChart.update();}
   });
 }
-
 function listenExpenses(){
   db.ref('expenses').on('value', snap=>{
     let totalExp=0; const tb=document.getElementById('expenses-table-body'); tb.innerHTML='';
@@ -527,20 +600,37 @@ function saveNewExpense(){
   const title=document.getElementById('new-exp-title').value;
   const amount=Number(document.getElementById('new-exp-amount').value);
   const cat=document.getElementById('new-exp-cat').value;
+  if(!title || isNaN(amount)){
+    Swal.fire('Error', 'Please fill in valid details for the expense.', 'error');
+    return;
+  }
   db.ref('expenses').push({title, amount, category: cat, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
     document.getElementById('add-expense-modal').style.display='none';
     document.getElementById('new-exp-title').value='';
     document.getElementById('new-exp-amount').value='';
-    alert('Expense saved successfully ✅');
+    Toast.fire({icon:'success',title:'Expense saved successfully'});
   });
 }
-function deleteExpense(k){if(confirm('Delete expense?'))db.ref(`expenses/${k}`).remove()}
+function deleteExpense(k){
+  Swal.fire({
+    title: 'Delete expense?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref(`expenses/${k}`).remove();
+      Toast.fire({icon:'success',title:'Expense deleted'});
+    }
+  });
+}
 function updateNetProfitDisplay(){
   let net = totalRevenueGlobal - totalExpensesGlobal;
   const el = document.getElementById('dash-profit');
   if(el) el.innerText = '₦ '+net.toLocaleString();
 }
-
 function listenDebts(){
   db.ref('debtors').on('value', snap=>{
     const tb=document.getElementById('debtors-table-body'); tb.innerHTML='';
@@ -558,6 +648,10 @@ function saveNewDebt(){
   const items=document.getElementById('new-debt-items').value;
   const amount=Number(document.getElementById('new-debt-amount').value);
   const paid=Number(document.getElementById('new-debt-paid').value);
+  if(!name || isNaN(amount)){
+    Swal.fire('Error', 'Please provide valid customer name and credit amount.', 'error');
+    return;
+  }
   db.ref('debtors').push({name, phone, items, amount, paid, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
     document.getElementById('add-debt-modal').style.display='none';
     document.getElementById('new-debt-name').value='';
@@ -565,17 +659,41 @@ function saveNewDebt(){
     document.getElementById('new-debt-items').value='';
     document.getElementById('new-debt-amount').value='';
     document.getElementById('new-debt-paid').value='0';
-    alert('Credit ledger record saved ✅');
+    Toast.fire({icon:'success',title:'Credit record saved successfully'});
   });
 }
 function updateDebtPaid(k, currentPaid, totalAmount){
-  const p = prompt(`Enter new total amount paid so far (Total: ₦${totalAmount}):`, currentPaid);
-  if(p!==null){
-    db.ref(`debtors/${k}`).update({paid: Number(p)}).then(()=>alert('Updated successfully ✅'));
-  }
+  Swal.fire({
+    title: 'Update Amount Paid',
+    text: `Total Credit: ₦${totalAmount}`,
+    input: 'number',
+    inputValue: currentPaid,
+    showCancelButton: true,
+    confirmButtonText: 'Update',
+    confirmButtonColor: '#2e7d32'
+  }).then((result)=>{
+    if(result.isConfirmed && result.value !== ''){
+      db.ref(`debtors/${k}`).update({paid: Number(result.value)}).then(()=>{
+        Toast.fire({icon:'success',title:'Payment record updated'});
+      });
+    }
+  });
 }
-function deleteDebt(k){if(confirm('Delete record?'))db.ref(`debtors/${k}`).remove()}
-
+function deleteDebt(k){
+  Swal.fire({
+    title: 'Delete credit record?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref(`debtors/${k}`).remove();
+      Toast.fire({icon:'success',title:'Record deleted'});
+    }
+  });
+}
 // Farm Activities / Livestock Log Logic
 function listenActivities(){
   db.ref('farm_activities').on('value', snap=>{
@@ -593,16 +711,33 @@ function saveNewActivity(){
   const details=document.getElementById('new-act-details').value;
   const mortality=Number(document.getElementById('new-act-mortality').value||0);
   const remarks=document.getElementById('new-act-remarks').value;
+  if(!details){
+    Swal.fire('Error', 'Please enter details for the farm activity.', 'error');
+    return;
+  }
   db.ref('farm_activities').push({type, details, mortality, remarks, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
     document.getElementById('add-activity-modal').style.display='none';
     document.getElementById('new-act-details').value='';
     document.getElementById('new-act-mortality').value='0';
     document.getElementById('new-act-remarks').value='';
-    alert('Farm activity logged successfully ✅');
+    Toast.fire({icon:'success',title:'Farm activity logged successfully'});
   });
 }
-function deleteActivity(k){if(confirm('Delete activity log?')) db.ref(`farm_activities/${k}`).remove();}
-
+function deleteActivity(k){
+  Swal.fire({
+    title: 'Delete activity log?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref(`farm_activities/${k}`).remove();
+      Toast.fire({icon:'success',title:'Log deleted'});
+    }
+  });
+}
 // Suppliers / Vendors Directory Logic
 function listenVendors(){
   db.ref('vendors').on('value', snap=>{
@@ -620,33 +755,48 @@ function saveNewVendor(){
   const phone=document.getElementById('new-vendor-phone').value;
   const items=document.getElementById('new-vendor-items').value;
   const address=document.getElementById('new-vendor-address').value;
+  if(!name || !phone || !items){
+    Swal.fire('Error', 'Please fill in name, phone and items supplied.', 'error');
+    return;
+  }
   db.ref('vendors').push({name, phone, items, address, timestamp: firebase.database.ServerValue.TIMESTAMP}).then(()=>{
     document.getElementById('add-vendor-modal').style.display='none';
     document.getElementById('new-vendor-name').value='';
     document.getElementById('new-vendor-phone').value='';
     document.getElementById('new-vendor-items').value='';
     document.getElementById('new-vendor-address').value='';
-    alert('Supplier added successfully ✅');
+    Toast.fire({icon:'success',title:'Supplier added successfully'});
   });
 }
-function deleteVendor(k){if(confirm('Delete supplier?')) db.ref(`vendors/${k}`).remove();}
-
+function deleteVendor(k){
+  Swal.fire({
+    title: 'Delete supplier?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref(`vendors/${k}`).remove();
+      Toast.fire({icon:'success',title:'Supplier deleted'});
+    }
+  });
+}
 // Feature: Automated Customer WhatsApp Order Status Updates
 function sendWhatsAppStatusUpdate(phone, orderRef, status){
   const cleanPhone = String(phone||'').replace(/[^0-9]/g,'').replace(/^0/,'234');
-  if(!cleanPhone){ alert('Customer phone number not available'); return; }
+  if(!cleanPhone){ Swal.fire('Error', 'Customer phone number not available', 'error'); return; }
   let statusMsg = `Hello! Update regarding your order #${orderRef} at Amasan Farm Wukari:\n\nStatus Update: *${status}*\n\nThanks for your patronage! - Gideon Shadrach, Amasan Farm`;
   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(statusMsg)}`, '_blank');
 }
-
 // Feature: P&L Date-Range Filter Logic
 function calculateFilteredPNL(){
   const startDateStr = document.getElementById('pnl-start-date').value;
   const endDateStr = document.getElementById('pnl-end-date').value;
-  if(!startDateStr || !endDateStr){ alert('Please select both start and end dates'); return; }
+  if(!startDateStr || !endDateStr){ Swal.fire('Notice', 'Please select both start and end dates', 'info'); return; }
   const startTime = new Date(startDateStr).getTime();
   const endTime = new Date(endDateStr).getTime() + 86400000; // end of day
-
   db.ref('orders').once('value', oSnap=>{
     let rev = 0;
     oSnap.forEach(ch=>{
@@ -654,7 +804,6 @@ function calculateFilteredPNL(){
       let t = o.timestamp || 0;
       if(t >= startTime && t <= endTime){ rev += Number(o.total||0); }
     });
-
     db.ref('expenses').once('value', eSnap=>{
       let exp = 0;
       eSnap.forEach(ch=>{
@@ -662,11 +811,11 @@ function calculateFilteredPNL(){
         let t = e.timestamp || 0;
         if(t >= startTime && t <= endTime){ exp += Number(e.amount||0); }
       });
-
       let net = rev - exp;
       document.getElementById('pnl-filter-rev').innerText = '₦ '+rev.toLocaleString();
       document.getElementById('pnl-filter-exp').innerText = '₦ '+exp.toLocaleString();
       document.getElementById('pnl-filter-net').innerText = '₦ '+net.toLocaleString();
+      Toast.fire({icon:'success',title:'P&L calculated for selected date range'});
     });
   });
 }
@@ -677,7 +826,6 @@ function resetFilteredPNL(){
   document.getElementById('pnl-filter-exp').innerText='₦ 0';
   document.getElementById('pnl-filter-net').innerText='₦ 0';
 }
-
 function sendWhatsAppSummary(){
   let summaryText = `📊 *AMASAN FARM WUKARI - SALES SUMMARY* 📊\n\n`;
   summaryText += `• *Total Revenue:* ₦${totalRevenueGlobal.toLocaleString()}\n`;
@@ -688,7 +836,6 @@ function sendWhatsAppSummary(){
   summaryText += `- Generated via Amasan Farm Admin Hub`;
   window.open(`https://wa.me/?text=${encodeURIComponent(summaryText)}`, '_blank');
 }
-
 function renderOrders(){
   const tb=document.getElementById('orders-table-body');tb.innerHTML='';
   const f=activeFilter==='All'?realTimeOrders:realTimeOrders.filter(o=>(o.status||'Pending').toLowerCase()===activeFilter.toLowerCase());
@@ -700,19 +847,70 @@ function renderOrders(){
 }
 function searchOrders(){let q=document.getElementById('order-search').value.toLowerCase();if(!q){renderOrders();return;}let filtered=realTimeOrders.filter(o=>JSON.stringify(o).toLowerCase().includes(q));const tb=document.getElementById('orders-table-body');tb.innerHTML='';filtered.forEach(o=>{const esc=s=>String(s||'').replace(/'/g,"\\'");tb.innerHTML+=`<tr><td>#${o.ref}</td><td>${o.customer}</td><td>${o.items}</td><td>₦${Number(o.total).toLocaleString()}</td><td><span class="status-tag status-${(o.status||'pending').toLowerCase()}">${o.status}</span></td><td>${o.gps?`<button class="btn btn-secondary" style="padding:3px 6px" onclick="focusOnDriver(${o.gps.split(',')[0]},${o.gps.split(',')[1]})">Track</button>`:'N/A'}</td><td><button class="btn btn-secondary" style="padding:3px 6px;font-size:.7rem" onclick="downloadPDFReceipt('${o.ref}','${esc(o.customer)}','${esc(o.fullAddress||o.address)}','${esc(o.items)}','${o.total}')">PDF</button></td></tr>`;});}
 function updateOrderStatus(k,ref,name,st,phone){
-  if(confirm(`Set ${ref} to ${st}?`)){
-    db.ref(`orders/${k}`).update({status:st}).then(()=>{
-      if(phone && confirm('Would you like to send this status update via WhatsApp to the customer?')){
-        sendWhatsAppStatusUpdate(phone, ref, st);
-      }
-    });
-  }
+  Swal.fire({
+    title: `Set order #${ref} to ${st}?`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#2e7d32',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, update'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref(`orders/${k}`).update({status:st}).then(()=>{
+        Toast.fire({icon:'success',title:`Order status updated to ${st}`});
+        if(phone){
+          Swal.fire({
+            title: 'Send WhatsApp Update?',
+            text: 'Would you like to notify the customer of this status update via WhatsApp?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#25D366',
+            confirmButtonText: 'Yes, Send WhatsApp'
+          }).then((res)=>{
+            if(res.isConfirmed){
+              sendWhatsAppStatusUpdate(phone, ref, st);
+            }
+          });
+        }
+      });
+    }
+  });
 }
-function deleteOrder(k,ref){if(confirm(`Delete ${ref}?`))db.ref(`orders/${k}`).remove()}
-function clearAllOrders(){if(confirm('Delete ALL?')){db.ref('orders').remove();db.ref('dispatches').remove()}}
+function deleteOrder(k,ref){
+  Swal.fire({
+    title: `Delete order #${ref}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref(`orders/${k}`).remove();
+      Toast.fire({icon:'success',title:'Order deleted successfully'});
+    }
+  });
+}
+function clearAllOrders(){
+  Swal.fire({
+    title: 'Delete ALL orders?',
+    text: "This will wipe all order and dispatch data permanently.",
+    icon: 'error',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, clear all!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref('orders').remove();
+      db.ref('dispatches').remove();
+      Toast.fire({icon:'success',title:'All orders cleared'});
+    }
+  });
+}
 function filterOrders(s,b){activeFilter=s;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderOrders()}
-function exportOrdersCSV(){let csv="data:text/csv,Ref,Customer,Items,Total,Status\n";realTimeOrders.forEach(o=>{csv+=`"${o.ref}","${o.customer}","${o.items}","${o.total}","${o.status}"\n`});const a=document.createElement('a');a.href=encodeURI(csv);a.download='orders.csv';a.click();}
-function assignDispatch(){const ref=document.getElementById('dispatch-order-ref').value,drv=document.getElementById('driver-select').value,veh=document.getElementById('vehicle-input').value;if(!ref||ref==='None')return alert('Select order');db.ref(`dispatches/${ref}`).set({driver:drv,vehicle:veh}).then(()=>alert('Assigned'));}
+function exportOrdersCSV(){let csv="data:text/csv,Ref,Customer,Items,Total,Status\n";realTimeOrders.forEach(o=>{csv+=`"${o.ref}","${o.customer}","${o.items}","${o.total}","${o.status}"\n`});const a=document.createElement('a');a.href=encodeURI(csv);a.download='orders.csv';a.click();Toast.fire({icon:'success',title:'Orders exported to CSV'});}
+function assignDispatch(){const ref=document.getElementById('dispatch-order-ref').value,drv=document.getElementById('driver-select').value,veh=document.getElementById('vehicle-input').value;if(!ref||ref==='None')return Swal.fire('Error','Select order first','error');db.ref(`dispatches/${ref}`).set({driver:drv,vehicle:veh}).then(()=>Toast.fire({icon:'success',title:'Driver assigned successfully'}));}
 function switchView(id,el){
   const titles = {'dashboard-view':'Dashboard','chat-view':'Support Chat','inventory-view':'Inventory','orders-view':'Orders','expenses-view':'Expenses Tracker','debtors-view':'Credit Ledger','activities-view':'Farm Activities & Logs','vendors-view':'Suppliers Directory','feedback-view':'Feedback','complaints-view':'Complaints','analytics-view':'Analytics & P&L','info-view':'Farm Info'};
   document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
@@ -727,7 +925,6 @@ function switchView(id,el){
 }
 function filterCustomers(){const q=document.getElementById('customer-search').value.toLowerCase();document.querySelectorAll('.customer-item').forEach(i=>{i.style.display=i.innerText.toLowerCase().includes(q)?'flex':'none';});}
 function toggleDispatchDrawer(){document.getElementById('dispatch-drawer').classList.toggle('open')}
-
 let feedbackData=[];
 function listenFeedback(){
   db.ref('feedback').on('value', snap=>{
@@ -748,10 +945,37 @@ function listenFeedback(){
     });
   });
 }
-function deleteFeedback(key){ if(confirm('Delete this feedback?')){ db.ref('feedback/'+key).remove(); } }
-function clearAllFeedback(){ if(confirm('Delete ALL feedback?')){ db.ref('feedback').remove(); } }
-function exportFeedbackCSV(){let csv = "data:text/csv;charset=utf-8,Name,Contact,Message,Date,Admin Reply\n";feedbackData.forEach(f=>{const date = f.timestamp? new Date(f.timestamp).toLocaleString() : '';csv += `"${(f.name||'').replace(/"/g,'""')}","${(f.contact||'').replace(/"/g,'""')}","${(f.msg||'').replace(/"/g,'""')}","${date}","${(f.adminReply||'').replace(/"/g,'""')}"\n`;});const a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'feedback.csv'; a.click();}
-
+function deleteFeedback(key){ 
+  Swal.fire({
+    title: 'Delete feedback?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref('feedback/'+key).remove();
+      Toast.fire({icon:'success',title:'Feedback deleted'});
+    }
+  }); 
+}
+function clearAllFeedback(){ 
+  Swal.fire({
+    title: 'Delete ALL feedback?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, clear all!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref('feedback').remove();
+      Toast.fire({icon:'success',title:'All feedback cleared'});
+    }
+  }); 
+}
+function exportFeedbackCSV(){let csv = "data:text/csv;charset=utf-8,Name,Contact,Message,Date,Admin Reply\n";feedbackData.forEach(f=>{const date = f.timestamp? new Date(f.timestamp).toLocaleString() : '';csv += `"${(f.name||'').replace(/"/g,'""')}","${(f.contact||'').replace(/"/g,'""')}","${(f.msg||'').replace(/"/g,'""')}","${date}","${(f.adminReply||'').replace(/"/g,'""')}"\n`;});const a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'feedback.csv'; a.click();Toast.fire({icon:'success',title:'Feedback exported'});}
 let complaintsData=[];
 function listenComplaints(){
   db.ref('complaints').on('value', snap=>{
@@ -773,13 +997,40 @@ function listenComplaints(){
     });
   });
 }
-function sendFeedbackReply(key, contact, name){const input = document.getElementById('reply-input-fb-'+key);const reply = input.value.trim();if(!reply) return alert('Type reply first');db.ref('feedback/'+key).update({adminReply: reply, repliedAt: Date.now(), status: 'Replied'}).then(()=>{alert('Reply saved! Opening WhatsApp...');const waNum = String(contact).replace(/[^0-9]/g,'').replace(/^0/,'234');const waText = encodeURIComponent(`Hello ${name}, thanks for your feedback at Amasan Farm!\n\nOur reply: ${reply}\n\n- Gideon Shadrach, CEO`);window.open(`https://wa.me/${waNum}?text=${waText}`, '_blank');});}
-function sendComplaintReply(key, phone, name){const input = document.getElementById('reply-input-comp-'+key);const reply = input.value.trim();if(!reply) return alert('Type reply first');db.ref('complaints/'+key).update({adminReply: reply, repliedAt: Date.now(), status: 'Resolved'}).then(()=>{alert('Reply saved & resolved! Opening WhatsApp...');const waNum = String(phone).replace(/[^0-9]/g,'').replace(/^0/,'234');const waText = encodeURIComponent(`Hello ${name}, regarding your complaint at Amasan Farm.\n\nSolution: ${reply}\n\nWe apologize for the inconvenience. - Gideon, CEO - 08088375509`);window.open(`https://wa.me/${waNum}?text=${waText}`, '_blank');});}
-function markComplaintResolved(key){ if(confirm('Mark as resolved?')) db.ref('complaints/'+key).update({status:'Resolved', resolvedAt: Date.now()}); }
-function deleteComplaint(key){ if(confirm('Delete this complaint?')) db.ref('complaints/'+key).remove(); }
-function clearAllComplaints(){ if(confirm('Delete ALL complaints?')) db.ref('complaints').remove(); }
-function exportComplaintsCSV(){let csv = "data:text/csv;charset=utf-8,Name,Phone,OrderRef,Type,Message,Status,Date,Admin Reply\n";complaintsData.forEach(c=>{const date = c.timestamp? new Date(c.timestamp).toLocaleString() : '';csv += `"${(c.name||'').replace(/"/g,'""')}","${(c.phone||'').replace(/"/g,'""')}","${(c.orderRef||'').replace(/"/g,'""')}","${(c.type||'').replace(/"/g,'""')}","${(c.message||'').replace(/"/g,'""')}","${(c.status||'').replace(/"/g,'""')}","${date}","${(c.adminReply||'').replace(/"/g,'""')}"\n`;});const a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'complaints.csv'; a.click();}
-
+function sendFeedbackReply(key, contact, name){const input = document.getElementById('reply-input-fb-'+key);const reply = input.value.trim();if(!reply) return Swal.fire('Error','Type reply first','error');db.ref('feedback/'+key).update({adminReply: reply, repliedAt: Date.now(), status: 'Replied'}).then(()=>{Toast.fire({icon:'success',title:'Reply saved! Opening WhatsApp...'});const waNum = String(contact).replace(/[^0-9]/g,'').replace(/^0/,'234');const waText = encodeURIComponent(`Hello ${name}, thanks for your feedback at Amasan Farm!\n\nOur reply: ${reply}\n\n- Gideon Shadrach, CEO`);window.open(`https://wa.me/${waNum}?text=${waText}`, '_blank');});}
+function sendComplaintReply(key, phone, name){const input = document.getElementById('reply-input-comp-'+key);const reply = input.value.trim();if(!reply) return Swal.fire('Error','Type reply first','error');db.ref('complaints/'+key).update({adminReply: reply, repliedAt: Date.now(), status: 'Resolved'}).then(()=>{Toast.fire({icon:'success',title:'Reply saved & resolved! Opening WhatsApp...'});const waNum = String(phone).replace(/[^0-9]/g,'').replace(/^0/,'234');const waText = encodeURIComponent(`Hello ${name}, regarding your complaint at Amasan Farm.\n\nSolution: ${reply}\n\nWe apologize for the inconvenience. - Gideon, CEO - 08088375509`);window.open(`https://wa.me/${waNum}?text=${waText}`, '_blank');});}
+function markComplaintResolved(key){ db.ref('complaints/'+key).update({status:'Resolved', resolvedAt: Date.now()}).then(()=>Toast.fire({icon:'success',title:'Marked as resolved'})); }
+function deleteComplaint(key){ 
+  Swal.fire({
+    title: 'Delete complaint?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref('complaints/'+key).remove();
+      Toast.fire({icon:'success',title:'Complaint deleted'});
+    }
+  }); 
+}
+function clearAllComplaints(){ 
+  Swal.fire({
+    title: 'Delete ALL complaints?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, clear all!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref('complaints').remove();
+      Toast.fire({icon:'success',title:'All complaints cleared'});
+    }
+  }); 
+}
+function exportComplaintsCSV(){let csv = "data:text/csv;charset=utf-8,Name,Phone,OrderRef,Type,Message,Status,Date,Admin Reply\n";complaintsData.forEach(c=>{const date = c.timestamp? new Date(c.timestamp).toLocaleString() : '';csv += `"${(c.name||'').replace(/"/g,'""')}","${(c.phone||'').replace(/"/g,'""')}","${(c.orderRef||'').replace(/"/g,'""')}","${(c.type||'').replace(/"/g,'""')}","${(c.message||'').replace(/"/g,'""')}","${(c.status||'').replace(/"/g,'""')}","${date}","${(c.adminReply||'').replace(/"/g,'""')}"\n`;});const a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'complaints.csv'; a.click();Toast.fire({icon:'success',title:'Complaints exported'});}
 function listenToAnalytics(){
   db.ref('analytics/installs').on('value', snap=>{
     let total=0; let today=0; let todayStr = new Date().toDateString();
@@ -813,9 +1064,24 @@ function exportInstallsCSV(){
     let csv="data:text/csv,Device,Browser,Date\n";
     snap.forEach(c=>{ const d=c.val(); csv+=`"${d.device||''}","${d.browser||''}","${new Date(d.timestamp).toLocaleString()}"\n`; });
     const a=document.createElement('a'); a.href = encodeURI(csv); a.download = 'installs.csv'; a.click();
+    Toast.fire({icon:'success',title:'Installs exported'});
   });
 }
-function clearAnalytics(){ if(confirm('Clear all analytics?')){ db.ref('analytics').remove(); } }
+function clearAnalytics(){ 
+  Swal.fire({
+    title: 'Clear all analytics data?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, clear!'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      db.ref('analytics').remove();
+      Toast.fire({icon:'success',title:'Analytics cleared'});
+    }
+  }); 
+}
 </script>
 </body>
 </html>
